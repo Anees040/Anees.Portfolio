@@ -1,0 +1,99 @@
+:root {
+  --color-alabaster: #F4F0E8;
+  --color-graphite: #252421;
+  --color-copper: #A85D3F;
+  --color-antique-gold: #C29A55;
+  --color-dusty-clay: #D7B9A5;
+  --color-espresso: #302B27;
+  --color-linen: #E7E0D5;
+  --color-mushroom: #746D64;
+
+  /* Readability variants: only OKLab lightness is lowered; approved primitives stay intact. */
+  --color-copper-readable: #A2573A;
+  --color-mushroom-readable: #716A61;
+
+  --color-bg-page: var(--color-alabaster);
+  --color-bg-surface: var(--color-linen);
+  --color-bg-subtle: var(--color-dusty-clay);
+  --color-bg-inverse: var(--color-espresso);
+  --color-text-primary: var(--color-graphite);
+  --color-text-secondary: var(--color-mushroom-readable);
+  --color-text-on-surface: var(--color-espresso);
+  --color-text-inverse: var(--color-alabaster);
+  --color-text-inverse-muted: var(--color-dusty-clay);
+  --color-accent-solid: var(--color-copper-readable);
+  --color-accent-hover: var(--color-espresso);
+  --color-accent-text: var(--color-copper-readable);
+  --color-accent-contrast: var(--color-alabaster);
+  --color-detail: var(--color-antique-gold);
+  --color-border-subtle: var(--color-linen);
+  --color-border-strong: var(--color-mushroom);
+  --color-border-inverse: var(--color-mushroom);
+  --color-focus: var(--color-copper);
+  --color-selection-bg: var(--color-dusty-clay);
+  --color-selection-text: var(--color-graphite);
+  --color-art-line: var(--color-dusty-clay);
+  --color-art-solid: var(--color-copper);
+  --color-art-disc: var(--color-dusty-clay);
+  --color-art-base: var(--color-espresso);
+  --color-art-highlight: var(--color-antique-gold);
+  --color-image-outline: rgb(0 0 0 / 10%);
+  --color-scene-wall: var(--color-graphite);
+  --color-scene-inset: var(--color-espresso);
+  --color-scene-paper: var(--color-linen);
+  --color-scene-ink: var(--color-espresso);
+  --color-scene-rule: var(--color-mushroom);
+  --color-overlay-scrim: rgb(37 36 33 / 16%);
+
+  --type-display: clamp(3.15rem, 5.6vw, 5.25rem);
+  --type-heading: clamp(2.75rem, 4.4vw, 4rem);
+  --type-subheading: clamp(2rem, 3vw, 2.8rem);
+  --type-lead: clamp(1.2rem, 1.6vw, 1.4rem);
+  --type-body: 1rem;
+  --type-small: 0.875rem;
+  --type-caption: 0.75rem;
+  --leading-display: 1.04;
+  --leading-heading: 1.1;
+  --leading-body: 1.65;
+  --tracking-heading: -0.025em;
+  --tracking-label: 0.06em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --page-gutter: clamp(1.25rem, 5vw, 5rem);
+  --page-width: 80rem;
+  --header-height: 6rem;
+  --section-space: clamp(4rem, 7.5vw, 7rem);
+  --radius-control: 0.25rem;
+  --radius-media: 0.75rem;
+  --radius-round: 50%;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-feedback: 150ms;
+  --duration-release: 100ms;
+  --duration-entrance: 600ms;
+  --duration-stagger: 80ms;
+  --duration-interface: 240ms;
+  --duration-reduced: 160ms;
+  --spring-stiffness: 130;
+  --spring-damping: 24;
+  --spring-mass: 0.8;
+}
+
+@theme inline {
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-instrument-serif);
+  --font-mono: var(--font-ibm-plex-mono);
+  --color-background: var(--color-bg-page);
+  --color-foreground: var(--color-text-primary);
+  --color-surface: var(--color-bg-surface);
+  --color-muted: var(--color-text-secondary);
+  --color-accent: var(--color-accent-solid);
+}

@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Muhammad Anees — Copper Atelier
 
-## Getting Started
+Phase 2 of Muhammad Anees's Copper Atelier portfolio: coordinated hero motion, character asset architecture and an interactive developer workspace. Built with Next.js App Router, TypeScript, Tailwind CSS 4, Motion for React, Lucide, and the approved Instrument Serif / DM Sans / IBM Plex Mono typography.
 
-First, run the development server:
+## Run locally
 
-```bash
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For a production preview:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run build
+npm run start -- --port 3100
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A first build needs access to Google Fonts. next/font then serves optimized fonts locally to visitors. No API keys or environment variables are needed for Phase 2.
 
-## Learn More
+## Checks
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run lint
+npm run typecheck
+npm run build
+npm run test:e2e
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Browser checks use installed Google Chrome. If Chrome is unavailable, install it or switch the Playwright channel after installing a compatible browser. Tests start a production server on port 3100 if needed. Phase 2 screenshots are saved under `.impeccable/review/phase-2/`; the interactive test report is in `playwright-report/`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project map
 
-## Deploy on Vercel
+- `app/`: route, layout, shared CSS, and design tokens.
+- `components/portfolio/`: new portfolio components; content remains server-rendered around small interactive boundaries.
+- `lib/portfolio-content.ts`: typed personal and project content.
+- `public/projects/`: authentic screenshots from Anees's software repositories.
+- `docs/DESIGN_SYSTEM.md`: approved design and measured contrast.
+- `DESIGN.md` and `.impeccable/design.json`: extracted visual system and machine-readable design documentation.
+- `docs/CONTENT_SOURCES.md`: factual sources and asset provenance.
+- `docs/BUILD_LOG.md`: implementation and verification record.
+- `docs/PROJECT_STATUS.md`: phase gates and limitations.
+- `docs/PHASE1_REVIEW.md`: historical foundation report.
+- `docs/PHASE2_REVIEW.md`: current implementation, checks, review and screenshot links.
+- `lib/character-assets.ts` and `public/images/character/README.md`: owner-supplied artwork contract.
+- `AGENTS.md`: durable instructions for future development.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Phase 2 interaction work is implemented and production-tested. Character generation was deferred by the owner; the architectural MA fallback remains until supplied artwork is integrated. Phase 3 requires explicit approval. Detailed case studies and Ask Anees AI are deferred. Nothing has been deployed.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Existing unused starter components/assets remain preserved. The initial versions of changed files are saved locally in the ignored `docs/workspace-snapshot/phase-1-start/` directory.
