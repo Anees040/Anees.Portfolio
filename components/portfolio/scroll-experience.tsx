@@ -27,7 +27,13 @@ export function ScrollExperience({ children }: { children: ReactNode }) {
         const element = entry.target as HTMLElement;
         const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const frames = reduced ? revealFrames.reduced : element.dataset.reveal === "media" ? revealFrames.media : revealFrames.section;
-        const control = animate(element, frames, { duration: reduced ? tokens.reduced : tokens.entrance, ease: tokens.ease });
+        const group = element.hasAttribute("data-reveal-group") ? Array.from(element.children) as HTMLElement[] : [element];
+        const controls = group.map((child, index) => {
+          const control = animate(child, frames, { duration: reduced ? tokens.reduced : tokens.entrance, delay: reduced ? 0 : Math.min(index, 3) * tokens.stagger, ease: tokens.ease });
+          control.then(() => clearRevealStyles(child));
+          return control;
+        });
+        const control = { stop: () => { controls.forEach(item => item.cancel()); group.forEach(clearRevealStyles); } };
         stops.push(() => control.stop());
       }
     }, { threshold: 0.12 });
@@ -39,7 +45,7 @@ export function ScrollExperience({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const followAnchor = (event: MouseEvent) => {
-      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       const anchor = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!anchor) return;
       const target = document.getElementById(anchor.hash.slice(1));

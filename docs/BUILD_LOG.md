@@ -1,5 +1,46 @@
 # Build log
 
+## 2026-11-15 — Complete Phase 2 implementation and handoff
+
+Resumed the stopped session's uncommitted work under the owner's complete Phase 2 authorization. Read the full completion audit, project/design/content/status/build documentation, implementation and tests. Preserved the incoming tree at `docs/workspace-snapshot/phase-2-resume-20261114-104705/` with its commit and status. No user files, unrelated starter files or original artwork were discarded; no commit/reset/deployment was performed.
+
+Completed the intrinsic workspace/header reflow, unit-aware CSS-time parser, independent media/image transform layers, coordinated hero/group/media reveals, finite-orbit interruption and ball/seam grouping. Added the measured four-scene ProjectJourney with native vertical scrolling, keyboard anchors, progress, focus/deep-link behavior and stacked touch/reduced-motion/short-viewport/enlarged-text/no-JS fallback. Existing factual project descriptions and screenshots remain.
+
+The owner approved the two existing character illustrations during this session. Integrated an optimized primary cutout in the hero and standing/working whole poses in the workspace. Removed the primary's baked checkerboard and isolated the working scene using the sheet's supplied alpha; generated no likeness or intermediate facial frames. Originals are unchanged. Character registration now supports independent scenes, optional mobile picture sources, explicit state events, bounded real-frame sequences and runtime failure fallback. Independent facial/typing motion remains awaiting aligned exports.
+
+Verification corrections were concrete: the new tests exposed an initially conditional Motion subscription that missed page-scroll updates, delayed MotionValue style writes after interruption, and an image error occurring before hydration. All were fixed. Visual captures exposed neighboring pose fragments and stale optimized images; the derivative was cleaned and assigned a revision. Installed Next.js restricts local image query strings, so its exact `?v=2` character-image allowlist is configured after reading the installed image guide. Normal project image paths retain their existing behavior.
+
+Final verification uses the production build in local Chrome 157.0.8103.51. The 24 original browser cases are preserved and adapted to the intended horizontal presentation/approved artwork; 18 new cases cover the audit regressions, for **42 passing browser tests**. Lint and typecheck pass; the production build statically prerenders `/`. Node's NO_COLOR/FORCE_COLOR warnings are launcher notices, not application errors.
+
+Normal widths: 320, 375, 390, 414, 768, 1024, 1280, 1440, 1920px. Doubled text: 768/1024/1280/1440px plus retained narrow-screen checks. Verified actual native durations (600ms normal, 160ms reduced), center-click targets, independent lift/zoom, horizontal progression/exit, keyboard, touch emulation, native controls/no-JS, live preference interruption, approved-image loading/fallback and axe scans. Local performance observations are retained in `.impeccable/review/phase-2/performance.json`; no physical-device, field-metric or 60fps guarantee is made.
+
+Screenshots/contact sheets and a short actual Chrome recording are in `.qa/phase2-finish/`; `review.html` provides a local gallery. The recording uses CDP screencast frames and Chrome MediaRecorder, requiring no encoder dependency. Current delivery and asset/device limitations are in `PHASE2_DELIVERY.md`; design system, status, audit addendum, source records and character guide are updated. Root DESIGN.md/design sidecar remain historical Phase 1 artifacts rather than an unsolicited tooling refresh.
+
+**Phase 2 is handed back for owner review within the available asset scope.** Missing aligned facial/typing frames are explicit. Phase 3, detailed case studies, full timeline, GitHub dashboard, Ask Anees backend and deployment have not started.
+
+## 2026-11-14 — Phase 2 completion audit; implementation on hold
+
+The owner requested a full audit before approving further implementation. Read the complete shipping page/component/motion architecture, preserved starter components, assets, dependencies, tests and project documentation. Used the interface-audit, animation-review and React performance guidance; read installed Next.js guides. No application source, dependency, artwork or deployment changes were made. Phase 3 was not started.
+
+Fresh required checks: `npm run lint`, `npm run typecheck` and `npm run build` passed; `npm run test:e2e` passed **24 tests in 1.4 minutes** on production Chrome 157.0.8103.51. Test-launcher color-environment warnings were not browser errors. Preserved previous Phase 2 captures in `.qa/phase2-completion-audit/prior-evidence/` before refreshing the suite's output. Visually inspected all nine normal viewport captures as ordered strips, plus interactive and enlarged-text evidence.
+
+Additional local audit probes demonstrated gaps in the passing suite:
+
+- **P0:** 200% root text creates notebook/project overlap at 768–1440px; the notebook center hits the project at 768/1024px. At 768px the notebook extends 152.64px above its stage. Header document width becomes 1278px at a 1024px viewport and 1291px at 1280px.
+- **P1:** Production CSS changes `600ms` to `.6s`; the reader unconditionally divides by 1000. Native browser animation timing is **0.6ms** for hero/section/media reveals and **0.16ms** for reduced opacity reveals. The 80ms stagger survives; CSS-only timings remain correct.
+- **P1:** No sideways scrolling implementation exists. Normal vertical wheel, small deltas, synthesized touch swipes, and Home/End exit work; horizontal wheel has no destination.
+- **P1, owner-asset dependency:** `characterAssets` remains null. An aligned-frame interface and explicit static pose selector exist, but no portrait, automatic state sequence or workspace-driven character transition is implemented.
+- **P2:** MediaReveal leaves an inline identity transform that prevents the CSS outer-card lift; nested screenshot zoom works. The finite CSS orbit continues during a synthetic visibility-interruption diagnostic. Performance and acceptance coverage need further work.
+- **P3:** The conceptual court ball moves without its sibling seam.
+
+Real workspace behavior was retained and verified: lamp state/illumination, laptop/notebook notes, bug note, project anchor, native keyboard/Escape/focus restoration, no-JS controls and touch labels. Additional laptop/project taps and synthesized vertical swipes pass at 320/390/768px. Desktop/mobile and open-state axe checks pass. The first raw geometry probe included hidden disclosure descendants; a visibility-aware follow-up excluded those false positives and verified open menus fit at doubled text.
+
+Fresh unthrottled localhost observation: CLS 0, LCP 244ms, transferred scripts 198,916 bytes. A separate 3-second, 390px programmatic sweep with 4× CPU throttling recorded median frame interval 16.9ms, p95 83.3ms and maximum 200.2ms. This is a diagnostic signal, not physical-device FPS or a causal performance profile. Physical devices, trackpad inertia, Safari, Firefox, screen readers and field performance remain unverified. The synthetic hidden-state check is not a real background-tab session.
+
+Created `docs/PHASE2_COMPLETION_AUDIT.md` with the requested gap table, reproduction evidence, component/file map, character handoff and fix order. Updated `docs/PROJECT_STATUS.md` and `docs/DESIGN_SYSTEM.md` to withdraw completion claims and distinguish intended motion from tested behavior. The old dated reviews remain historical. Audit scripts/results/screenshots are in `.qa/phase2-completion-audit/`; the refreshed suite captures are in `.impeccable/review/phase-2/`. The static design detector found zero primary and 48 historical-design advisory findings, not 48 verified defects. Final document link/whitespace checks passed; `git diff --check` passed with Windows line-ending notices. Actual notebook-center clicks at 768/1024px confirmed navigation to SportLynk instead of opening the note.
+
+**Phase 2 is not complete. Await owner approval before implementing findings.** No Phase 3 work or deployment is authorized by this audit.
+
 ## 2026-11-12 — Phase 1
 
 ### Inspection and scope

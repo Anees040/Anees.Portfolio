@@ -1,12 +1,17 @@
 import { ArrowDownRight, ArrowUpRight, Bug, Plus } from "lucide-react";
 import { workspaceNotes } from "@/lib/portfolio-content";
 import { WorkspacePopover } from "./workspace-popover";
+import { WorkspaceInteraction } from "./workspace-interaction";
+import { CharacterAnimation } from "./character-animation";
+import { workspaceCharacterAssets } from "@/lib/character-assets";
 
 export function WorkspaceScene() {
   return <section id="workspace" className="workspace-section section-space" aria-labelledby="workspace-heading" tabIndex={-1}>
     <div className="site-shell">
-      <div className="workspace-intro" data-reveal><h2 id="workspace-heading">A little space.<br /><em>A lot of possibility.</em></h2><div><p>A peek into my workspace. Open the notebook, explore the project, or change the light.</p><span className="workspace-invitation">Make yourself at home <ArrowDownRight size={19} aria-hidden="true" /></span></div></div>
+      <div className="workspace-intro" data-reveal data-reveal-group><h2 id="workspace-heading">A little space.<br /><em>A lot of possibility.</em></h2><div><p>A peek into my workspace. Open the notebook, explore the project, or change the light.</p><span className="workspace-invitation">Make yourself at home <ArrowDownRight size={19} aria-hidden="true" /></span></div></div>
+      <WorkspaceInteraction>
       <div className="workspace-stage" data-reveal="media">
+        {workspaceCharacterAssets && <div className="workspace-character-slot"><CharacterAnimation assets={workspaceCharacterAssets} scene="workspace" /></div>}
         <div className="workspace-wall" aria-hidden="true"><svg viewBox="0 0 1000 440" fill="none" preserveAspectRatio="xMidYMid slice"><path d="M58 370V141a110 110 0 0 1 220 0v229M69 370V141a99 99 0 0 1 198 0v229M58 205h220M167 31v339" /><path d="M817 52h111v134H817zM829 65h87v108h-87z" /><circle cx="872" cy="119" r="30" /><path d="M842 119h60M872 89v60M0 370h1000" /></svg></div>
         <div className="workspace-light" aria-hidden="true" />
         <div className="workspace-desk" aria-hidden="true" />
@@ -25,6 +30,7 @@ export function WorkspaceScene() {
         <WorkspacePopover id="workspace-notebook" title={workspaceNotes.notebook.title} href={workspaceNotes.notebook.href} link={workspaceNotes.notebook.link}>{workspaceNotes.notebook.body}</WorkspacePopover>
         <WorkspacePopover id="workspace-bug-note" title={workspaceNotes.bug.title} href={workspaceNotes.bug.href} link={workspaceNotes.bug.link}>{workspaceNotes.bug.body}</WorkspacePopover>
       </div>
+      </WorkspaceInteraction>
     </div>
   </section>;
 }

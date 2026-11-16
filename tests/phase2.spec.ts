@@ -94,6 +94,7 @@ test("hero depth, progress, active section and project motion respond without co
   await expect(page.locator("#engineering")).toBeFocused();
   await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Engineering", exact: true })).toHaveAttribute("aria-current", "location");
   const card = page.locator(".project-card-link").first();
+  await page.locator('.journey-navigation a[href="#fitpilot"]').click();
   await card.scrollIntoViewIfNeeded();
   await settle(page);
   const shot = card.locator(".project-screenshot");
@@ -101,7 +102,7 @@ test("hero depth, progress, active section and project motion respond without co
   await card.hover();
   await expect.poll(() => shot.evaluate(el => getComputedStyle(el).transform)).not.toBe(before);
   await settle(page);
-  await page.locator(".project-grid").screenshot({ path: `${captures}/project-hover.png` });
+  await page.locator(".journey-viewport").screenshot({ path: `${captures}/project-hover.png` });
   await card.focus();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Shift+Tab");
@@ -148,7 +149,7 @@ test("workspace stays usable without JavaScript or WebGL", async ({ browser }) =
   await page.locator('label[for="desk-light"]').click();
   await expect(page.getByRole("checkbox", { name: "Desk lamp" })).not.toBeChecked();
   await expect(page.locator("canvas")).toHaveCount(0);
-  await expect(page.locator(".character-fallback")).toBeVisible();
+  await expect(page.locator('.hero-artwork .character-portrait')).toBeVisible();
   await page.getByRole("link", { name: "Explore SportLynk project", exact: true }).click();
   await expect(page).toHaveURL(/#sportlynk$/);
   await context.close();
@@ -196,6 +197,6 @@ test("record local production loading measurements", async ({ page }) => {
   }));
   await writeFile(`${captures}/performance.json`, JSON.stringify(metrics, null, 2));
   expect(metrics.cls ?? 1).toBeLessThan(0.1);
-  await expect(page.locator(".character-fallback")).toBeVisible();
-  await expect(page.locator('img[src*="character"]')).toHaveCount(0);
+  await expect(page.locator('.hero-artwork .character-portrait')).toBeVisible();
+  await expect(page.locator('.character-portrait')).toHaveCount(2);
 });

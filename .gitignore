@@ -53,3 +53,9 @@ next-env.d.ts
 /.codex/
 /.gemini/
 /.impeccable/
+
+# Unused starter and local skill configuration
+/components.json
+/components/Aurora.tsx
+/components/ui/
+/skills-lock.json

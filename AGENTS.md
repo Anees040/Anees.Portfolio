@@ -44,7 +44,7 @@ Read `PRODUCT.md`, `docs/DESIGN_SYSTEM.md`, `docs/PROJECT_STATUS.md`, and `docs/
 - SportLynk is a private project in development. No production launch, tech stack, users, customers, downloads, or metrics have been independently verified.
 - Email: `muhammadanees0511@gmail.com`, explicitly approved for public use.
 - Keep planned and built functionality distinct. Do not infer employment, certificates, degree completion, dates, impact metrics, or personal contribution details.
-- The owner supplied a private reference photograph, then deferred generation. Use the nonfigurative fallback until supplied character artwork is integrated. Enable independent facial/pose states only when matching assets exist.
+- The owner approved `public/assets/character/anees-character-primary.png` and `anees-character-sheet.png` during Phase 2 completion. Their optimized derivatives are registered in `lib/character-assets.ts`; preserve originals and keep the private reference photograph unpublished. Use the architectural fallback when a scene has no valid asset. Independent facial states require matching aligned assets.
 - Ask Anees is currently a planned-feature note with direct email fallback. Future AI must use verified content and a server-side API; never expose secrets in browser code.
 
 ### Accessibility and motion
@@ -70,3 +70,6 @@ Read `PRODUCT.md`, `docs/DESIGN_SYSTEM.md`, `docs/PROJECT_STATUS.md`, and `docs/
 - Workspace notes use native nonmodal HTML popovers; preserve Escape, focus restoration, no-JS behavior and touch labels. Lamp state is a native checkbox, not a decorative-only toggle.
 - Register owner-supplied aligned character frames in `lib/character-assets.ts`; use `public/images/character/README.md` for export guidance. No invented facial state or automatic rig.
 - Current Phase 2 motion/component guidance is in `docs/DESIGN_SYSTEM.md`; root `DESIGN.md` and `.impeccable/design.json` preserve the Phase 1 extraction. Consult `docs/PHASE2_REVIEW.md` before claiming browser or device coverage.
+- The bounded `ProjectJourney` defaults to stacked server content. Desktop pinning requires sufficient physical and text-relative space. Preserve native page scrolling, project links, keyboard focus and live reduced-motion fallback; never intercept wheel/touch scrolling.
+- CSS times may use `s` or `ms`; legacy unitless values mean milliseconds. Reveal cleanup must run after Motion's queued render. Cancel interrupted reveals without retaining their mid-animation styles.
+- Current completion verification and asset/device limits are in `docs/PHASE2_DELIVERY.md`; earlier reviews remain historical.

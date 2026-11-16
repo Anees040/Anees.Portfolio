@@ -2,46 +2,46 @@
 
 ## Current phase
 
-Phase 2 implementation, production checks and independent finish review are complete. The reviewer returned **ship** with no material fixes; see `PHASE2_REVIEW.md` and `PHASE2_DESIGN_REVIEW.md`. Character generation was explicitly deferred by the owner, who will supply artwork. The character architecture and nonfigurative fallback are implemented. Nothing has been deployed. Phase 3 has not started.
+**Phase 2 implementation is complete for the available artwork and ready for owner review.** The full completion prompt was authorized and implemented, including the horizontal project journey and audit fixes. Independent facial/typing animation remains awaiting aligned artwork. Phase 3 has not started; nothing is deployed.
 
-## Implemented
+The current [delivery report](PHASE2_DELIVERY.md) and the resolution addendum in [the completion audit](PHASE2_COMPLETION_AUDIT.md) supersede the original incomplete/readiness reports. Historical reports are preserved.
 
-- Preserved Next.js App Router foundation, exact Copper Atelier primitives, measured readable derivatives and optimized approved typography.
-- Sequenced hero, architectural signature scene, desktop pointer depth, bounded artwork scroll travel and reusable motion tokens/utilities.
-- Character asset contract with idle and optional pose slots; no reference photo or invented likeness published.
-- Original interactive workspace: laptop and notebook notes, lamp toggle, bug feedback and SportLynk project anchor.
-- Active navigation, native mobile disclosure, progress line, consistent section reveals, project zoom/lift/arrows and distinctive conceptual SportLynk court feedback.
-- Server-rendered content with focused client islands; native workspace actions remain usable without JavaScript.
-- Reduced motion at initial load and during animation, visible focus, touch equivalents, responsive layouts and enlarged-text resilience.
-- Existing factual project content and genuine screenshots; Ask Anees remains an honest planned note with direct email.
-- Lint, typecheck, production build and all 24 browser checks pass.
+## Delivered
 
-## Phase sequence and gates
-
-| Phase | Scope | Status |
-| --- | --- | --- |
-| 1 | Foundation and homepage | Complete; retained and extended |
-| 2 | Character architecture, hero, workspace, motion and interactions | Implemented and tested; artwork deferred by owner |
-| 3 | Full projects and engineering case studies | Not started; explicit approval and deeper project/contribution evidence required |
-| 4 | Originally planned advanced motion | Relevant motion was brought into the authorized Phase 2 brief; no separate phase started |
-| 5 | Full About/capabilities/education/certificates | Introductory anchors only |
-| 6 | Ask Anees AI | Planned note only; no knowledge pipeline, retrieval API or fake chat |
-| 7 | Final accessibility/performance/SEO preparation | Initial checks complete; final release work remains |
+- Copper Atelier identity, eight primitives, readable derivatives and three optimized fonts retained.
+- Correct unit-aware motion timing, coordinated hero entrance, bounded pointer/scroll depth, section/media/group reveals and shared project navigation indicator.
+- One four-scene horizontal Selected Work journey driven by native vertical scroll, with keyboard access, progress, deep links, natural exit and stacked mobile/reduced-motion/no-JS/enlarged-text fallbacks.
+- Content-resilient header and workspace grids. Notebook center-click and independent control hit areas pass at doubled text.
+- Native lamp, laptop/notebook/bug notes and project navigation, with visible keyboard/touch feedback.
+- Owner-approved portrait and workspace whole-pose illustrations integrated; original files preserved. Image failure/absent asset fallback, optional mobile image interface, state events and bounded sequence adapter included.
+- Independent card media lift and screenshot zoom; complete SportLynk ball/seam movement.
+- Verified factual content; no new project metrics, unverified SportLynk stack or launch claims.
 
 ## Verification
 
-Production Chrome checks cover 320, 375, 390, 414, 768, 1024, 1280, 1440 and 1920px without horizontal overflow. Keyboard, touch emulation at 320/390/768px, native mobile menu, open workspace notes, lamp and bug, project hover/focus, active navigation/progress, no-JS, 200% text, RTL smoke and initial/live reduced motion passed. Axe scans passed for desktop/mobile, open menu and open note. No console warnings/errors were captured in the interaction check.
+Production Next.js build, lint and strict TypeScript checks pass. **42 browser tests pass** in local Google Chrome: all 24 original cases preserved and adapted to the intended horizontal layout/approved artwork, plus 18 new acceptance cases.
 
-Latest local, unthrottled observation: CLS 0, LCP 236ms and 198,916 transferred script bytes. These are localhost measurements, not field performance or Lighthouse guarantees. See `PHASE2_REVIEW.md` and `../.impeccable/review/phase-2/performance.json`.
+Normal widths: **320, 375, 390, 414, 768, 1024, 1280, 1440, 1920px**. Doubled text: **768, 1024, 1280, 1440px**, plus retained narrow-screen checks. Native production timing: **600ms normal / 160ms reduced**. Keyboard, native menu, no-JS, note focus restoration, touch emulation, actual horizontal progression/exit, live reduced motion, image failure and axe scans pass.
 
-## Remaining limitations
+Local screenshots and a short screen recording: [review gallery](../.qa/phase2-finish/review.html). Full implementation/results/limits: [PHASE2_DELIVERY.md](PHASE2_DELIVERY.md). Raw loading observations: [performance.json](../.impeccable/review/phase-2/performance.json).
 
-- The owner must supply approved character artwork. Independent facial/pose states remain dormant until real matching frames exist; integration needs new visual verification.
-- No genuine 3D was implemented. The evaluated SVG/CSS solution has no WebGL dependency.
-- SportLynk is private/in development. No stack, deployment, users, metrics or contribution evidence is invented.
-- Full case-study routes and detailed contribution narratives belong to Phase 3.
-- Native popovers are verified in current Chrome. Safari, Firefox, physical touch devices and screen-reader sessions remain unverified.
-- Google Fonts are fetched at build time, then self-hosted. Fresh offline builds need a cache or later local-font migration.
-- Contact uses mailto; no live contact form, domain, canonical URL, share image, analytics, certificates or CV is fabricated.
-- Root `DESIGN.md` and `.impeccable/design.json` remain the Phase 1 extraction; current Phase 2 components and motion are documented in `DESIGN_SYSTEM.md`.
-- Existing unused starter assets/components remain preserved.
+## Remaining asset and verification limits
+
+- Current hero is a static portrait; workspace switches real whole-pose images. Blink, head movement, greeting, alternate facial expression and interpolated typing need matching aligned exports. No facial rig or synthetic movement is claimed.
+- Exact filenames, dimensions, alpha/alignment requirements and replacement instructions: [character asset guide](../public/images/character/README.md).
+- No physical phone/tablet, physical trackpad, Safari, Firefox or screen-reader session was performed. Chrome wheel/touch emulation and root-font enlargement do not certify those.
+- No genuine 3D is needed for the current planar scenes; no WebGL library or renderer was added.
+- Root DESIGN.md and its design sidecar remain the historical Phase 1 extraction. Current behavior is documented in DESIGN_SYSTEM.md; no unrelated tooling refresh was undertaken.
+- First-time builds require Google Fonts access/cache. Contact remains mailto.
+
+## Phase boundary
+
+| Phase | Status |
+| --- | --- |
+| 1: foundation | Complete and retained |
+| 2: hero, workspace, motion, horizontal journey, character integration | Implemented and verified within available assets; handed back for review |
+| 3: full projects/case studies | Not started; requires explicit approval |
+| Full timeline, GitHub dashboard and Ask Anees backend | Not started |
+| Deployment | Not performed |
+
+Recoverable incoming tree: `docs/workspace-snapshot/phase-2-resume-20261114-104705/`. Original user changes, starter files and both approved source images were preserved.

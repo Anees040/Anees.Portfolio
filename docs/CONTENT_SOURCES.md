@@ -29,10 +29,10 @@ Each shipping screenshot also embeds its exact origin and acquisition date in JP
 - `public/projects/fitpilot-today.jpg`: https://raw.githubusercontent.com/Anees040/FitPilot/main/docs/screenshots/log/today_1.jpg
 - `public/projects/sukoon-home.jpeg`: https://raw.githubusercontent.com/Anees040/sukoon/main/assets/screenshots/home_screen.jpeg
 - `public/projects/eduverse-home.png`: https://raw.githubusercontent.com/Anees040/EduVerse/main/docs/screenshots/student_home_dashboard.png
-- Hero/workspace: original code-native architectural vector/CSS geometry. The MA scene is a nonfigurative fallback, not a portrait or rig. No new raster was generated in Phase 2.
+- Hero/workspace: original architectural vector/CSS geometry and owner-approved illustrations. The owner approved `public/assets/character/anees-character-primary.png` and `anees-character-sheet.png` during Phase 2 completion. Hero uses the optimized primary cutout; workspace uses its standing derivative and a seated/laptop crop from the sheet. Original rasters are unchanged; no likeness or in-between frame was generated. See `public/images/character/README.md`. The MA study remains the fallback.
 - SportLynk: newly authored geometric court, labeled “Concept illustration.” Not a product screenshot or validated architecture diagram.
 - MA monogram: original vector drawn for this portfolio.
 
 ## Open verification
 
-No production launch is claimed for any project. Deeper source review, precise contribution narratives, demonstrations, and case studies belong to Phase 3. The owner supplied a private reference photograph, then explicitly deferred generation and will supply character artwork. The photograph is not published; independent states require real aligned frames. Certificates and full education history are pending Phase 5. No AI knowledge base exists yet.
+No production launch is claimed for any project. Deeper source review, contribution narratives, demonstrations and case studies belong to Phase 3. Approved illustrations are integrated; the private photograph is not used. Independent facial states need aligned frames. Certificates and full education history remain later work. No AI knowledge base exists.

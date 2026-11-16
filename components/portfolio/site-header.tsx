@@ -29,7 +29,7 @@ export function SiteHeader() {
       if (menu.current?.open && !menu.current.contains(event.target as Node)) menu.current.open = false;
     };
     const closeAtDesktop = () => {
-      if (window.matchMedia("(min-width: 64rem)").matches && menu.current) menu.current.open = false;
+      if (menu.current && getComputedStyle(menu.current).display === "none") menu.current.open = false;
     };
     document.addEventListener("pointerdown", closeOutside);
     window.addEventListener("resize", closeAtDesktop);

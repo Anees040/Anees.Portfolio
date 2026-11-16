@@ -41,10 +41,11 @@ Browser checks use installed Google Chrome. If Chrome is unavailable, install it
 - `docs/BUILD_LOG.md`: implementation and verification record.
 - `docs/PROJECT_STATUS.md`: phase gates and limitations.
 - `docs/PHASE1_REVIEW.md`: historical foundation report.
-- `docs/PHASE2_REVIEW.md`: current implementation, checks, review and screenshot links.
+- `docs/PHASE2_REVIEW.md`: historical initial implementation review.
+- `docs/PHASE2_DELIVERY.md`: current completion report, verification and review artifacts.
 - `lib/character-assets.ts` and `public/images/character/README.md`: owner-supplied artwork contract.
 - `AGENTS.md`: durable instructions for future development.
 
-Phase 2 interaction work is implemented and production-tested. Character generation was deferred by the owner; the architectural MA fallback remains until supplied artwork is integrated. Phase 3 requires explicit approval. Detailed case studies and Ask Anees AI are deferred. Nothing has been deployed.
+Phase 2 now includes the bounded horizontal project journey and owner-approved portrait/workspace poses, with an architectural fallback for missing/failed assets. All 42 browser tests pass. Independent facial/typing animation still needs aligned frames. Phase 3 requires explicit approval; detailed case studies and Ask Anees AI remain deferred. Nothing has been deployed. The local review gallery and screen recording are in `.qa/phase2-finish/review.html`.
 
 Existing unused starter components/assets remain preserved. The initial versions of changed files are saved locally in the ignored `docs/workspace-snapshot/phase-1-start/` directory.

@@ -16,6 +16,9 @@ for (const width of widths) {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("I build thoughtful software for real-world problems.");
     await expect(page.getByRole("link", { name: "Explore my work", exact: true })).toBeVisible();
     for (const image of await page.locator(".project-screenshot").all()) {
+      // Every scene must be reachable through its real project navigation.
+      const id = await image.evaluate(el => el.closest("article")!.id);
+      await page.locator(`.journey-navigation a[href="#${id}"]`).click();
       await image.scrollIntoViewIfNeeded();
       await expect(image).toBeVisible();
       await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
@@ -24,6 +27,8 @@ for (const width of widths) {
     await page.waitForTimeout(800);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     const offscreenText = await page.locator("main h1, main h2, main h3, main p, .contact-email").evaluateAll((elements) => elements.filter((element) => {
+      // Inactive desktop scenes intentionally sit inside a clipped horizontal track.
+      if (element.closest('[data-journey-mode="horizontal"] .project-scene')) return element.scrollWidth > element.clientWidth + 1;
       const bounds = element.getBoundingClientRect();
       return bounds.left < -1 || bounds.right > innerWidth + 1 || element.scrollWidth > element.clientWidth + 1;
     }).map((el) => el.textContent));
