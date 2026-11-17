@@ -6,7 +6,7 @@ import { clearRevealStyles, readMotionTokens, revealFrames, watchMotionInterrupt
 
 export function MotionProvider({ children }: { children: ReactNode }) {
   useEffect(() => watchMotionInterruption(() => {
-    document.querySelectorAll(".hero-orbit, .site-header").forEach(element => {
+    document.querySelectorAll(".hero-orbit, .site-header, .lab-request-lines span").forEach(element => {
       element.getAnimations().forEach(animation => animation.finish());
     });
   }), []);

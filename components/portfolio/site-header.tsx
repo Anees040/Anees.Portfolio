@@ -56,7 +56,7 @@ export function SiteHeader() {
         <nav className="desktop-nav" aria-label="Main navigation">
           {navigation.map(({ label, href }) => <a key={href} href={href} aria-current={active === href ? "location" : undefined} onClick={() => setActive(href)}>{label}</a>)}
         </nav>
-        <a className="ask-link" href="#ask-anees"><MessageCircle size={16} strokeWidth={1.6} aria-hidden="true" /><span>Ask Anees</span><span className="sr-only"> — coming soon</span></a>
+        <a className="ask-link" href="#contact"><MessageCircle size={16} strokeWidth={1.6} aria-hidden="true" /><span>Let’s talk</span></a>
         <details ref={menu} className="mobile-menu" onKeyDown={(event) => {
           if (event.key === "Escape" && menu.current?.open) { menu.current.open = false; menu.current.querySelector("summary")?.focus(); }
         }} onBlur={(event) => {
@@ -65,7 +65,7 @@ export function SiteHeader() {
           <summary><span>Menu</span><Plus className="menu-open-icon" size={18} aria-hidden="true" /><Minus className="menu-close-icon" size={18} aria-hidden="true" /></summary>
           <nav className="menu-panel" aria-label="Mobile navigation">
             {navigation.map(({ label, href }) => <a key={href} href={href} aria-current={active === href ? "location" : undefined} onClick={() => followAnchor(href)}>{label}<ArrowUpRight size={20} strokeWidth={1.5} aria-hidden="true" /></a>)}
-            <a className="mobile-ask" href="#ask-anees" onClick={() => followAnchor("#ask-anees")}>Ask Anees <span>Coming soon</span></a>
+            <a className="mobile-ask" href="#playground" onClick={() => followAnchor("#playground")}>Concurrency Lab <ArrowUpRight size={20} aria-hidden="true" /></a>
           </nav>
         </details>
       </div>

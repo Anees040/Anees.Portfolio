@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { mkdir } from "node:fs/promises";
 
 const widths = [320, 375, 390, 414, 768, 1024, 1280, 1440, 1920];
-const captureDir = ".impeccable/review/phase-2";
+const captureDir = ".qa/phase3-finish/baseline";
 
 for (const width of widths) {
   test(`homepage at ${width}px has readable content and no horizontal overflow`, async ({ page }) => {
@@ -13,7 +13,7 @@ for (const width of widths) {
     await page.setViewportSize({ width, height: width < 768 ? 844 : 1000 });
     await page.goto("/", { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("I build thoughtful software for real-world problems.");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Thoughtful software. A human perspective.");
     await expect(page.getByRole("link", { name: "Explore my work", exact: true })).toBeVisible();
     for (const image of await page.locator(".project-screenshot").all()) {
       // Every scene must be reachable through its real project navigation.
@@ -48,7 +48,7 @@ for (const width of widths) {
 test("mobile disclosure works by keyboard, returns focus, and follows section links", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  const trigger = page.locator("summary");
+  const trigger = page.locator(".mobile-menu > summary");
   await trigger.focus();
   await page.keyboard.press("Enter");
   const nav = page.getByRole("navigation", { name: "Mobile navigation" });
@@ -83,7 +83,7 @@ test("skip link, real destinations, and honest planned assistant", async ({ page
   expect(missingTargets).toEqual([]);
   await expect(page.locator(".contact-email")).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
   await expect(page.locator(".project-card-link")).toHaveCount(3);
-  await expect(page.locator("#ask-anees")).toContainText("Coming soon");
+  await expect(page.locator("#ask-anees")).toContainText("Ask Anees AI is a planned feature");
   await expect(page.locator("#sportlynk")).toContainText("Private repository");
   await expect(page.locator('input:not([type="checkbox"]), textarea')).toHaveCount(0);
 });
@@ -96,7 +96,7 @@ for (const width of [390, 1440]) {
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(results.violations.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target), summary: v.nodes[0]?.failureSummary }))).toEqual([]);
     if (width === 390) {
-      await page.locator("summary").click();
+      await page.locator(".mobile-menu > summary").click();
       const menuResults = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
       expect(menuResults.violations.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target) }))).toEqual([]);
     }
@@ -113,7 +113,7 @@ test("reduced motion removes transform animation, and content works without Java
   await staticPage.goto("http://127.0.0.1:3100");
   await expect(staticPage.getByRole("heading", { level: 1 })).toBeVisible();
   expect(await staticPage.locator(".hero-copy").evaluate(el => getComputedStyle(el).opacity)).toBe("1");
-  await staticPage.locator("summary").click();
+  await staticPage.locator(".mobile-menu > summary").click();
   await expect(staticPage.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
   await staticPage.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Contact", exact: true }).click();
   await expect(staticPage).toHaveURL(/#contact$/);
@@ -131,7 +131,7 @@ test("text expansion and RTL retain the reading layout", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => { document.documentElement.style.fontSize = ""; document.documentElement.dir = "rtl"; });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.locator("summary").click();
+  await page.locator(".mobile-menu > summary").click();
   await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
 });
 

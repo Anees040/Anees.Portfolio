@@ -1,17 +1,14 @@
 import { ArrowUpRight } from "lucide-react";
 import { profile } from "@/lib/portfolio-content";
-import { TextLink } from "./text-link";
+import { profileContent } from "@/lib/profile-content";
+import { Monogram } from "./monogram";
+import Image from "next/image";
 
 export function About() {
   return (
-    <section id="about" className="about-section site-shell section-space" aria-labelledby="about-heading" tabIndex={-1}>
-      <div className="about-heading" data-reveal><h2 id="about-heading">Curious by nature.<br /><em>Thoughtful by design.</em></h2></div>
-      <div className="about-body" data-reveal data-reveal-group><p className="about-lead">I’m Anees, a Software Engineering student who likes turning everyday problems into software that makes sense.</p><p>My interests live where mobile development, backend engineering, and product design meet. From a quieter prayer routine to a more connected learning experience, I’m drawn to building things with a practical purpose.</p><TextLink href={profile.github}>Get to know my work</TextLink></div>
-      <div id="engineering" className="engineering-intro" tabIndex={-1} data-reveal data-reveal-group>
-        <h3>From the interface<br />to the <em>underlying logic.</em></h3>
-        <dl className="engineering-list"><div><dt>Mobile experiences</dt><dd>Flutter, Dart, and native Android integration with Kotlin.</dd></div><div><dt>Data & backend</dt><dd>Exploring connected products with Firebase, Supabase, and local persistence.</dd></div><div><dt>Product thinking</dt><dd>Clear workflows, considered interactions, and useful everyday tools.</dd></div></dl>
-      </div>
-      <div id="journey" className="journey-intro" tabIndex={-1} data-reveal data-reveal-group><span className="journey-symbol" aria-hidden="true"><ArrowUpRight size={24} strokeWidth={1.3} /></span><div><h3>Learning. Building. Going a little deeper.</h3><p>Studying Software Engineering at COMSATS University Islamabad.<br className="desktop-break" /> Putting that learning into practice, one project at a time.</p></div><span className="journey-label">The journey continues</span></div>
+    <section id="about" className="about-section about-expanded site-shell section-space" aria-labelledby="about-heading" tabIndex={-1}>
+      <div className="about-heading"><h2 id="about-heading">Anees,<br /><em>beyond the screen.</em></h2><div className="about-personal-mark">{profileContent.photograph ? <Image src={profileContent.photograph.src} width={profileContent.photograph.width} height={profileContent.photograph.height} alt={profileContent.photograph.alt} sizes="(max-width: 767px) 80vw, 400px" /> : <><Monogram /><p>Muhammad<br /><em>Anees.</em></p><span>Software developer & student</span></>}</div></div>
+      <div className="about-body"><p className="about-lead">{profileContent.introduction}</p><p>{profileContent.philosophy}</p><dl className="profile-details"><div><dt>Education</dt><dd>{profileContent.education.description}<br />{profileContent.education.institution}{profileContent.education.dates && <span>{profileContent.education.dates}</span>}</dd></div><div><dt>Development interests</dt><dd>{profileContent.interests.join(" · ")}</dd></div><div><dt>Currently building</dt><dd>{profileContent.building}</dd></div><div><dt>Currently exploring</dt><dd>{profileContent.learning}</dd></div><div><dt>Where I’m heading</dt><dd>{profileContent.direction}</dd></div></dl><a className="text-link" href={profile.github}><span>Follow the work on GitHub</span><ArrowUpRight size={18} aria-hidden="true" /></a>{profileContent.resume && <a className="text-link" href={profileContent.resume.href}><span>{profileContent.resume.label}</span><ArrowUpRight size={18} aria-hidden="true" /></a>}{profileContent.linkedin && <a className="text-link" href={profileContent.linkedin}><span>LinkedIn</span><ArrowUpRight size={18} aria-hidden="true" /></a>}</div>
     </section>
   );
 }

@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 
-const captures = ".impeccable/review/phase-2";
+const captures = ".qa/phase3-finish/baseline";
 
 async function settle(page: Page) {
   await page.evaluate(() => document.fonts.ready);

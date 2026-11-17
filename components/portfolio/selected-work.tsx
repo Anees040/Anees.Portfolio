@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, LockKeyhole } from "lucide-react";
 import { profile, projects } from "@/lib/portfolio-content";
 import { TextLink } from "./text-link";
 import { MediaReveal } from "./motion";
 import { ProjectJourney } from "./project-journey";
 
-function SportLynkPreview() {
+export function SportLynkPreview() {
   return (
     <div className="sportlynk-preview" role="img" aria-label="Conceptual sports-court drawing for SportLynk; not an application screenshot.">
       <div className="sportlynk-preview-top"><span translate="no">SportLynk<ArrowUpRight className="sportlynk-mark" size={22} aria-hidden="true" /></span><span>Play. Connect. Compete.</span></div>
@@ -30,28 +31,30 @@ export function SelectedWork() {
             <p>A sports venue booking and competitive matchmaking platform, built around a simple idea: make it easier to get people into the game.</p>
             <ul className="project-tags" aria-label="SportLynk product focus"><li>Venue booking</li><li>Matchmaking</li></ul>
             <div className="private-project-note"><LockKeyhole size={14} strokeWidth={1.6} aria-hidden="true" /><span>Private repository · Work in progress</span></div>
-            <p className="project-status-note">Technology details to follow.</p>
-            <TextLink href={`mailto:${profile.email}?subject=Let%E2%80%99s%20talk%20about%20SportLynk`}>Let’s talk about SportLynk</TextLink>
+            <p className="project-status-note">Flagship Final Year Project</p>
+            <Link className="text-link" href="/work/sportlynk"><span>Inside SportLynk</span><ArrowUpRight size={18} aria-hidden="true" /></Link>
           </div>
         </article>
         <div className="project-grid">
           {projects.map((project) => (
             <article id={project.slug} className={`project-card project-scene project-${project.slug}`} aria-labelledby={`${project.slug}-heading`} tabIndex={-1} key={project.slug}>
-              <a className="project-card-link" href={project.repository} aria-label={`Explore ${project.name} on GitHub`}>
+              <Link className="project-card-link" href={`/work/${project.slug}`} aria-label={`Read the ${project.name} case study`}>
                 <MediaReveal className="project-media">
                   <div className="project-media-label" aria-hidden="true"><span>{project.name}</span><ArrowUpRight size={18} strokeWidth={1.6} /></div>
-                  <div className="project-screen"><Image src={project.image} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} sizes="164px" className="project-screenshot" /></div>
+                  <span className="project-visual-word" aria-hidden="true">{project.slug === "fitpilot" ? "Move." : project.slug === "sukoon" ? "Pause." : "Grow."}</span>
+                  <div className="project-screen"><Image src={project.image} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} sizes="(max-width: 767px) 180px, 230px" className="project-screenshot" /></div>
                   <span className="project-media-caption">From the application</span>
                 </MediaReveal>
                 <div className="project-card-heading"><h3 id={`${project.slug}-heading`} translate="no">{project.name}</h3><span className="project-repository-icon"><ArrowUpRight size={20} strokeWidth={1.5} aria-hidden="true" /></span></div>
                 <p className="project-category">{project.category}</p>
-              </a>
+              </Link>
               <div className="project-detail" data-reveal data-reveal-group>
               <p className="project-description">{project.description}</p>
+              <p className="project-engineering-thread">{project.slug === "fitpilot" ? "Inside the build: offline records, a sync queue, and a day-state engine." : project.slug === "sukoon" ? "Inside the build: a versioned schedule crossing from Flutter into Android." : "Inside the build: one course identity across student, teacher and admin workflows."}</p>
               <ul className="project-tech" aria-label={`${project.name} technologies`}>{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul>
               <p className="project-status-note">{project.status}</p>
               <p className="project-status-detail">{project.statusDetail}</p>
-              <TextLink href={project.repository}>Explore {project.name}</TextLink>
+              <Link className="text-link" href={`/work/${project.slug}`}><span>Inside {project.name}</span><ArrowUpRight size={18} aria-hidden="true" /></Link>
               </div>
             </article>
           ))}

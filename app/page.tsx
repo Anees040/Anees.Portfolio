@@ -5,6 +5,10 @@ import { SelectedWork } from "@/components/portfolio/selected-work";
 import { SiteHeader } from "@/components/portfolio/site-header";
 import { WorkspaceScene } from "@/components/portfolio/workspace-scene";
 import { ScrollExperience } from "@/components/portfolio/scroll-experience";
+import { Engineering } from "@/components/portfolio/engineering";
+import { BuildTrail } from "@/components/portfolio/build-trail";
+import { Playground } from "@/components/portfolio/playground";
+import { Evidence } from "@/components/portfolio/evidence";
 
 export default function Home() {
   return (
@@ -15,7 +19,11 @@ export default function Home() {
         <Hero />
         <WorkspaceScene />
         <SelectedWork />
+        <Engineering />
+        <BuildTrail />
+        <Playground />
         <About />
+        <Evidence />
       </main>
       <Contact />
     </ScrollExperience>

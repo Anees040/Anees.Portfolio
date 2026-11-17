@@ -8,7 +8,7 @@ import { workspaceCharacterAssets } from "@/lib/character-assets";
 export function WorkspaceScene() {
   return <section id="workspace" className="workspace-section section-space" aria-labelledby="workspace-heading" tabIndex={-1}>
     <div className="site-shell">
-      <div className="workspace-intro" data-reveal data-reveal-group><h2 id="workspace-heading">A little space.<br /><em>A lot of possibility.</em></h2><div><p>A peek into my workspace. Open the notebook, explore the project, or change the light.</p><span className="workspace-invitation">Make yourself at home <ArrowDownRight size={19} aria-hidden="true" /></span></div></div>
+      <div className="workspace-intro" data-reveal data-reveal-group><h2 id="workspace-heading">Come into<br /><em>the workshop.</em></h2><div><p>This is where an everyday problem becomes a project. Open the laptop, read a development note, or switch off the desk lamp.</p><span className="workspace-invitation">The objects are yours to explore <ArrowDownRight size={19} aria-hidden="true" /></span></div></div>
       <WorkspaceInteraction>
       <div className="workspace-stage" data-reveal="media">
         {workspaceCharacterAssets && <div className="workspace-character-slot"><CharacterAnimation assets={workspaceCharacterAssets} scene="workspace" /></div>}

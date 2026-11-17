@@ -1,12 +1,20 @@
 # Verified content and asset sources
 
+## Continuation re-verification — 17 November 2026
+
+All seventeen previously selected implementation/documentation files again matched the fixed public revisions. In addition, all fifteen distinct file-level implementation links used by the case studies were fetched and matched the local research source byte-for-byte, including FitPilot's `burn_provider.dart` and Sukoon's `prayer_service.dart`. Reports: `.qa/phase3-finish/sources/verification.json` and `.qa/phase3-finish/linked-source-verification.json`.
+
+Case-study file and directory evidence now links to those immutable revisions instead of mutable `main`. Project overview/repository destinations still link to the living repositories. New source-model and no-JavaScript browser regressions protect this distinction. Re-verification does not establish individual contribution, device correctness, production adoption or changed project status; visible original review dates remain accurate.
+
+Reference source/license evidence was checked again at the same revisions. No reference code or assets are incorporated; the renderer remains independently implemented. The optional legacy camel-case repository lookup returns 404 and is not treated as license evidence.
+
 Verified on 2026-11-12. GitHub is used only for software-project evidence. No old portfolio repository was opened. README claims describe the repository; they are not independent proof of deployment, usage, test results, or personal responsibility for every feature.
 
 | Content | Evidence | Display decision |
 | --- | --- | --- |
 | Name, student identity, mobile/backend/product interests | User's master brief | Use supplied introduction |
 | Email | User confirmed `muhammadanees0511@gmail.com` | Working mailto links |
-| SportLynk | User: venue booking and competitive matchmaking; currently building; private repository | In development. No invented tech stack, screenshots, deployment, or case-study link |
+| SportLynk | User: venue booking and competitive matchmaking; flagship Final Year Project; currently building; private repository | In development. Its case study explains approved product direction with explicitly conceptual diagrams; no invented stack, screenshots, completed features or deployment |
 | FitPilot | [README](https://github.com/Anees040/FitPilot/blob/main/README.md), [manifest](https://github.com/Anees040/FitPilot/blob/main/pubspec.yaml) | Food logging, burn plans, workout guidance; Flutter, Riverpod, Supabase; core features built |
 | Sukoon | [README](https://github.com/Anees040/sukoon/blob/main/README.md), [manifest](https://github.com/Anees040/sukoon/blob/main/pubspec.yaml), user says completed | Offline prayer companion, auto-silent, tracking, Qibla; Flutter/Dart/Kotlin; completed project with ongoing verification noted |
 | EduVerse | [README](https://github.com/Anees040/EduVerse/blob/main/README.md), [manifest](https://github.com/Anees040/EduVerse/blob/main/pubspec.yaml) | Flutter/Firebase LMS, courses, assessments, progress; core features built. Planned study rooms and push notifications are not claimed |
@@ -35,4 +43,45 @@ Each shipping screenshot also embeds its exact origin and acquisition date in JP
 
 ## Open verification
 
-No production launch is claimed for any project. Deeper source review, contribution narratives, demonstrations and case studies belong to Phase 3. Approved illustrations are integrated; the private photograph is not used. Independent facial states need aligned frames. Certificates and full education history remain later work. No AI knowledge base exists.
+No production launch is claimed for any project. Phase 3 now includes source-reviewed case studies, but personal contribution narratives and measured outcomes still need owner confirmation. Approved illustrations are integrated; the private photograph is not used. Independent facial states need aligned frames. Certificates and full education history remain missing owner content. No AI knowledge base exists.
+
+## Phase 3 implementation review — 16 November 2026
+
+The public revisions above were checked again during the continuation. Seventeen selected local evidence files matched their revision-pinned remote bytes, including the READMEs, manifests and implementation paths below. The local verification report is `.qa/phase3-finish/sources/verification.json`. This is a focused source review, not execution of those applications, a contribution audit or proof that every README capability works on a device.
+
+| Project / evidence paths | Supported case-study observations | Boundary |
+| --- | --- | --- |
+| FitPilot: `lib/domain/engines/burn_planner.dart`, `streak_engine.dart`; `lib/data/sync/sync_service.dart`, `sync_tables.dart` | Pure Dart calculation engines; a neutral unlogged day; SQLite/Supabase synchronization, identity mapping, UTC timestamps and retry considerations | No accuracy, model quality, production release, users or personally measured performance claim |
+| Sukoon: `lib/prayer/schedule_payload.dart`, `lib/native/schedule_sync.dart`; `android/app/src/main/kotlin/com/anees/sukoon/DndController.kt`; `docs/VERIFY_PLAN.md` | Versioned Flutter/native schedule contract, Android-owned timed behavior, permission and DND restoration responsibilities, documented device-verification considerations | Completed personal project is owner-confirmed; store release and full device verification are not established |
+| EduVerse: `lib/services/course_service.dart`, `quiz_service.dart`; `database.rules.json` | Role-specific learning workflows; course/quiz/attempt records; Firebase **Realtime Database**, not Firestore; separate teacher/global writes and their consistency trade-off | Study rooms and push delivery remain roadmap work; no production payments, certificate validity or comprehensive security audit is asserted |
+| SportLynk: approved portfolio data and Phase 3 owner brief | Flagship FYP, sports venue booking and competitive matchmaking, private/in development | Product map is conceptual. Concurrency Lab is an independent simplified teaching model, not its backend |
+
+Technology metadata is tied to these implementation paths rather than interpreted as proficiency. Engineering takeaways are labeled source observations rather than invented first-person lessons. Optional role and additional outcome fields render only when supplied.
+
+## Nine new case-study screenshots
+
+Acquired on 16 November 2026 from the project repositories at the reviewed revision trees. Existing application pixels were resized without enlargement to a maximum width of 600px and compressed as WebP; they were not generated, redrawn or passed off as new application UI. Each asset embeds its source and acquisition date in XMP. Original source rasters remain in the local research checkout; originals already in this portfolio are unchanged. Exact output dimensions and byte sizes are in `.qa/phase3-research/asset-manifest.json`.
+
+| Shipping asset under `public/projects/stories/` | Original repository path |
+| --- | --- |
+| `fitpilot-log.webp` | `Anees040/FitPilot/docs/screenshots/log/log_screen.jpg` |
+| `fitpilot-plan.webp` | `Anees040/FitPilot/docs/screenshots/workouts/plan_1.jpg` |
+| `fitpilot-programs.webp` | `Anees040/FitPilot/docs/screenshots/workouts/programs.jpg` |
+| `sukoon-permissions.webp` | `Anees040/sukoon/assets/screenshots/permission_screen.jpeg` |
+| `sukoon-tracker.webp` | `Anees040/sukoon/assets/screenshots/tracker_screen.jpeg` |
+| `sukoon-qibla.webp` | `Anees040/sukoon/assets/screenshots/qibla_finder.jpeg` |
+| `eduverse-course.webp` | `Anees040/EduVerse/docs/screenshots/student_course_detail_overview.png` |
+| `eduverse-teacher.webp` | `Anees040/EduVerse/docs/screenshots/teacher_home_dashboard.png` |
+| `eduverse-admin.webp` | `Anees040/EduVerse/docs/screenshots/admin_dashboard_overview.png` |
+
+Screenshot numbers are documentary application content, not portfolio usage or impact metrics. SportLynk has no product screenshot in this delivery.
+
+The provenance tool also produced format-compatible `.webp.json` origin sidecars for the nine gallery images and three existing character derivatives. Final scan: 15 shipping rasters, zero missing provenance. Before/after raw RGBA hashes verify all 12 affected images retain exactly the same decoded pixels and dimensions (`.qa/phase3-finish/raster-provenance-check.json`). Approved character source originals were untouched.
+
+## Profile, journey and evidence
+
+`lib/profile-content.ts` stores optional education periods, approved photograph, resume and LinkedIn fields separately from confirmed content. The Build Trail describes academic learning and personal-project themes, not a dated employment timeline. It has stable chapter IDs and optional periods; no employer, graduation, award or chronology is inferred. Source-linked project artifacts and repository links provide evidence without a fabricated contribution graph or GitHub metrics. Missing first-person details and their exact placement are listed in `PERSONAL_CONTENT_NEEDED.md`.
+
+## Reference interaction research
+
+Reviewed the supplied reference site, its source repository, Image Atomizer explanation, particle-performance article, career-journey article and mini-game article. Local research is retained under `.qa/phase3-research/` and `.qa/phase3-finish/sources/`. The reference portfolio manifest is `UNLICENSED`; no source or assets were copied. The Image Atomizer repository's correct branch/file is `trunk` / `image-atomizer.js`, reviewed at `91e4d78c11eac397ab72457378bf3006d9084d60`; its header declares MIT but no standalone LICENSE was present. This portfolio uses an independently implemented renderer and therefore incorporates none of that source. See `THIRD_PARTY_NOTICES.md` for exact license/reuse boundaries. Earlier 404 research artifacts are not license evidence.

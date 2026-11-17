@@ -16,7 +16,7 @@ The primary PNG contained a **baked checkerboard**, not an alpha channel. Its de
 
 ## Available behavior
 
-- Hero: static approved portrait with scene-level pointer/scroll depth. No face distortion.
+- Hero: the approved portrait remains the accessible/static representation. Phase 3 optionally assembles its real pixels on Canvas 2D and responds to pointer proximity, with keyboard replay; mobile, touch, reduced-motion, forced-colors and no-JS retain the image. Scene-level depth never distorts the face.
 - Workspace: **Rest / At work** controls select supplied whole-pose illustrations. Opening a note selects working; closing it returns to idle. These are pose changes, not interpolated typing or a facial rig.
 - Both scenes accept `idle`, `blink`, `head`, `greeting`, `working`, and `expression`. Only registered states have controls.
 - Optional bounded sequences accept 1–12 actual frames, at least 80ms per frame and at most four seconds total. They play once, then return to idle unless `returnToIdle: false` is supplied. No ambient blink loop.

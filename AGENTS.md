@@ -15,8 +15,8 @@ Read `PRODUCT.md`, `docs/DESIGN_SYSTEM.md`, `docs/PROJECT_STATUS.md`, and `docs/
 ### Phase boundary
 
 - Phase 1 is complete. The owner explicitly authorized Phase 2 on 2026-11-12: character architecture, hero choreography, interactive workspace, advanced motion, navigation and project-preview polish.
-- Stop after Phase 2 verification and report. Phase 3 and later require explicit approval.
-- Do not deploy, publish, build the AI service, or author detailed case studies. The owner deferred character generation and will supply artwork; the reference photograph must not be published.
+- The owner explicitly authorized the complete Phase 3 immersive redesign on 2026-11-16. The current scope includes the particle portrait, deeper workshop, four evidence-based case studies, engineering workbook, Build Trail, Concurrency Lab and expanded profile. Stop after Phase 3 verification and report; later phases require explicit approval.
+- Do not deploy, publish or build the AI service. Detailed case studies are now authorized, but every factual statement needs owner-approved context or source evidence. Character generation remains excluded; the private reference photograph must not be published.
 - Never delete existing user files without permission. The initial files are preserved in the local, ignored `docs/workspace-snapshot/phase-1-start/` directory.
 - Do not import the pre-existing `components/Aurora.tsx`, `components/ui/button.tsx`, old utility styling, or starter SVG assets into the new portfolio. They remain preserved but unused.
 
@@ -27,7 +27,7 @@ Read `PRODUCT.md`, `docs/DESIGN_SYSTEM.md`, `docs/PROJECT_STATUS.md`, and `docs/
 - New portfolio components live in `components/portfolio/`; content lives in `lib/portfolio-content.ts`.
 - Keep content and layout server-rendered. Client boundaries belong to navigation state and motion wrappers. Pass server-rendered children into motion wrappers.
 - `app/tokens.css` is the token authority; `app/portfolio.css` holds the shared styling. Tailwind's theme maps semantic roles to the same variables.
-- Motion remains the default. Add no unnecessary dependencies, Lenis or particles. GSAP or genuine Three.js/R3F is permitted only if a documented Phase 2 evaluation justifies it.
+- Motion remains the default. Add no unnecessary dependencies or Lenis. Phase 3 authorizes the bounded Canvas 2D portrait particle engine, not unrelated particle decoration. GSAP or genuine Three.js/R3F requires a documented technical justification.
 - Evaluate React Bits through the connected registry; install only if its performance, accessibility and visual behavior fit. Selected advanced effects are now authorized in Phase 2.
 
 ### Brand rules
@@ -73,3 +73,12 @@ Read `PRODUCT.md`, `docs/DESIGN_SYSTEM.md`, `docs/PROJECT_STATUS.md`, and `docs/
 - The bounded `ProjectJourney` defaults to stacked server content. Desktop pinning requires sufficient physical and text-relative space. Preserve native page scrolling, project links, keyboard focus and live reduced-motion fallback; never intercept wheel/touch scrolling.
 - CSS times may use `s` or `ms`; legacy unitless values mean milliseconds. Reveal cleanup must run after Motion's queued render. Cancel interrupted reveals without retaining their mid-animation styles.
 - Current completion verification and asset/device limits are in `docs/PHASE2_DELIVERY.md`; earlier reviews remain historical.
+
+### Phase 3 integration guidance
+
+- Typed project narratives live in `lib/case-studies.ts`; the four `/work/[slug]` routes render server content. SportLynk remains a conceptual public study until private implementation evidence is approved.
+- Profile and date-optional journey data live in `lib/profile-content.ts`. No approved public photograph, resume or LinkedIn URL is registered. Missing owner input belongs in `docs/PERSONAL_CONTENT_NEEDED.md`, not visible filler.
+- The original portrait engine lives in `lib/particle-engine.ts`, with optional worker rendering in `lib/particle-worker.ts` and the lifecycle adapter in `components/portfolio/image-atomizer.tsx`. Preserve static image, low-core, touch, reduced-motion, worker-failure and hidden/offscreen fallbacks.
+- Native engineering/architecture disclosures and screenshot popovers work without JavaScript. The Concurrency Lab is a simplified local educational demonstration, not SportLynk's backend; its static reading alternative must remain.
+- Next.js Cache Components disables `dynamicParams`. The narrow `proxy.ts` handles unknown case-study slugs before streaming so they return HTTP 404. Do not disable Cache Components just to replace this guard.
+- Current Phase 3 verification and coverage limits belong in `docs/PHASE3_DELIVERY.md`. Preserve all 42 Phase 2 browser cases or their verified equivalent, plus Phase 3 regression coverage.

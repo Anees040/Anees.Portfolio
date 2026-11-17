@@ -4,7 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { parseCssTime } from "../lib/motion-system";
 import { characterAssets, workspaceCharacterAssets, characterAssetErrors, resolveCharacterFrame } from "../lib/character-assets";
 
-const output = ".qa/phase2-finish";
+const output = ".qa/phase3-finish/baseline";
 const ids = ["sportlynk", "fitpilot", "sukoon", "eduverse"];
 test.beforeAll(async () => { await mkdir(output, { recursive: true }); });
 

@@ -161,7 +161,7 @@ export function ProjectJourney({ children }: { children: ReactNode }) {
         <motion.div className="journey-progress" style={{ scaleX: progress }} aria-hidden="true" />
       </nav>
       <div className="journey-viewport"><motion.div className="journey-track" style={{ x }}>{children}</motion.div></div>
-      <p className="journey-scroll-note"><span>Scroll through the projects, or choose one above.</span><a href="#about">Continue to About <ArrowUpRight size={14} aria-hidden="true" /></a></p>
+      <p className="journey-scroll-note"><span>Scroll through the projects, or open a full study.</span><a href="#engineering">Into the engineering <ArrowUpRight size={14} aria-hidden="true" /></a></p>
     </div>
   </div>;
 }

@@ -22,27 +22,27 @@ export const profile = {
 
 export const navigation = [
   { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
   { label: "Engineering", href: "#engineering" },
   { label: "Journey", href: "#journey" },
+  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
 export const workspaceNotes = {
   laptop: {
     title: "On the workbench: SportLynk",
-    body: "A sports venue booking and competitive matchmaking platform. Currently in development, with a private repository.",
-    link: "Explore the project", href: "#sportlynk",
+    body: "My flagship Final Year Project: a sports venue booking and competitive matchmaking platform. Currently in development, with a private repository. Open the study to explore the product direction.",
+    link: "Explore the project", href: "/work/sportlynk",
   },
   notebook: {
     title: "Start with the everyday problem.",
-    body: "A useful engineering question: what is the smallest interaction that makes someone’s day easier? Follow that thread, then work back to the data and the logic.",
+    body: "In FitPilot, a day without a food log is a neutral state. That small product choice reaches all the way into the streak engine. Naming the states carefully is part of designing the experience.",
     link: "My engineering interests", href: "#engineering",
   },
   bug: {
     title: "You found the edge case.",
-    body: "The smallest bugs have a talent for finding the least obvious places. This one is safely contained. Thanks for looking a little closer.",
-    link: "Back to the work", href: "#work",
+    body: "This one is safely contained. But what if two players both reserve the last available slot? Checking availability is not the same as claiming it. Try that edge case in the Concurrency Lab.",
+    link: "Investigate the booking race", href: "#playground",
   },
 } as const;
 

@@ -1,8 +1,14 @@
 # Copper Atelier design system
 
-The portfolio remains warm, editorial, and precise. `app/tokens.css` is the implementation authority. Components consume role tokens rather than raw brand literals. Phase 2 extends the existing identity through composition and interaction; the eight primitives and three typefaces are unchanged.
+## Phase 3 finish verification — 17 November 2026
 
-**Current implementation, 2026-11-15:** The Phase 2 completion defects are fixed, the bounded horizontal project journey and approved character artwork are integrated, and 42 production browser tests pass. The [delivery report](PHASE2_DELIVERY.md) records current evidence and limits. The original [completion audit](PHASE2_COMPLETION_AUDIT.md) remains historical evidence with a resolution addendum.
+The expanded experience contract below is retained. A fresh read-only visual/content review of the owner-specified code-led implementation returns **ship**, with no material fixes; scope and limitations are in `PHASE3_DESIGN_REVIEW.md`. All nine widths and all five routes pass current regression coverage, including 200% root text. The 85-case production suite retains all 42 Phase 2 cases. Current screenshots, recording and measured limits are in `PHASE3_DELIVERY.md`.
+
+Case-study implementation links now preserve the exact source revision behind each engineering observation; live project destinations remain separate. No additional visual system, dependency or motion engine was introduced in the final continuation. Missing personal assets remain conditional, never visible filler.
+
+The portfolio remains warm, editorial, and precise. `app/tokens.css` is the implementation authority. Components consume role tokens rather than raw brand literals. Phase 3 expands the existing identity through scale, alternating material surfaces and evidence-led interactions; the eight primitives and three typefaces are unchanged.
+
+**Current implementation, 2026-11-16:** The Phase 3 immersive portfolio includes an image-derived particle portrait, deeper workshop, four source-grounded case studies, engineering workbook, Build Trail and local Concurrency Lab. Current checks and captures are recorded in [PHASE3_DELIVERY.md](PHASE3_DELIVERY.md). The Phase 2 delivery and completion audit remain historical evidence; the implementation details below are retained and expanded by the Phase 3 contract at the end of this document.
 
 ## Color primitives
 
@@ -121,3 +127,39 @@ No new dependency was installed. React Bits TiltedCard was evaluated and rejecte
 Fresh production Chrome verification passes all nine required widths, doubled text at 768/1024/1280/1440px, native controls, keyboard, touch emulation, no-JS, reduced motion and project scroll/exit. All 24 existing test cases are preserved, adapted to the intentional horizontal layout and approved artwork; 18 new cases bring the total to 42 passing. See `PHASE2_DELIVERY.md` for current results and captures. Physical devices, physical trackpad, Safari, Firefox and screen-reader sessions remain untested.
 
 Root `DESIGN.md` and `.impeccable/design.json` retain the Phase 1 extraction of the incumbent system. Their primitives, type, spacing and surface rules were compared with Phase 2; their historical component/motion descriptions do not describe the new interactions. This document and the CSS tokens are the current implementation reference.
+
+## Phase 3 experience contract
+
+### Composition and pacing
+
+The homepage reads as an atelier visit: Graphite portrait opening → Linen workbench → Alabaster selected work → Graphite engineering workbook → Alabaster Build Trail → Linen engineering experiment → personal introduction → repository evidence → Espresso contact conclusion. Dark scenes own inverse text and Gold focus; paper popovers keep their light-surface focus role even inside a night scene. Copper is reserved for paths, action states, markers and material details rather than a background wash.
+
+The `--type-masthead` token is `clamp(3.5rem, 7.8vw, 6.5rem)` for the authored hero composition. Existing display/body/mono roles remain. Product screenshots retain their actual colors inside project-specific editorial treatments; FitPilot, Sukoon and EduVerse do not become identical cards. SportLynk remains an original geometric concept scene, explicitly labeled as such.
+
+`--color-bg-deep` aliases Graphite and `--color-ink-on-tint` aliases Espresso. No new hue is introduced. Workshop lamp off uses the Espresso inverse surface, not reduced opacity on a light scene. The real whole-pose artwork stays undistorted; no blink, walking rig or generated likeness is implied.
+
+### Authored motion
+
+| Experience | Narrative / interaction | Fallback and lifecycle |
+| --- | --- | --- |
+| Hero particle portrait | Actual approved portrait colors assemble into its silhouette; pointer proximity disperses pixels; keyboard replay restarts assembly | Actual image beneath the canvas; static mobile/touch/reduced-motion/forced-color/no-JS path; loops stop at rest, hidden or offscreen |
+| Workshop | Whole-pose character responds to genuine object state; lamp changes material lighting; laptop, notebook and bug expose useful notes and links | Native checkbox and nonmodal popovers; Escape/focus restoration; clear touch labels; no-JS actions |
+| Selected Work | Retained native-scroll four-scene horizontal journey with project-specific compositions and detail links | Stacked at mobile, enlarged text, inadequate space, touch or reduced motion; no wheel interception |
+| Engineering workbook | One native disclosure at a time connects a development question, a three-step diagram and actual projects | All labels and evidence remain server-rendered; focused clipped reveal only when motion is permitted |
+| Build Trail | Motion `useScroll` draws an SVG copper path and moves a geometric marker; measured chapter emphasis reverses with scroll | Unpinned stacked chapters and complete static path on narrow/reduced layouts; optional dates never invented |
+| Concurrency Lab | Explicit event advancement, acting-request tracks and accepted/rejected reservation states expose a race and a simplified check/claim boundary | Local deterministic model; no continuous game loop, backend, touch interception or dependency on animation |
+| Case-study diagrams/gallery | Native inspectable architecture layers and genuine screenshot enlargement; source links explain the model | Static server content and native nonmodal popovers; conceptual labels when evidence is unavailable |
+
+Existing token durations, interruption cleanup, coordinated hero entrance, project lift/image zoom and focus/navigation behavior remain. Spatial effects never carry exclusive information. Native scrolling and live preference changes are preserved; GSAP, Lenis, paid motion source and 3D engines were not added.
+
+### Content-resilient layout
+
+All five routes use intrinsic grid minimums, reserved image dimensions and wrapping controls. A `55rem` container query stacks architecture stations based on actual text-relative available space; technology names may wrap at the narrowest doubled-text width. Trail artifacts wrap as links and cannot impose a wider minimum. The notebook cover caps its rem-based width to its native control. Hidden desktop tooltips leave the layout; touch/content-relative layouts keep labels visible. Final responsive and accessibility evidence belongs to the Phase 3 delivery, not an inferred guarantee from these rules.
+
+At less than `20rem` content-relative space, laptop media becomes content-sized rather than forcing its ratio and architecture summary identity/icon move above the full-width title. Contact uses a single reading column before its circular action below `38rem` container space, preserving headline punctuation without shrinking supporting copy. Case chapters explicitly label concept-only studies; next-project titles carry the directional link without a redundant eyebrow.
+
+### Typed content and truth
+
+`lib/case-studies.ts` contains identity/status, optional role, audience, problem, goals, implementation, features, images, technology, architecture, decisions, challenges, outcomes, takeaways, links and next steps. Empty sections do not render. `lib/profile-content.ts` stores the profile, evidence-linked engineering areas and date-optional journey chapters. Source-based diagrams are simplified responsibility maps, not certified production architectures. SportLynk's map and the educational lab are expressly conceptual. No placeholder photograph, resume link, fabricated metrics or AI chat is displayed.
+
+Root `DESIGN.md` and its sidecar remain the preserved historical extraction, not a claim that their Phase 1 component descriptions cover Phase 3. This is an expansion of Copper Atelier's approved identity, not an unsolicited tooling migration or brand replacement.
