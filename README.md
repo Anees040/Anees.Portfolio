@@ -1,6 +1,6 @@
 # Muhammad Anees — Copper Atelier
 
-Phase 3 of Muhammad Anees's Copper Atelier: actual-pixel portrait, interactive workshop, four evidence-led case studies, engineering workbook, reversible Build Trail and one local Concurrency Lab. Next.js 16.4.6 App Router, TypeScript, Tailwind CSS 4, Motion, Lucide and approved Instrument Serif / DM Sans / IBM Plex Mono typography.
+Phase 3 of Muhammad Anees's Copper Atelier: interactive image-derived portrait, professional Digital Atelier, four evidence-led case studies, engineering workbook, scroll-driven Follow the Thread, local Concurrency Lab and editorial contact finale. Next.js 16.4.6 App Router, TypeScript, Tailwind CSS 4, Motion, Lucide and approved Instrument Serif / DM Sans / IBM Plex Mono typography.
 
 ## Run locally
 
@@ -27,7 +27,7 @@ npm run build
 npm run test:e2e
 ```
 
-Browser checks use installed Google Chrome and a production build on port 3100. This Windows continuation uses a separately started preview with Playwright's existing reuse setting to avoid an observed automatic-teardown stall. Current captures/recording/measurements: `.qa/phase3-finish/`; browser report: `playwright-report/`.
+Browser checks use installed Google Chrome and a production build on port 3100. This Windows continuation uses a separately started preview with Playwright's existing reuse setting to avoid an observed automatic-teardown stall. Current captures/recordings/measurements: `.qa/phase3-finalization/`; browser report: `playwright-report/`.
 
 ## Project map
 
@@ -48,12 +48,13 @@ Browser checks use installed Google Chrome and a production build on port 3100. 
 - `docs/PHASE2_REVIEW.md`: historical initial implementation review.
 - `docs/PHASE2_DELIVERY.md`: historical Phase 2 report.
 - `docs/PHASE3_DELIVERY.md`: current implementation, checks, measurements, captures and limits.
+- `docs/PHASE3_FINALIZATION.md`: current four-experience finalization, root causes, complete results and Phase 4 handoff.
 - `docs/PERSONAL_CONTENT_NEEDED.md`: owner inputs/placement.
 - `docs/THIRD_PARTY_NOTICES.md`: licensing research/non-reuse.
 - `lib/character-assets.ts` and `public/images/character/README.md`: owner-supplied artwork contract.
 - `AGENTS.md`: durable instructions for future development.
 
-All **85 production Chrome tests pass**, retaining 42 Phase 2 cases and adding 43 for portrait/lifecycle, cases/gallery, engineering/trail/lab, profile/night contrast, truthful labels, responsive contact and immutable source evidence without JavaScript. All nine widths/all five routes cover 200% root text. Independent visual/content finish review returns **ship**, with no material fixes (`docs/PHASE3_DESIGN_REVIEW.md`). Final results: `docs/PHASE3_DELIVERY.md`; fresh screenshots/recording: `.qa/phase3-finish/review.html`. Chrome emulation is not real-device/accessibility certification.
+Finalization lint/typecheck/build pass and **102 production Chrome tests pass in5.9 minutes**: all85 prior cases retained/equivalent plus17 particle-equilibrium/touch, project/view, chapter navigation, clipboard and enlarged-heading regressions. The previous delivery/review remain historical; current results and the independent visual-fix verdict are in `docs/PHASE3_FINALIZATION.md`. All nine widths/all five routes cover 200% root text. Current screenshots/real recordings: `.qa/phase3-finalization/review.html`. Phase3 is ready for separately authorized Phase4 within documented limits. Chrome emulation is not real-device/accessibility certification.
 
 SportLynk is private/in development; its case explains approved product direction without invented stack, screens or backend completion. Other studies use genuine repositories/screenshots. Public photo/resume/LinkedIn and detailed dated history are not registered; clean optional fields are ready. Independent facial/typing/walking needs aligned artwork. No AI backend, copied reference code or publication.
 

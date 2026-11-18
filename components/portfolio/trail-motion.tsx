@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { useScroll } from "motion/react";
-const path = "M80 65 C330 65 350 150 200 195 S30 305 205 335 S375 420 200 470 S45 540 260 575";
 
-export function TrailMotion({ children }: { children: ReactNode }) {
+const path = "M52 74 C180 15 530 45 542 166 S42 195 52 292 S542 306 542 410 S315 585 72 522";
+
+export function TrailMotion({ children, scene }: { children: ReactNode; scene: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const line = useRef<SVGPathElement>(null);
   const marker = useRef<SVGCircleElement>(null);
@@ -12,46 +13,70 @@ export function TrailMotion({ children }: { children: ReactNode }) {
   useEffect(() => {
     const element = root.current!, route = line.current!, dot = marker.current!;
     const chapters = Array.from(element.querySelectorAll<HTMLElement>(".trail-chapters > li"));
-    const chapterStarts = new Float32Array(chapters.length);
+    const links = Array.from(element.querySelectorAll<HTMLAnchorElement>(".thread-navigation a"));
+    const sheets = Array.from(element.querySelectorAll<HTMLElement>(".thread-scene-sheet"));
+    const starts = new Float32Array(chapters.length);
     const length = route.getTotalLength();
     const preference = matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)");
-    let visible = true;
-    let activeChapter = -2;
+    let visible = true, height = 1, activeChapter = -2;
+    let spatial = false;
     const measure = () => {
-      const height = Math.max(1, element.clientHeight);
-      chapters.forEach((item, index) => { chapterStarts[index] = item.offsetTop / height; });
+      spatial = preference.matches && innerHeight >= parseFloat(getComputedStyle(document.documentElement).fontSize) * 46;
+      element.dataset.trailMotion = spatial ? "active" : "static";
+      const bounds = element.getBoundingClientRect();
+      height = Math.max(1, bounds.height);
+      for (let index = 0; index < chapters.length; index++) starts[index] = chapters[index].getBoundingClientRect().top - bounds.top;
     };
     const update = () => {
-      const enabled = preference.matches && !document.hidden;
-      element.dataset.trailMotion = enabled ? "active" : "static";
-      const progress = enabled ? Math.min(1, Math.max(0, scrollYProgress.get())) : 1;
-      route.style.strokeDasharray = `${length}`;
-      route.style.strokeDashoffset = `${length * (1 - progress)}`;
+      if (!visible || document.hidden) return;
+      const position = scrollYProgress.get() * height;
+      let chapter = 0;
+      for (let index = 1; index < chapters.length; index++) if (position >= starts[index]) chapter = index;
+      const next = Math.min(chapter + 1, chapters.length - 1);
+      const within = next === chapter ? 1 : Math.min(1, Math.max(0, (position - starts[chapter]) / Math.max(1, starts[next] - starts[chapter])));
+      const progress = spatial ? (chapter + (next === chapter ? 0 : within)) / (chapters.length - 1) : 1;
+      route.style.strokeDasharray = String(length); route.style.strokeDashoffset = String(length * (1 - progress));
       const point = route.getPointAtLength(length * progress);
       dot.setAttribute("cx", String(point.x)); dot.setAttribute("cy", String(point.y));
       element.dataset.trailProgress = progress.toFixed(3);
-      let chapter = enabled ? 0 : -1;
-      if (enabled) {
-        for (let index = 1; index < chapters.length; index++) {
-          if (progress >= chapterStarts[index]) chapter = index;
+      const transition = Math.max(0, (within - 0.78) / 0.22);
+      for (let index = 0; index < sheets.length; index++) {
+        const opacity = index === chapter ? (next === chapter ? 1 : 1 - transition) : index === next ? transition : 0;
+        sheets[index].style.opacity = String(opacity);
+        sheets[index].style.visibility = opacity > 0 ? "visible" : "hidden";
+        sheets[index].style.transform = `translateY(${index === chapter ? -transition * 12 : (1 - transition) * 12}px)`;
+      }
+      if (chapter !== activeChapter || element.dataset.trailChapter !== (spatial ? String(chapter + 1) : "static")) {
+        activeChapter = chapter;
+        element.dataset.trailChapter = spatial ? String(chapter + 1) : "static";
+        for (let index = 0; index < chapters.length; index++) {
+          if (index === chapter && spatial) chapters[index].dataset.trailCurrent = "true";
+          else delete chapters[index].dataset.trailCurrent;
+          if (index === chapter) links[index].setAttribute("aria-current", "step");
+          else links[index].removeAttribute("aria-current");
         }
       }
-      if (chapter !== activeChapter) {
-        activeChapter = chapter;
-        element.dataset.trailChapter = chapter < 0 ? "static" : String(chapter + 1);
-        chapters.forEach((item, index) => {
-          if (index === chapter) item.dataset.trailCurrent = "true";
-          else delete item.dataset.trailCurrent;
-        });
-      }
     };
-    const resize = new ResizeObserver(() => { measure(); update(); });
-    resize.observe(element);
-    measure();
-    const unsubscribe = scrollYProgress.on("change", () => { if (visible) update(); });
-    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) update(); }); observer.observe(element);
-    preference.addEventListener("change", update); document.addEventListener("visibilitychange", update); update();
-    return () => { observer.disconnect(); resize.disconnect(); unsubscribe(); preference.removeEventListener("change", update); document.removeEventListener("visibilitychange", update); };
+    const refresh = () => { measure(); update(); };
+    const navigate = (event: MouseEvent) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const target = (event.target as Element).closest<HTMLAnchorElement>(".thread-navigation a");
+      const index = target ? links.indexOf(target) : -1;
+      if (index < 0) return;
+      event.preventDefault();
+      const destination = chapters[index];
+      const top = scrollY + (spatial ? destination.querySelector("article")!.getBoundingClientRect().top - innerHeight * 0.35 : destination.getBoundingClientRect().top - parseFloat(getComputedStyle(element).getPropertyValue("--header-height")) - 32);
+      history.pushState(null, "", target!.hash);
+      destination.focus({ preventScroll: true });
+      scrollTo({ top, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    };
+    const resize = new ResizeObserver(refresh); resize.observe(element);
+    const unsubscribe = scrollYProgress.on("change", update);
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) refresh(); }); observer.observe(element);
+    preference.addEventListener("change", refresh); window.addEventListener("resize", refresh);
+    document.addEventListener("visibilitychange", update); element.addEventListener("click", navigate);
+    refresh();
+    return () => { observer.disconnect(); resize.disconnect(); unsubscribe(); preference.removeEventListener("change", refresh); window.removeEventListener("resize", refresh); document.removeEventListener("visibilitychange", update); element.removeEventListener("click", navigate); };
   }, [scrollYProgress]);
-  return <div ref={root} className="trail-layout" data-trail-motion="static"><div className="trail-map" aria-hidden="true"><svg viewBox="0 0 400 640" fill="none"><defs><pattern id="trail-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" className="trail-grid" /></pattern></defs><rect width="400" height="640" fill="url(#trail-grid)" /><path d={path} className="trail-base" /><path ref={line} d={path} className="trail-copper" /><circle ref={marker} cx="260" cy="575" r="9" className="trail-marker" /><g className="trail-map-labels"><text x="49" y="42">THE FOUNDATION</text><text x="175" y="170">EVERYDAY PRODUCTS</text><text x="72" y="308">UNDER THE SURFACE</text><text x="177" y="448">SPORTLYNK</text><text x="230" y="617">NEXT</text></g><g className="trail-stations"><circle cx="80" cy="65" r="4" /><circle cx="200" cy="195" r="4" /><circle cx="205" cy="335" r="4" /><circle cx="200" cy="470" r="4" /><circle cx="260" cy="575" r="4" /></g></svg><span>Follow the thread.</span></div>{children}</div>;
+  return <div ref={root} className="trail-layout thread-layout" data-trail-motion="static"><div className="trail-map thread-scene" aria-hidden="true"><svg className="thread-pathwork" viewBox="0 0 600 600" fill="none"><path d={path} className="trail-base" /><path ref={line} d={path} className="trail-copper" /><circle ref={marker} cx="72" cy="522" r="7" className="trail-marker" /></svg><div className="thread-scene-sheets">{scene}</div><div className="thread-scene-signature"><span>Copper Atelier</span><span>Learning → building</span></div></div>{children}</div>;
 }

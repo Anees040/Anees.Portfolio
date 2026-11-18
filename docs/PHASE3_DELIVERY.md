@@ -1,5 +1,15 @@
 # Copper Atelier — Phase 3 delivery
 
+## Finalization — 18 November 2026
+
+The owner's finalization assignment replaces the four experiences described in the historical delivery below. Current implementation and exit gate: [PHASE3_FINALIZATION.md](PHASE3_FINALIZATION.md). Current rendered evidence: [finalization review gallery](../.qa/phase3-finalization/review.html). The older review's independent verdict does not apply to these subsequent changes.
+
+The portrait now separates canvas visibility from simulation equilibrium, supports native-scroll-safe touch gestures and performs verified target reassembly. Follow the Thread is a bounded, reversible scroll-linked engineering archive with direct chapter anchors and complete inline fallbacks. The mounted cartoon desk is replaced by a professional Digital Atelier with four projects and three meaningful native-control views; old files/art are preserved. The contact finale provides visible email, actual clipboard feedback, verified GitHub and natural back-to-top navigation. Case studies, Selected Work, Workbook, Concurrency Lab, profile, evidence, navigation and metadata remain intact.
+
+Current lint, typecheck and production build exit zero; the focused production suite passes 42 cases. **The complete final production suite exits zero: 102 passed in 5.9 minutes.** All 85 original cases remain represented, with intentionally obsolete desk/assistant assertions migrated to equivalent replacement coverage, plus 17 new regressions; no skipped/deleted failure cases. Current captures cover all nine widths, actual desktop/emulated-mobile recordings, enlarged text and interaction states; local measurements and corrected intermediate failures are in the finalization report. A fresh independent visual review identified two material heading/note fixes; both were scored resolved, disposition ship on refreshed evidence. No earlier verdict is reused or physical device certified. **Phase 3 is ready for a separately authorized Phase 4 within these documented limits.**
+
+The following 16–17 November delivery is retained as history, not the current desk/portrait/trail contract.
+
 Implemented 16–17 November 2026; final verification on 17 November (Asia/Karachi). This continues the interrupted chat's uncommitted implementation rather than replacing it. Nothing is deployed, published or committed.
 
 ## Overall status

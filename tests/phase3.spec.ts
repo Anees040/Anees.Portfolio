@@ -29,7 +29,8 @@ for (const mode of ["worker", "main", "worker-failure"] as const) {
     const metrics = JSON.parse(first!);
     expect(metrics.particles).toBeGreaterThan(1000);
     expect(metrics.particles).toBeLessThan(30000);
-    expect(metrics.frames).toBeGreaterThan(5);
+    expect(metrics.frames).toBe(1);
+    expect(metrics.reassembled).toBe(true);
     await page.waitForTimeout(300);
     expect(await portrait.getAttribute("data-particle-metrics")).toBe(first);
     const replay = page.getByRole("button", { name: "Reassemble portrait" });
@@ -112,11 +113,12 @@ test("a worker failure in a hidden tab recovers on return", async ({ page }) => 
   await expect(page.getByRole("button", { name: "Reassemble portrait" })).toBeVisible();
 });
 
-test("touch and low-core devices use static or lower-density portrait paths", async ({ browser, page }) => {
+test("touch and low-core devices use interactive lower-density portrait paths", async ({ browser, page }) => {
   const context = await browser.newContext({ viewport: { width: 768, height: 1000 }, hasTouch: true });
   const touch = await context.newPage();
   await touch.goto("http://127.0.0.1:3100", { waitUntil: "networkidle" });
-  await expect(touch.locator(".particle-canvas")).toHaveCount(0);
+  await expect(touch.locator(".particle-canvas")).toHaveCount(1);
+  await expect(touch.locator(".image-atomizer")).toHaveAttribute("data-particle-mode", "main");
   await expect(touch.locator(".hero-artwork .character-portrait")).toBeVisible();
   await context.close();
   await page.addInitScript(() => Object.defineProperty(navigator, "hardwareConcurrency", { value: 4 }));
@@ -178,7 +180,18 @@ test("build trail follows reversible scroll and live reduced motion settles the 
   for (const fraction of [0.15, 0.65, 0.35]) {
     await page.evaluate(({ top, height, fraction }) => scrollTo({ top: top + height * fraction - innerHeight / 2, behavior: "instant" }), { ...range, fraction });
     await expect(trail).toHaveAttribute("data-trail-motion", "active");
-    await expect.poll(async () => Number(await trail.getAttribute("data-trail-progress"))).toBeCloseTo(fraction, 1);
+    const expected = await trail.evaluate((element, fraction) => {
+      const bounds = element.getBoundingClientRect();
+      const chapters = Array.from(element.querySelectorAll<HTMLElement>(".trail-chapters > li"));
+      const starts = chapters.map(chapter => chapter.getBoundingClientRect().top - bounds.top);
+      const position = element.clientHeight * fraction;
+      let chapter = 0;
+      for (let index = 1; index < starts.length; index++) if (position >= starts[index]) chapter = index;
+      const next = Math.min(chapter + 1, starts.length - 1);
+      const within = next === chapter ? 0 : (position - starts[chapter]) / (starts[next] - starts[chapter]);
+      return (chapter + within) / (starts.length - 1);
+    }, fraction);
+    await expect.poll(async () => Number(await trail.getAttribute("data-trail-progress"))).toBeCloseTo(expected, 2);
     progress.push(Number(await trail.getAttribute("data-trail-progress")));
   }
   expect(progress[1]).toBeGreaterThan(progress[0]);

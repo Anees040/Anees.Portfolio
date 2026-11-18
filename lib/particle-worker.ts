@@ -1,17 +1,18 @@
 import { ParticleEngine, type ParticleSource } from "./particle-engine";
 
-type Message = { type: "init"; canvas: OffscreenCanvas; source: ParticleSource } | { type: "pointer"; x: number; y: number } | { type: "scatter" } | { type: "pause" };
+type Message = { type: "init"; canvas: OffscreenCanvas; source: ParticleSource } | { type: "pointer"; x: number; y: number; sequence: number } | { type: "scatter"; sequence: number } | { type: "pause" };
 const worker = self as unknown as { postMessage: (data: unknown) => void; requestAnimationFrame: (callback: (time: number) => void) => number; cancelAnimationFrame: (id: number) => void; onmessage: (event: MessageEvent<Message>) => void };
 let engine: ParticleEngine | undefined;
 let frame = 0;
 let last = 0;
+let sequence = 0;
 function stop() { if (frame) worker.cancelAnimationFrame(frame); frame = 0; }
 function tick(time: number) {
   frame = 0;
   if (!engine) return;
   const done = engine.step(last ? time - last : 16.667);
   last = time;
-  if (done) worker.postMessage({ type: "settled", metrics: engine.metrics });
+  if (done) worker.postMessage({ type: "settled", metrics: engine.metrics, sequence });
   else frame = worker.requestAnimationFrame(tick);
 }
 function start() { if (!frame) { last = 0; frame = worker.requestAnimationFrame(tick); } }
@@ -23,10 +24,9 @@ worker.onmessage = (event: MessageEvent<Message>) => {
       if (!context || typeof worker.requestAnimationFrame !== "function") throw new Error("Worker canvas unavailable");
       engine = new ParticleEngine(context, message.source);
       engine.step(16.667);
-      worker.postMessage({ type: "ready" });
-      start();
+      worker.postMessage({ type: "ready", metrics: engine.metrics });
     } else if (message.type === "pause") stop();
-    else if (message.type === "scatter") { engine?.scatter(); start(); }
-    else { engine?.pointer(message.x, message.y); start(); }
+    else if (message.type === "scatter") { sequence = message.sequence; engine?.scatter(); start(); }
+    else { sequence = message.sequence; engine?.pointer(message.x, message.y); start(); }
   } catch { stop(); worker.postMessage({ type: "failed" }); }
 };

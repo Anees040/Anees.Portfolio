@@ -16,8 +16,8 @@ The primary PNG contained a **baked checkerboard**, not an alpha channel. Its de
 
 ## Available behavior
 
-- Hero: the approved portrait remains the accessible/static representation. Phase 3 optionally assembles its real pixels on Canvas 2D and responds to pointer proximity, with keyboard replay; mobile, touch, reduced-motion, forced-colors and no-JS retain the image. Scene-level depth never distorts the face.
-- Workspace: **Rest / At work** controls select supplied whole-pose illustrations. Opening a note selects working; closing it returns to idle. These are pose changes, not interpolated typing or a facial rig.
+- Hero: the approved portrait remains the accessible/static representation. Phase 3 finalization activates real sampled particles on desktop hover and mobile tap/horizontal drag, with keyboard replay. Equilibrium keeps the active canvas visible without extra frames; exit/release reassembles before restoring the image. Reduced-motion, forced-colors, no-JS and missing-canvas paths retain the image. Scene-level depth never distorts the face.
+- Former workspace: the **Rest / At work** whole-pose assets and adapter remain registered/preserved. The final Digital Atelier does not mount the character, desk or lamp. This professional engineering folio intentionally contains no new face, pose or rig.
 - Both scenes accept `idle`, `blink`, `head`, `greeting`, `working`, and `expression`. Only registered states have controls.
 - Optional bounded sequences accept 1–12 actual frames, at least 80ms per frame and at most four seconds total. They play once, then return to idle unless `returnToIdle: false` is supplied. No ambient blink loop.
 - Reduced motion keeps explicit pose selection immediate and disables sequences. Hidden/offscreen scenes cancel timers and settle to idle.

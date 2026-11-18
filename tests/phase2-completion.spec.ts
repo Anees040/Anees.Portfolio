@@ -66,38 +66,24 @@ test("live reduced motion and visibility changes settle real entrance animations
 });
 
 for (const width of [768, 1024, 1280, 1440]) {
-  test(`200% text at ${width}px preserves header, notebook hit area and project content`, async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await ready(page, width);
+  test(`200% text at ${width}px preserves header, atelier hit areas and project content`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" }); await ready(page, width);
     await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
     await expect(page.locator(".project-journey")).toHaveAttribute("data-journey-mode", "stacked");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    const overflow = await page.locator(".header-inner a, .header-inner summary").evaluateAll(elements => elements.filter(el => el.checkVisibility()).filter(el => {
-      const rect = el.getBoundingClientRect();
-      return rect.left < 0 || rect.right > innerWidth || el.scrollWidth > el.clientWidth + 1;
-    }).map(el => el.textContent));
+    const overflow = await page.locator(".header-inner a, .header-inner summary").evaluateAll(elements => elements.filter(element => element.checkVisibility()).filter(element => { const bounds = element.getBoundingClientRect(); return bounds.left < 0 || bounds.right > innerWidth || element.scrollWidth > element.clientWidth + 1; }).map(element => element.textContent));
     expect(overflow).toEqual([]);
-    await page.screenshot({ path: `${output}/text-200-${width}-header.png` });
-    const notebook = page.locator(".notebook-object");
-    await notebook.scrollIntoViewIfNeeded();
-    const collisions = await page.locator(".workspace-lamp, .laptop-object, .notebook-object, .project-object, .workspace-bug").evaluateAll(elements => {
-      const failures: string[] = [];
-      elements.forEach((a, i) => elements.slice(i + 1).forEach(b => {
-        const x = a.getBoundingClientRect(), y = b.getBoundingClientRect();
-        if (Math.min(x.right, y.right) - Math.max(x.left, y.left) > 1 && Math.min(x.bottom, y.bottom) - Math.max(x.top, y.top) > 1) failures.push(`${a.className} / ${b.className}`);
-      }));
-      return failures;
-    });
-    expect(collisions).toEqual([]);
-    const box = (await notebook.boundingBox())!;
-    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-    await expect(page.locator("#workspace-notebook")).toBeVisible();
-    await expect(page).not.toHaveURL(/#sportlynk$/);
-    await page.keyboard.press("Escape");
-    await expect(notebook).toBeFocused();
-    await page.locator(".workspace-stage").screenshot({ path: `${output}/text-200-${width}-workspace.png` });
-    const clipped = await page.locator(".object-label, .notebook-cover, .project-detail, .project-media-label, .character-state-controls").evaluateAll(elements => elements.filter(el => el.scrollWidth > el.clientWidth + 1).map(el => el.className));
+    const studio = page.locator(".digital-atelier");
+    for (const name of ["FitPilot", "Sukoon", "EduVerse", "SportLynk"]) {
+      const choice = studio.getByRole("radio", { name }); await choice.check(); await expect(choice).toBeChecked();
+      await expect(studio.getByRole("heading", { name: `${name}.` })).toBeVisible();
+    }
+    const note = studio.getByRole("radio", { name: "Engineering Notes" }); await note.focus(); await page.keyboard.press("Space");
+    await expect(note).toBeFocused(); await expect(studio.getByRole("article", { name: "SportLynk engineering notes" })).toBeVisible();
+    const clipped = await studio.locator("label, h3, h4, p").evaluateAll(elements => elements.filter(element => element.checkVisibility()).filter(element => element.scrollWidth > element.clientWidth + 1).map(element => element.className));
     expect(clipped).toEqual([]);
+    const collisions = await studio.locator(".atelier-project-choice").evaluateAll(elements => elements.flatMap((element, index) => elements.slice(index + 1).filter(other => { const first = element.getBoundingClientRect(), second = other.getBoundingClientRect(); return Math.min(first.right, second.right) - Math.max(first.left, second.left) > 1 && Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top) > 1; }).map(other => `${element.textContent} / ${other.textContent}`)));
+    expect(collisions).toEqual([]); await studio.screenshot({ path: `${output}/text-200-${width}-atelier.png` });
   });
 }
 
@@ -188,25 +174,19 @@ test("approved character assets are valid and missing states resolve honestly to
   expect(characterAssetErrors({ idle: { ...characterAssets!.idle, width: 0 } }).length).toBeGreaterThan(0);
 });
 
-test("approved portrait loads and workspace changes only between supplied whole poses", async ({ page }) => {
-  await ready(page);
-  const portrait = page.locator(".hero-artwork .character-portrait");
-  await expect.poll(() => portrait.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+test("approved portrait loads and atelier does not reuse the rejected workspace character", async ({ page }) => {
+  await ready(page); const portrait = page.locator(".hero-artwork .character-portrait");
+  await expect.poll(() => portrait.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0)).toBe(true);
   await expect(page.locator(".hero-artwork .character-state-controls")).toHaveCount(0);
-  const character = page.locator('[data-character-scene="workspace"]');
-  await character.scrollIntoViewIfNeeded();
-  await character.getByRole("button", { name: "At work", exact: true }).click();
-  await expect(character).toHaveAttribute("data-character-state", "working");
-  await expect.poll(() => character.locator("img").evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
-  await character.getByRole("button", { name: "Rest", exact: true }).click();
-  await expect(character).toHaveAttribute("data-character-state", "idle");
-  await page.locator(".laptop-object").click();
-  await expect(character).toHaveAttribute("data-character-state", "working");
-  await page.keyboard.press("Escape");
-  await expect(character).toHaveAttribute("data-character-state", "idle");
+  await expect(page.locator('#workspace [data-character-scene="workspace"]')).toHaveCount(0);
+  const studio = page.locator(".digital-atelier"); await studio.getByRole("radio", { name: "Sukoon" }).check();
+  const images = studio.locator('[data-project="sukoon"] .folio-screens img');
+  for (const image of await images.all()) await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0)).toBe(true);
+  await studio.getByRole("radio", { name: "Engineering Notes" }).check();
+  await expect(studio.getByRole("article", { name: "Sukoon engineering notes" })).toBeVisible();
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await character.getByRole("button", { name: "At work", exact: true }).click();
-  await expect(character.locator(".character-frame")).toHaveCSS("transform", "none");
+  await studio.getByRole("radio", { name: "Projects", exact: true }).check();
+  await expect(studio.getByRole("article", { name: "Sukoon project presentation" })).toHaveCSS("transform", "none");
 });
 
 test("failed character image falls back to the architectural study", async ({ page }) => {

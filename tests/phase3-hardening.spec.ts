@@ -15,28 +15,18 @@ test("profile and journey support owner content without invented dates or assets
 });
 
 for (const width of [390, 1440]) {
-  test(`workshop night state keeps native controls, focus and contrast at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 1000 });
-    await page.goto("/", { waitUntil: "networkidle" });
-    const lamp = page.getByRole("checkbox", { name: "Desk lamp" });
-    await lamp.focus();
-    await page.keyboard.press("Space");
-    await expect(lamp).not.toBeChecked();
-    await expect(page.locator(".workspace-stage")).toHaveCSS("background-color", "rgb(48, 43, 39)");
+  test(`atelier native selection keeps focus and contrast at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 }); await page.goto("/", { waitUntil: "networkidle" });
+    const studio = page.locator(".digital-atelier");
+    const notes = studio.getByRole("radio", { name: "Engineering Notes" }); await notes.focus(); await page.keyboard.press("Space");
+    await expect(notes).toBeChecked(); await expect(notes).toBeFocused();
     const scan = await new AxeBuilder({ page }).include("#workspace").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(scan.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) }))).toEqual([]);
-    await page.locator(".notebook-object").focus();
-    await page.keyboard.press("Enter");
-    const note = page.locator("#workspace-notebook");
-    await expect(note).toBeVisible();
-    await expect(note.getByRole("button", { name: "Close note" })).toBeFocused();
-    await page.keyboard.press("Escape");
-    await expect(page.locator(".notebook-object")).toBeFocused();
+    await studio.getByRole("radio", { name: "FitPilot" }).check();
+    await expect(studio.getByRole("article", { name: "FitPilot engineering notes" })).toContainText("neutral");
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await lamp.focus();
-    await page.keyboard.press("Space");
-    await expect(lamp).toBeChecked();
-    await expect(page.locator(".workspace-stage")).toHaveCSS("transition-duration", "0s");
+    await studio.getByRole("radio", { name: "Build Log" }).check();
+    await expect(studio.getByRole("article", { name: "FitPilot build log" })).toHaveCSS("animation-name", "none");
   });
 }
 
@@ -94,7 +84,7 @@ test("main-thread particle drawing really stops after rest, hidden state, and of
   const draws = () => page.evaluate(() => (window as Window & { particleDrawCount?: number }).particleDrawCount ?? 0);
   await expect(portrait).toHaveAttribute("data-particle-metrics", /particles/, { timeout: 10000 });
   const count = await draws();
-  expect(count).toBeGreaterThan(10);
+  expect(count).toBe(1);
   await page.waitForTimeout(250);
   expect(await draws()).toBe(count);
   await page.getByRole("button", { name: "Reassemble portrait" }).click();
@@ -162,7 +152,7 @@ for (const width of [320, 375, 390, 414, 768, 1024, 1280, 1440, 1920]) {
       await page.goto(route, { waitUntil: "networkidle" });
       await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
       if (route === "/") {
-        expect(await page.locator(".laptop-screen").evaluate(element => element.clientHeight >= element.querySelector(".laptop-screen-content")!.scrollHeight)).toBe(true);
+        expect(await page.locator(".atelier-work-surface").evaluate(element => element.clientHeight >= element.querySelector('.atelier-project-panel[data-project="sportlynk"]')!.scrollHeight)).toBe(true);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const clipped = await page.locator("h1,h2,h3,p,summary,button").evaluateAll(elements => elements.filter(element => element.checkVisibility()).filter(element => {

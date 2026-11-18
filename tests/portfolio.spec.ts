@@ -73,7 +73,7 @@ test("mobile disclosure works by keyboard, returns focus, and follows section li
   await expect.poll(() => page.locator("#about").evaluate(el => el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(72);
 });
 
-test("skip link, real destinations, and honest planned assistant", async ({ page }) => {
+test("skip link, real destinations, and no inactive assistant or fake form", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
@@ -83,9 +83,10 @@ test("skip link, real destinations, and honest planned assistant", async ({ page
   expect(missingTargets).toEqual([]);
   await expect(page.locator(".contact-email")).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
   await expect(page.locator(".project-card-link")).toHaveCount(3);
-  await expect(page.locator("#ask-anees")).toContainText("Ask Anees AI is a planned feature");
+  await expect(page.locator("#ask-anees")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Write to Anees" })).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
   await expect(page.locator("#sportlynk")).toContainText("Private repository");
-  await expect(page.locator('input:not([type="checkbox"]), textarea')).toHaveCount(0);
+  await expect(page.locator('input:not([type="checkbox"]):not([type="radio"]), textarea')).toHaveCount(0);
 });
 
 for (const width of [390, 1440]) {

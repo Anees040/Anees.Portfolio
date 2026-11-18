@@ -37,7 +37,7 @@ Each shipping screenshot also embeds its exact origin and acquisition date in JP
 - `public/projects/fitpilot-today.jpg`: https://raw.githubusercontent.com/Anees040/FitPilot/main/docs/screenshots/log/today_1.jpg
 - `public/projects/sukoon-home.jpeg`: https://raw.githubusercontent.com/Anees040/sukoon/main/assets/screenshots/home_screen.jpeg
 - `public/projects/eduverse-home.png`: https://raw.githubusercontent.com/Anees040/EduVerse/main/docs/screenshots/student_home_dashboard.png
-- Hero/workspace: original architectural vector/CSS geometry and owner-approved illustrations. The owner approved `public/assets/character/anees-character-primary.png` and `anees-character-sheet.png` during Phase 2 completion. Hero uses the optimized primary cutout; workspace uses its standing derivative and a seated/laptop crop from the sheet. Original rasters are unchanged; no likeness or in-between frame was generated. See `public/images/character/README.md`. The MA study remains the fallback.
+- Hero/former workspace: original architectural vector/CSS geometry and owner-approved illustrations. The owner approved `public/assets/character/anees-character-primary.png` and `anees-character-sheet.png` during Phase 2 completion. Hero uses the optimized primary cutout. The former standing/seated workspace derivatives remain preserved, but the final professional Digital Atelier does not mount them. Original rasters are unchanged; no likeness or in-between frame was generated. See `public/images/character/README.md`. The MA study remains the fallback.
 - SportLynk: newly authored geometric court, labeled “Concept illustration.” Not a product screenshot or validated architecture diagram.
 - MA monogram: original vector drawn for this portfolio.
 
