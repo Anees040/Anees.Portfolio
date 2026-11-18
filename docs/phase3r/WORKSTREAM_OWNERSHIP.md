@@ -1,0 +1,31 @@
+# Future parallel worktree ownership
+
+**No worktree or parallel Codex execution was created for 3R-0.** This is a future operating contract. Never run two Codex agents in one working directory. Reference snapshots remain ignored research material and must not migrate into production branches.
+
+## Exclusive write sets
+
+| Owner | Exclusive files / scope | May not edit |
+| --- | --- | --- |
+| Coordinator | `app/page.tsx`, `app/layout.tsx`, `app/globals.css`, `app/portfolio.css`, `app/tokens.css`, all package/lock/config files, `proxy.ts`, navigation/site-header/scroll-experience/motion provider, `lib/motion-system.ts`, proposed shared scroll runtime/contracts/provider/boundary, `lib/portfolio-content.ts`, `lib/profile-content.ts`, `lib/case-studies.ts`, `lib/character-assets.ts`, shared SVG assets/registrations/provenance, docs/status/notices and final integration | Does not overwrite a worker's unmerged component/styles/tests without coordination |
+| Hero worker, Phase 3R-1 only | Existing `hero.tsx`, `character-scene.tsx`, `image-atomizer.tsx`, `lib/particle-engine.ts`, `lib/particle-worker.ts`, new `hero-cosmos.module.css`, `tests/phase3r-hero.spec.ts` | Shared CSS/tokens, pointer-scene/motion infrastructure, fonts, packages, public asset originals/registration; request coordinator changes explicitly |
+| About + Work worker | Existing `about.tsx`, `selected-work.tsx`, `project-journey.tsx`, `workspace-scene.tsx`, `workspace-interaction.tsx`; new `studio-scene.tsx`, `project-showcase-motion.tsx`, `studio-work.module.css`, `tests/phase3r-studio-work.spec.ts` | Root order, global CSS, shared motion, data/case narratives, shared project-artifact/gallery/popover sources; any new reusable contract goes to coordinator |
+| Thread worker | Existing `build-trail.tsx`, `trail-motion.tsx`, `trail-artifact.tsx`; new `thread-scene.tsx`, `thread-scene.module.css`, `tests/phase3r-thread.spec.ts` | Project/profile chronology/data, shared scroll runtime, roots/global CSS/navigation, other workers' assets/components |
+| Game worker | New `always-building.tsx`, `always-building.module.css`, `lib/always-building-engine.ts`, `tests/phase3r-game.spec.ts`; approved **new** `public/images/game/` delivery assets only after coordinator grant | Existing playground/concurrency-lab/reducer, character-assets.ts, original character files, other public paths, global input/scroll state, shared code/packages |
+
+Paths in component rows resolve under `components/portfolio/` unless prefixed otherwise. Coordinator owns Engineering/Workbook and Concurrency integration/refinement, contact/evidence/case-study shared adaptations, `tests/phase3r-integration.spec.ts` and test migration edits in existing suites. Workers may add only their named tests; no broad golden update or unrelated snapshot rewrite. New game assets need a named approved file list to avoid source artwork conflicts. Shared artifact primitives remain coordinator-owned even if multiple scenes consume them.
+
+## Dependency and merge protocol
+
+1. Owner authorizes a phase. Coordinator reviews dirty state and stores a baseline patch/capture/hash record without deleting files. No automatic commits/branches/worktrees are made from this plan; obtain explicit permission for those Git operations first.
+2. After permission, coordinator creates a stable integration commit containing the shared contract/fixtures and records its SHA. Future isolated sibling paths could be `D:\anees-portfolio-3r-studio`, `D:\anees-portfolio-3r-thread`, `D:\anees-portfolio-3r-game`; these are examples, **not created targets**. Creating/writing outside the current approved root requires explicit filesystem permission.
+3. Each worker gets its own branch/worktree, exact write set, contract version, source evidence, available/missing assets, no-deploy boundary and acceptance tests. Shared changes are requested as a patch proposal/message; coordinator alone applies them on integration.
+4. Each worktree needs its own dependencies/build output and distinct port. Use an approved lockfile install without changing package files, never share `.next`. Suggested ports: integration 3100, studio 3111, thread 3112, game 3113. Existing Playwright config is hard-coded to 3100; coordinator must provide an approved port-aware fixture/config **before** concurrent browsers run. Do not let workers independently edit playwright.config.ts.
+5. Worker returns changed paths, diff, screenshot/recording evidence, test result/limits and unresolved owner questions. Coordinator audits `git diff --name-only <base>...<worker>` against the allowlist, reviews source and renders integration. No silently modified neighboring files; reject out-of-scope patches.
+6. If commits are explicitly authorized, cherry-pick reviewed bounded commits in order: shared foundation → studio/work → thread → game. Otherwise integrate approved patch files; do not invent permission to commit. Never blindly copy whole working directories. Rebase/refresh workers on the shared contract when needed; don't merge duplicate runtimes.
+7. Resolve shared changes in the coordinator tree only. Run targeted then full tests, inspect scenes and global seams at required sizes, record regressions/limits, obtain visual approval. Worktree cleanup/deletion requires permission and Windows absolute-target containment checks; never delete user files as a convenience.
+
+## What can actually run in parallel
+
+Phase 3R-1 hero is local/critical-path and precedes package/motion decisions. Art requests can be prepared separately but not generated without approval. Phase 3R-2 coordinator establishes the shared runtime and fixture; **do not delegate that blocker and start incompatible scene code**. Once frozen, About/Work and Thread can implement disjoint scopes concurrently. Game can run concurrently only after approved frames and interface contract exist; its state/physics never depend on the narrative scroll clock. Coordinator can build engineering/contact/evidence in parallel, avoiding worker files. Final root order/global styling/tests remain sequential integration.
+
+No speculative worker may start Phase 3R-1 during this blueprint assignment. The strict matrix is intended to prevent the next implementation from passing local tests while conflicting globally or failing the visual direction.
