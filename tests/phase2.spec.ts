@@ -31,8 +31,8 @@ test("atelier native project and view controls work with keyboard and retain foc
   await studio.getByRole("radio", { name: "Projects", exact: true }).check();
   const scan = await new AxeBuilder({ page }).include("#workspace").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(scan.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) }))).toEqual([]);
-  await mkdir(captures, { recursive: true });
-  await studio.screenshot({ path: `${captures}/atelier-keyboard.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await mkdir(captures, { recursive: true });
+  if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${captures}/atelier-keyboard.png` });
   await studio.getByRole("link", { name: "Explore Sukoon" }).click();
   await expect(page).toHaveURL(/\/work\/sukoon$/);
 });
@@ -69,12 +69,12 @@ test("hero depth, progress, active section and project motion respond without co
   await card.hover();
   await expect.poll(() => shot.evaluate(el => getComputedStyle(el).transform)).not.toBe(before);
   await settle(page);
-  await page.locator(".journey-viewport").screenshot({ path: `${captures}/project-hover.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await page.locator(".journey-viewport").screenshot({ path: `${captures}/project-hover.png` });
   await card.focus();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Shift+Tab");
   await expect(card).toBeFocused();
-  await page.screenshot({ path: `${captures}/project-focus.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${captures}/project-focus.png` });
   expect(errors).toEqual([]);
 });
 
@@ -94,7 +94,7 @@ for (const width of [320, 390, 768]) {
     await expect(studio.getByRole("article", { name: "SportLynk build log" })).toContainText("no claimed production release");
     await studio.getByRole("radio", { name: "Projects", exact: true }).tap();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await studio.screenshot({ path: `${captures}/atelier-touch-${width}.png` }); await context.close();
+    if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${captures}/atelier-touch-${width}.png` }); await context.close();
   });
 }
 
@@ -126,7 +126,7 @@ test("reduced motion preserves atelier views, enlarged text and no spatial trans
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(await note.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
-  await studio.screenshot({ path: `${captures}/atelier-reduced-text-200.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${captures}/atelier-reduced-text-200.png` });
   await studio.getByRole("radio", { name: "Projects", exact: true }).check();
   await expect(studio.getByRole("heading", { name: "SportLynk." })).toBeVisible();
 });
@@ -151,7 +151,7 @@ test("record local production loading measurements", async ({ page }) => {
     scripts: performance.getEntriesByType("resource").filter(r => (r as PerformanceResourceTiming).initiatorType === "script").reduce((sum, r) => sum + (r as PerformanceResourceTiming).transferSize, 0),
     resources: performance.getEntriesByType("resource").map(r => ({ name: r.name, size: (r as PerformanceResourceTiming).transferSize })),
   }));
-  await writeFile(`${captures}/performance.json`, JSON.stringify(metrics, null, 2));
+  if (process.env.CAPTURE_VISUALS === "1") await writeFile(`${captures}/performance.json`, JSON.stringify(metrics, null, 2));
   expect(metrics.cls ?? 1).toBeLessThan(0.1);
   await expect(page.locator('.hero-artwork .character-portrait')).toBeVisible();
   await expect(page.locator('.character-portrait')).toHaveCount(1);

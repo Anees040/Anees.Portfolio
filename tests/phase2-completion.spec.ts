@@ -6,7 +6,7 @@ import { characterAssets, workspaceCharacterAssets, characterAssetErrors, resolv
 
 const output = ".qa/phase3-finish/baseline";
 const ids = ["sportlynk", "fitpilot", "sukoon", "eduverse"];
-test.beforeAll(async () => { await mkdir(output, { recursive: true }); });
+test.beforeAll(async () => { if (process.env.CAPTURE_VISUALS === "1") await mkdir(output, { recursive: true }); });
 
 async function ready(page: Page, width = 1440) {
   await page.setViewportSize({ width, height: 1000 });
@@ -44,7 +44,7 @@ for (const reduced of [false, true]) {
     expect(hero.length).toBeGreaterThanOrEqual(9);
     expect(hero.every(t => Math.abs(Number(t.duration) - (reduced ? 160 : 600)) < 1)).toBe(true);
     if (!reduced) expect(hero.some(t => t.delay === 560)).toBe(true);
-    await writeFile(`${output}/production-timing-${reduced ? "reduced" : "normal"}.json`, JSON.stringify(timings, null, 2));
+    if (process.env.CAPTURE_VISUALS === "1") await writeFile(`${output}/production-timing-${reduced ? "reduced" : "normal"}.json`, JSON.stringify(timings, null, 2));
   });
 }
 
@@ -83,7 +83,7 @@ for (const width of [768, 1024, 1280, 1440]) {
     const clipped = await studio.locator("label, h3, h4, p").evaluateAll(elements => elements.filter(element => element.checkVisibility()).filter(element => element.scrollWidth > element.clientWidth + 1).map(element => element.className));
     expect(clipped).toEqual([]);
     const collisions = await studio.locator(".atelier-project-choice").evaluateAll(elements => elements.flatMap((element, index) => elements.slice(index + 1).filter(other => { const first = element.getBoundingClientRect(), second = other.getBoundingClientRect(); return Math.min(first.right, second.right) - Math.max(first.left, second.left) > 1 && Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top) > 1; }).map(other => `${element.textContent} / ${other.textContent}`)));
-    expect(collisions).toEqual([]); await studio.screenshot({ path: `${output}/text-200-${width}-atelier.png` });
+    expect(collisions).toEqual([]); if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${output}/text-200-${width}-atelier.png` });
   });
 }
 
@@ -96,7 +96,7 @@ test("project media lifts independently of the image zoom and both settle for re
   await card.hover();
   await expect.poll(() => card.locator(".project-media").evaluate(el => new DOMMatrix(getComputedStyle(el).transform).m42)).toBeLessThan(-2.9);
   await expect.poll(() => card.locator(".project-screenshot").evaluate(el => new DOMMatrix(getComputedStyle(el).transform).m11)).toBeGreaterThan(1.03);
-  await page.screenshot({ path: `${output}/project-lift-and-zoom.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${output}/project-lift-and-zoom.png` });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(card.locator(".project-media")).toHaveCSS("transform", "none");
   await expect(card.locator(".project-screenshot")).toHaveCSS("transform", "none");
@@ -118,7 +118,7 @@ for (const width of [1280, 1440, 1920]) {
       expect(await page.evaluate(() => scrollX === 0 && document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       if (width === 1440) {
         await page.waitForTimeout(700);
-        await page.screenshot({ path: `${output}/journey-${ids[index]}.png` });
+        if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${output}/journey-${ids[index]}.png` });
       }
     }
     await page.mouse.wheel(0, 800);
@@ -161,7 +161,7 @@ test("touch project presentation is stacked, navigable and leaves the page scrol
     await expect(page.locator(`#${id}`)).toBeInViewport();
     await expect(page.locator(`#${id}`)).toBeFocused();
   }
-  await page.screenshot({ path: `${output}/mobile-project.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${output}/mobile-project.png` });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await context.close();
 });

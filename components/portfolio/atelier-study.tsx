@@ -1,7 +1,7 @@
 export function AtelierStudy() {
   return (
     <figure className="atelier-study">
-      <div className="study-topline" aria-hidden="true"><span>Copper atelier</span><span>Est. in curiosity</span></div>
+      <div className="study-topline" aria-hidden="true"><span>Muhammad Anees</span><span>Est. in curiosity</span></div>
       <div className="study-art" aria-hidden="true">
         <svg viewBox="0 0 480 450" fill="none" className="study-geometry">
           <path className="study-line" d="M51 370h378M84 96v294M388 63v327" />

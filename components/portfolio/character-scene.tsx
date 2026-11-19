@@ -3,16 +3,14 @@ import { characterAssets } from "@/lib/character-assets";
 import { ImageAtomizer } from "./image-atomizer";
 import { CharacterFallback } from "./character-fallback";
 import { PointerScene } from "./pointer-scene";
+import "./hero-cosmos.module.css";
 
 export function CharacterScene() {
-  return <figure className="character-scene">
-    <div className="character-scene-top"><span>Ideas take shape.</span><span className="scene-edition"><span className="portrait-mouse-hint">Move your pointer to explore</span><span className="portrait-touch-hint">Tap or slide across the portrait</span></span></div>
-    <PointerScene background={<div className="hero-scene-backdrop" aria-hidden="true">
-      <svg className="hero-orbit" viewBox="0 0 180 180" fill="none"><circle cx="90" cy="90" r="72" /><circle className="hero-orbit-disc" cx="90" cy="90" r="51" /><path d="M18 90h144M90 18v144" /><circle className="hero-orbit-point" cx="153" cy="55" r="5" /></svg>
-      <span className="hero-scene-rule" /><span className="hero-scene-notation">Form follows thought.</span>
+  return <figure className="character-scene cosmos-scene">
+    <PointerScene background={<div className="cosmos-construction" aria-hidden="true">
+      <svg className="hero-orbit" viewBox="0 0 600 720" fill="none" preserveAspectRatio="xMidYMid meet"><path d="M112 535C-2 388 96 192 275 178C438 165 581 293 565 456" /><path d="M58 498C-21 310 157 104 353 131C522 154 614 324 546 512" /><path className="cosmos-datum" d="M52 631H550M509 617V645" /></svg>
     </div>} foreground={characterAssets ? <ImageAtomizer frame={characterAssets.idle} /> : <CharacterFallback />}>
-      <a className="scene-project-slip" href="#sportlynk"><span className="status-dot" aria-hidden="true" /><span>On the workbench<strong>SportLynk</strong></span><ArrowDownRight size={19} aria-hidden="true" /></a>
     </PointerScene>
-    <figcaption className="character-scene-caption"><span>A little <em>character.</em></span><a href="#workspace">Step inside <ArrowDownRight size={18} aria-hidden="true" /></a></figcaption>
+    <figcaption className="cosmos-caption" data-entrance="2"><p><span className="cosmos-static-hint">Ideas take shape.</span><span className="cosmos-mouse-hint">Move your pointer. See ideas take shape.</span><span className="cosmos-touch-hint">Tap or slide sideways. Swipe up to explore.</span></p><a href="#workspace">Step inside <ArrowDownRight size={18} aria-hidden="true" /></a></figcaption>
   </figure>;
 }

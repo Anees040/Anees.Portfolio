@@ -1,12 +1,11 @@
 "use client";
 
-import { motion, useAnimate, useScroll } from "motion/react";
+import { useAnimate } from "motion/react";
 import { useEffect, useRef, type ReactNode } from "react";
 import { clearRevealStyles, readMotionTokens, revealFrames, watchMotionInterruption } from "@/lib/motion-system";
 
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  return <motion.div className="scroll-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />;
+  return <div className="scroll-progress" data-scroll-progress aria-hidden="true" />;
 }
 
 export function ScrollExperience({ children }: { children: ReactNode }) {
@@ -21,7 +20,7 @@ export function ScrollExperience({ children }: { children: ReactNode }) {
     const stops: (() => void)[] = [];
     const observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
-        if (!entry.isIntersecting || revealed.current.has(entry.target)) continue;
+        if (!entry.isIntersecting || revealed.current.has(entry.target) || entry.target.closest("[data-scroll-scene]")) continue;
         revealed.current.add(entry.target);
         observer.unobserve(entry.target);
         const element = entry.target as HTMLElement;

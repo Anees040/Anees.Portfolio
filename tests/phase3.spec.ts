@@ -4,7 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 
 const output = ".qa/phase3-finish";
 const slugs = ["sportlynk", "fitpilot", "sukoon", "eduverse"];
-test.beforeAll(async () => { await mkdir(output, { recursive: true }); });
+test.beforeAll(async () => { if (process.env.CAPTURE_VISUALS === "1") await mkdir(output, { recursive: true }); });
 
 async function home(page: Page) {
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -45,7 +45,7 @@ for (const mode of ["worker", "main", "worker-failure"] as const) {
     await expect(portrait).toHaveAttribute("data-particle-state", "active");
     await page.mouse.move(5, 5);
     await expect(portrait).toHaveAttribute("data-particle-state", "resting", { timeout: 10000 });
-    await writeFile(`${output}/particle-${mode}.json`, JSON.stringify({ initial: metrics, interaction: JSON.parse((await portrait.getAttribute("data-particle-metrics"))!) }, null, 2));
+    if (process.env.CAPTURE_VISUALS === "1") await writeFile(`${output}/particle-${mode}.json`, JSON.stringify({ initial: metrics, interaction: JSON.parse((await portrait.getAttribute("data-particle-metrics"))!) }, null, 2));
     expect(errors).toEqual([]);
   });
 }
@@ -147,7 +147,7 @@ for (const mode of ["unprotected", "protected"] as const) {
     await expect(lab.locator(".lab-reservations > span")).toHaveCount(mode === "protected" ? 1 : 2);
     await expect(lab.getByRole("status")).toHaveText(mode === "protected" ? "One reservation. One clear rejection." : "Conflict: two accepted reservations.");
     await expect(lab.getByRole("button", { name: "Next event" })).toBeDisabled();
-    await lab.screenshot({ path: `${output}/lab-${mode}.png` });
+    if (process.env.CAPTURE_VISUALS === "1") await lab.screenshot({ path: `${output}/lab-${mode}.png` });
     const scan = await new AxeBuilder({ page }).include("#playground").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(scan.violations).toEqual([]);
     await lab.getByRole("button", { name: "Reset", exact: true }).click();
@@ -222,7 +222,7 @@ for (const width of [320, 375, 390, 414, 768, 1024, 1280, 1440, 1920]) {
           await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
         }
         await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-        await page.screenshot({ path: `${output}/case-${slug}-${width}.png`, fullPage: true });
+        if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${output}/case-${slug}-${width}.png`, fullPage: true });
         const scan = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
         expect(scan.violations.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target), summary: v.nodes[0]?.failureSummary }))).toEqual([]);
       }

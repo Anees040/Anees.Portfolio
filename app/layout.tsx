@@ -8,9 +8,9 @@ const sans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"], display: 
 const mono = IBM_Plex_Mono({ variable: "--font-ibm-plex-mono", weight: "400", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Muhammad Anees — Software Developer | Copper Atelier",
+  title: "Muhammad Anees — Software Developer",
   description: "Muhammad Anees is a Software Engineering student building thoughtful mobile applications and practical digital products. Explore SportLynk, FitPilot, Sukoon, and EduVerse.",
-  applicationName: "Copper Atelier",
+  applicationName: "Muhammad Anees — Personal Portfolio",
   authors: [{ name: "Muhammad Anees", url: "https://github.com/Anees040" }],
   icons: { icon: "/brand/monogram.svg" },
   openGraph: { title: "Muhammad Anees — Thoughtful software, real-world problems.", description: "Mobile development, backend engineering, and product thinking. A selection of work by Muhammad Anees.", type: "website", locale: "en_US" },

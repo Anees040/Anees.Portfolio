@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) return {};
-  return { title: `${study.name} — Muhammad Anees`, description: study.summary, openGraph: { title: `${study.name} — Copper Atelier`, description: study.summary } };
+  return { title: `${study.name} — Muhammad Anees`, description: study.summary, openGraph: { title: `${study.name} — Muhammad Anees`, description: study.summary } };
 }
 
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {

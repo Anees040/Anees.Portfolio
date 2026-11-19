@@ -34,13 +34,13 @@ for (const width of widths) {
     }).map((el) => el.textContent));
     expect(offscreenText).toEqual([]);
     expect(errors).toEqual([]);
-    await mkdir(captureDir, { recursive: true });
+    if (process.env.CAPTURE_VISUALS === "1") await mkdir(captureDir, { recursive: true });
     if (width === 1440 || width === 390) {
       const name = width === 1440 ? "desktop" : "mobile";
-      await page.screenshot({ path: `${captureDir}/${name}.png`, fullPage: true });
-      await page.screenshot({ path: `${captureDir}/${name}-hero.png` });
+      if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${captureDir}/${name}.png`, fullPage: true });
+      if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${captureDir}/${name}-hero.png` });
     } else {
-      await page.screenshot({ path: `${captureDir}/width-${width}.png`, fullPage: true });
+      if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${captureDir}/width-${width}.png`, fullPage: true });
     }
   });
 }
@@ -65,7 +65,7 @@ test("mobile disclosure works by keyboard, returns focus, and follows section li
   await page.evaluate(async () => {
     await Promise.all(document.getAnimations().map(animation => animation.finished));
   });
-  await page.screenshot({ path: `${captureDir}/mobile-menu.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await page.screenshot({ path: `${captureDir}/mobile-menu.png` });
   await nav.getByRole("link", { name: "About", exact: true }).click();
   await expect(page).toHaveURL(/#about$/);
   await expect(nav).not.toBeVisible();

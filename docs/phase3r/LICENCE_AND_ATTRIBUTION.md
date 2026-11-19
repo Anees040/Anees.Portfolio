@@ -1,5 +1,19 @@
 # Licence and attribution boundaries
 
+## Phase 3R-2 dependency decision — 19 November 2026
+
+The owner explicitly approved GSAP for this personal website based on supplied licensing research. Only `gsap@3.15.1` and `@gsap/react@2.1.2` were added, with exact npm versions and integrity hashes in the existing lockfile. ScrollTrigger is included in the GSAP package, not a third dependency.
+
+Selected npm archives were inspected in memory before installation, including their actual manifests, READMEs and source notices. GSAP declares `Standard 'no charge' license: https://gsap.com/standard-license.`. **The actual React package is not MIT:** it declares `SEE LICENSE AT https://gsap.com/standard-license`; its bundled source notice says Copyright 2008–2025 GreenSock, all rights reserved, subject to the Standard Licence or a Club GSAP member agreement. GSAP/ScrollTrigger 3.15.1 notices say Copyright 2008–2026 GreenSock, all rights reserved. Preserve upstream notices in installed/bundled vendor code.
+
+`@gsap/react` peers are `gsap: ^3.12.5` and `react: >=17`, which include selected GSAP 3.15.1 and existing React 19.3.0. GSAP is framework-agnostic, with no conflicting Next peer requirement. Installed Next 16.4.6 guides were consulted; production builds verify the scoped browser registration and server/client boundary against this actual stack.
+
+Official sources inspected: https://registry.npmjs.org/gsap/3.15.1, https://registry.npmjs.org/@gsap%2freact/2.1.2, https://github.com/greensock/GSAP, https://github.com/greensock/react, and https://webflow.com/blog/gsap-becomes-free. The package README and Webflow announcement support no-charge website/commercial use. They are **not substitutes for the complete legal terms**.
+
+Full current legal-page verification remains a limit: https://gsap.com/standard-license and its community equivalent returned a verification interstitial, including in existing headless Chrome. Guessed Webflow licence URLs returned 404; its readable general terms did not supply a GSAP-specific grant. No inaccessible response is represented as readable legal terms, and no full text is fabricated. Local incorporation follows the owner's explicit dependency instruction/research; independently confirming the complete current terms remains necessary before claiming this legal acceptance gate fully verified. Do not publish or redistribute beyond the approved website use on the basis of a marketing statement.
+
+The research evidence below remains historical and is not rewritten to erase previous decisions.
+
 18 November 2026. Engineering guidance, not legal advice. Public availability is not a redistribution licence. Every reference is kept in ignored local research storage, not a shipping source or artwork directory. No Elliott code, character, sound, sprite, globe, building, icon or screenshot is included in the board or application.
 
 ## Inspected grants

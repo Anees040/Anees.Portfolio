@@ -1,5 +1,68 @@
 # Implementation architecture and decision record
 
+## Phase 3R-2 implemented foundation — 19 November 2026
+
+This section supersedes the historical proposal below. The owner authorized GSAP and the shared foundation, not About/Work/Thread redesigns, the game or AI. Public identity is **Muhammad Anees's personal developer portfolio**; the approved palette and fonts remain unchanged. No other workstream or agent was started.
+
+### Baseline and ownership
+
+Verified workspace `D:\anees-portfolio`, branch `master`, origin `https://github.com/Anees040/Anees.Portfolio.git`, reviewed commit `71bc5f87a4af52b4536e91b25dced0b435e37b3b`. The local 3R-1 hero/particle changes and its untracked CSS/test were already present. They are preserved; the only added hero edit removes public studio wording. The research README still describes 3R-1 as not started, so it is historical, not the current implementation baseline.
+
+GSAP owns the new narrative runtime and page progress indicator. Existing Work/Thread implementations retain their Motion ownership until their explicitly approved migration; the foundation does not attach GSAP to their animated elements. Local Motion interactions and the independent portrait simulation remain intact. Reveal discovery excludes registered GSAP scene scopes. The old global CSS smooth-scroll rule is removed: ScrollTrigger otherwise cached it and restored an inline smooth state across reduced-motion changes, interrupting native anchors. No smooth-scroll system, wheel/touch takeover, Lenis, ScrollSmoother, Three.js or second Motion package is added.
+
+### Contract v1 and lifecycle
+
+- `lib/scroll-scene-contract.ts`: typed scene identity/scope/stage, readiness with cancellation, actual fit predicate, finite distance, real anchor mappings, timeline setup, optional absolute-progress/visibility/settle/dispose callbacks, and mandatory static fallback. The timeline port exposes only scoped numeric transform/opacity tracks, not the GSAP global API.
+- `lib/scroll-scene-runtime.ts`: unique registration and anchor ownership, pure fit/progress helpers, bounded readiness, scoped contexts, one owned trigger per pinned scene, one page-progress trigger, one ResizeObserver/IntersectionObserver pair, matchMedia, coalesced refreshes, focus/history integration and idempotent teardown. `inspect()` and bounded DOM counters expose current registration/trigger/refresh state without logging continuously.
+- `components/portfolio/scroll-scene-provider.tsx`: one active browser lifecycle owner using `useGSAP`, `contextSafe`, a stable registration bridge, cancellation during imports and owned disposal. Home and case-study server content use the same adapter; navigation disposes the old route runtime before creating the new one. Case studies have only page progress, not narrative scene triggers. Content and data are not moved into client state.
+- `components/portfolio/scene-boundary.tsx`: scoped `useGSAP` registration and cleanup. A stable client-side factory creates the scene; server-rendered children pass through this adapter. Toggling/unmounting removes only that registration and its context/trigger.
+
+Registration returns an idempotent disposer. Duplicate identifiers, DOM scopes or shared anchors are rejected before setup. Each setup has a separate context assigned before animation creation so a thrown setup can still revert its partial work. Owned target styles are restored exactly after context cleanup. No `killAll`, global animation clear or per-frame React state is used. Async readiness cannot revive an aborted registration. Initialization failure leaves server content intact and tears down coordinator resources. Next/React may retain inactive route DOM in Activity; its effects dispose the old runtime, and only the current scope has `data-scroll-runtime="ready"`.
+
+### Fit, readiness and refresh
+
+Fit reads viewport width/height, measured header clearance, root text size, stage/content/image width and height, navigation/CTA height, fine-hover capability, touch capability and live reduced motion. Defaults require at least 1024px width, 46rem available height and 40rem stage width **as well as actual content fit**. A custom predicate may tighten this gate, never bypass it. At 1024×600 and 1280×720 the reference stacks; a 1440×900 non-touch fine-pointer viewport fits. Enlarged text, expanded content and touch-capable desktops may also stack.
+
+Fonts, image load/decode/error and scene-specific readiness settle before pinning. The 5-second bound makes stalled readiness a static failed state, not an unusable page. A failed resource does not hide content. Registration/removal, container changes, fonts, disclosures, resize/orientation and preference/visibility changes mark layout dirty. One rAF pass reads measurements first, rebuilds only changed configurations in DOM order, refreshes positions and allows one additional stabilization pass. ScrollTrigger's automatic resize/load refresh events are disabled while this coordinator owns them; disposal restores its normal event policy. Observers watch actual stage/content/header geometry, not the generated pin spacer.
+
+### Progress, focus and interruption
+
+The paused timeline seeks absolute normalized progress with linear scroll displacement. Scoped tracks render synchronously; reversing to the same progress restores the same state. Start/end functions use coordinator-measured clearance and finite content-bounded distances, with `invalidateOnRefresh`.
+
+Scene anchors keep real DOM IDs and native `href`s. Enhanced chapter navigation resolves `start + progress × (end - start)`, focuses the real target and uses instant native scrolling. Stacked mode resolves the real target offset with measured header clearance. Initial hashes, hashchange, popstate and back/forward are coordinated after readiness. Temporary GSAP pin DOM moves preserve useful focus and reading position; no hidden duplicate content is focused. Existing `#workspace`, `#work`, `#about`, project IDs and case-study routes remain untouched.
+
+Live reduced motion removes eligible pins and reverts owned tracks to complete static content, without scrolling to the top. Visibility changes pause visual writes and resume at current absolute progress, not accumulated displacement. Scope disposal removes observers, event handlers, contexts, triggers and scheduled refresh work.
+
+### Reference fixture and worker instructions
+
+The small geometric reference is exported from the boundary file, not a new route/component file. It has introductory normal flow, one finite pin, independently moving background/foreground/meter tracks, three always-readable real chapters, native chapter links, a height-changing disclosure, pin release and a registration toggle. It is absent from an ordinary build and requires **both build and serving** with the server-only flag:
+
+```powershell
+$env:PORTFOLIO_SCENE_FIXTURE = '1'
+npm.cmd run build
+npm.cmd run start -- --hostname 127.0.0.1 --port 3100
+```
+
+In another terminal, set `$env:PORTFOLIO_SCENE_FIXTURE = '1'`, then run `npm.cmd run test:e2e -- --reporter=list --trace=off`. Pure contract and public-branding tests always run; the 19 browser-fixture tests are explicitly skipped without this flag because an ordinary public build intentionally contains no fixture. The existing Playwright configuration is unchanged and reuses that local production server. Running with an explicitly started server also avoids the observed Windows webServer teardown stall. For manual inspection use `http://127.0.0.1:3100/#motion-reference-middle`. Stop the server, unset the flag and rebuild normally before a public build. No deployment is authorized.
+
+**3R-3 / 3R-4 consumption rules:** create a small client scene adapter in the approved worker scope; pass real server children into `SceneBoundary`; keep its `createScene` factory stable; provide stage/content/navigation/CTA measurement elements, real IDs/progress mappings, bounded distance and mandatory static fallback. Add timeline tracks only through the scoped port. Put local Motion effects on separately owned DOM wrappers. Remove the replaced scene's old Motion scroll subscription in the same migration. Do not create a provider, global scroll listener, observer/refresh manager or preference observer, and do not import ScrollTrigger directly in workers. Use the returned registration cleanup via the boundary, honor the readiness AbortSignal and use `inspect()` for diagnostics. Changes to contract v1 belong to the coordinator and require explicit approval before worker integration.
+
+### Dependency and verification limits
+
+**Phase file ledger:** created `lib/scroll-scene-contract.ts`, `lib/scroll-scene-runtime.ts`, `components/portfolio/scroll-scene-provider.tsx`, `components/portfolio/scene-boundary.tsx` and `tests/scroll-scenes.spec.ts`. No separate fixture file, route, image or QA directory was added.
+
+Modified integration/dependencies: `app/page.tsx`, `components/portfolio/scroll-experience.tsx`, `app/portfolio.css`, `package.json` and `package-lock.json`. Modified public identity: `app/layout.tsx`, `app/work/[slug]/page.tsx`, `components/portfolio/atelier-study.tsx`, `components/portfolio/case-study.tsx` (also the shared lifecycle adapter), `components/portfolio/character-fallback.tsx`, `components/portfolio/contact.tsx`, `components/portfolio/hero.tsx` (public copy only), `components/portfolio/trail-motion.tsx` (signature only) and `components/portfolio/workspace-scene.tsx` (heading/accessible labels only). Footer wrapping accommodates the longer personal name at doubled text size; its palette/type system is unchanged.
+
+Modified capture policy only, without changing assertions: `tests/portfolio.spec.ts`, `tests/phase2.spec.ts`, `tests/phase2-completion.spec.ts` and `tests/phase3.spec.ts`. Updated existing documentation only: this architecture/handoff, `LICENCE_AND_ATTRIBUTION.md` and `../THIRD_PARTY_NOTICES.md`. The pre-existing 3R-1 character/atomizer/particle-engine/worker modifications, hero CSS and hero test remain owner work, not new foundation edits.
+
+Exact dependencies: `gsap@3.15.1` and `@gsap/react@2.1.2`; existing Motion `14.12.0`, React/React DOM `19.3.0` and Next `16.4.6` are unchanged. See `LICENCE_AND_ATTRIBUTION.md` and `../THIRD_PARTY_NOTICES.md` for package notices and the unresolved full-terms retrieval limitation. Do not describe GSAP or this React package as MIT.
+
+Baseline lint/typecheck/build passed. The baseline suite completed all 129 case bodies: 124 passed and five legacy portrait assertions failed (initial one-frame assumptions and a fresh-tap displacement assertion changed by local 3R-1). Its Windows server teardown stalled and was interrupted. No portrait implementation or legacy assertion was changed to conceal those failures. Final verification results are recorded here after the final checks; a fully green phase acceptance cannot be claimed while those baseline failures remain.
+
+Artifact incident: the first baseline attempt ran briefly after a shell patch failure and legacy capture hooks emitted three PNGs and two timing JSONs to the pre-existing `.qa/phase3-finish/baseline` paths. It was interrupted immediately after discovery. Capture/mkdir/report writes in the four legacy specs now require `CAPTURE_VISUALS=1`; subsequent checks use list reporting and tracing off. No new QA directory, video, review gallery or visual pipeline is added; existing user evidence is not deleted. This incident is disclosed rather than claiming no captures occurred.
+
+## Historical proposal
+
 ## Recommended stack (proposal; no package change)
 
 **One primary narrative scroll system: GSAP + ScrollTrigger, integrated through @gsap/react.** It is justified by the approved redesign's two coordinated finite pins, multi-track background/image/type timelines, responsive scene rebuilding and reversible chapter choreography. Existing Motion remains for local entrance/press/hover UI where already useful; the independent existing particle engine and new game keep their own bounded simulation clocks. No Three.js, R3F, physics dependency or Lenis is required.

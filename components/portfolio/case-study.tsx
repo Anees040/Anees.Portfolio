@@ -9,6 +9,7 @@ import { ArchitectureExplorer } from "./architecture-explorer";
 import { ProjectGallery } from "./project-gallery";
 import { ScrollExperience, ScrollProgress } from "./scroll-experience";
 import { MediaReveal } from "./motion";
+import { ScrollSceneProvider } from "./scroll-scene-provider";
 
 function StoryPoints({ points, className = "" }: { points: StoryPoint[]; className?: string }) {
   return <div className={`story-points ${className}`}>{points.map(point => <article key={point.title}><h3>{point.title}</h3><p>{point.body}</p>{point.evidence && <a className="text-link" href={point.evidence.href}><span>{point.evidence.label}</span><ArrowUpRight size={16} aria-hidden="true" /></a>}</article>)}</div>;
@@ -18,9 +19,9 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
   const preview = projects.find(project => project.slug === study.slug);
   const next = caseStudies[(caseStudies.indexOf(study) + 1) % caseStudies.length];
   const conceptLed = study.architecture.conceptual;
-  return <ScrollExperience>
+  return <ScrollSceneProvider><ScrollExperience>
     <a className="skip-link" href="#case-main">Skip to content</a>
-    <header className="site-header case-header"><ScrollProgress /><div className="site-shell header-inner"><Link className="wordmark" href="/" aria-label="Anees — home"><Monogram /><span>Copper Atelier</span></Link><Link className="text-link" href={`/#${study.slug}`}><ArrowLeft size={18} aria-hidden="true" /><span>All work</span></Link><a href={`mailto:${profile.email}`} className="case-contact">Let’s talk <ArrowUpRight size={16} aria-hidden="true" /></a></div></header>
+    <header className="site-header case-header"><ScrollProgress /><div className="site-shell header-inner"><Link className="wordmark" href="/" aria-label="Muhammad Anees — home"><Monogram /><span>Muhammad Anees</span></Link><Link className="text-link" href={`/#${study.slug}`}><ArrowLeft size={18} aria-hidden="true" /><span>All work</span></Link><a href={`mailto:${profile.email}`} className="case-contact">Let’s talk <ArrowUpRight size={16} aria-hidden="true" /></a></div></header>
     <main id="case-main" tabIndex={-1} className={`case-study case-${study.slug}`}>
       <section className="case-hero site-shell" aria-labelledby="case-title">
         <div className="case-title-row"><h1 id="case-title">{study.name}<span>.</span></h1><div><p>{study.category}</p><p className="case-status">{study.status}</p></div></div>
@@ -36,5 +37,5 @@ export function CaseStudyPage({ study }: { study: CaseStudy }) {
       <aside className="case-evidence-note site-shell">This study combines owner-approved context with a source review on 16 November 2026. Technical takeaways are observations from the code, not a claim of individual authorship of every feature or a production audit.</aside>
     </main>
     <footer className="next-project"><div className="site-shell"><Link href={`/work/${next.slug}`} aria-label={`Next project: ${next.name}`}><span>{next.name}<em>.</em></span><ArrowUpRight size={60} strokeWidth={1} aria-hidden="true" /></Link><div className="next-project-bottom"><Link href="/#work">Back to selected work</Link><a href={`mailto:${profile.email}`}>Talk about the work <ArrowUpRight size={16} aria-hidden="true" /></a></div></div></footer>
-  </ScrollExperience>;
+  </ScrollExperience></ScrollSceneProvider>;
 }

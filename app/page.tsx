@@ -9,10 +9,12 @@ import { Engineering } from "@/components/portfolio/engineering";
 import { BuildTrail } from "@/components/portfolio/build-trail";
 import { Playground } from "@/components/portfolio/playground";
 import { Evidence } from "@/components/portfolio/evidence";
+import { ScrollSceneProvider } from "@/components/portfolio/scroll-scene-provider";
+import { ScrollSceneFixture } from "@/components/portfolio/scene-boundary";
 
 export default function Home() {
   return (
-    <ScrollExperience>
+    <ScrollSceneProvider><ScrollExperience>
       <a className="skip-link" href="#main-content">Skip to content</a>
       <SiteHeader />
       <main id="main-content" tabIndex={-1}>
@@ -24,8 +26,9 @@ export default function Home() {
         <Playground />
         <About />
         <Evidence />
+        {process.env.PORTFOLIO_SCENE_FIXTURE === "1" ? <ScrollSceneFixture /> : null}
       </main>
       <Contact />
-    </ScrollExperience>
+    </ScrollExperience></ScrollSceneProvider>
   );
 }

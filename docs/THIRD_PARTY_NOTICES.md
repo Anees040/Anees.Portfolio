@@ -1,5 +1,14 @@
 # Third-party research and notices
 
+## Phase 3R-2 incorporated dependencies — 19 November 2026
+
+- GSAP core and ScrollTrigger: `gsap@3.15.1`, https://www.npmjs.com/package/gsap and https://github.com/greensock/GSAP. Package licence: `Standard 'no charge' license: https://gsap.com/standard-license.` Source notice: Copyright 2008–2026 GreenSock. All rights reserved. Subject to the terms at https://gsap.com/standard-license. Author: Jack Doyle, jack@greensock.com.
+- React integration: `@gsap/react@2.1.2`, https://www.npmjs.com/package/@gsap/react and https://github.com/greensock/react. Actual package licence: `SEE LICENSE AT https://gsap.com/standard-license`. Bundled source notice: Copyright 2008–2025 GreenSock. All rights reserved. Subject to the terms at https://gsap.com/standard-license or, for Club GSAP members, the agreement issued with that membership. Author: Jack Doyle, jack@greensock.com.
+- Both are used unmodified through their public APIs. Upstream copyright/licence notices remain in vendor packages; neither dependency is labelled MIT. No Elliott source or artwork is incorporated. Existing Motion and all other dependencies remain unchanged.
+- The complete current Standard Licence page was not readable from this environment; its verification interstitial is not legal text. Exact package metadata/source notices and Webflow's official commercial-use announcement were verified. The owner explicitly instructed local website incorporation based on their licensing research. See `phase3r/LICENCE_AND_ATTRIBUTION.md` for this unresolved independent full-terms verification limit.
+
+Earlier records below describe prior phases, not the current dependency set.
+
 Continuation check, 17 November 2026: the same revision-pinned reference/library source was re-fetched. No external source or assets were added. The independently implemented particle engine therefore requires no incorporated Image Atomizer code notice. The research/license boundaries below remain unchanged.
 
 Reviewed on 2026-11-16. No source code, illustration, branded asset, biography, game sprite or AI backend was copied from Bryan Elliott's portfolio. No new third-party dependency was installed for Phase 3.
