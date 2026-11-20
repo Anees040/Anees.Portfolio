@@ -1,5 +1,17 @@
 # Actual asset inventory
 
+## Current Hero/About correction — 20 November 2026
+
+The owner confirms local `photo.png` is the only supplied original photograph. `sharp` and PNG-header measurements: **1268×1240 RGB**, 1,936,933 bytes; `public/assets/profile/photo.png` is byte-identical. The earlier 402×421 brief size is not the actual asset. Hero uses this original unchanged, with a CSS ellipse matched by the canvas sampler; maximum image display is 468px. No separate treated photograph or reliable local segmentation tool is registered. No removal model/service was installed or used; the background remains intentionally visible within the ellipse.
+
+`anees-working-illustration.png` and its public copy are **1402×1122 RGBA**, 1,264,472 bytes, with 760,856 fully transparent pixels. Visual inspection confirms one flattened scene containing character, laptop, table, books, plant, mug and notebook. It is the sole static About artwork, without duplicate portrait/captions. None of its head, hands, body, laptop, light or desk objects is independently represented. Earlier originals, contact sheet and derivatives remain preserved; no synthetic frames or identity substitutions are made.
+
+### Separate art required before modular workspace or game work
+
+Approve an original working-scene art direction first. Deliver a common fixed canvas/viewBox, camera, scale and anchors with separately authored transparent layers or original SVG groups: desk/rear workspace; body; rigid head; actual hand/typing poses; laptop/monitor; desk lamp and aligned light layer; at most a few meaningful objects. Supply correct foreground occlusions and neutral rest states. Eyelid/typing frames require separate owner-approved artwork and timing metadata. Do not extract fake layers or warp anatomy from either flattened PNG. A future keyboard-accessible edge-case activity must teach an engineering principle with static feedback; none is implemented here. Phase 3R-5 additionally requires the baseline-aligned game atlas specified below.
+
+The historical inventory below predates these two assets and must not be read as claiming the public photograph is missing.
+
 Fresh `sharp` metadata and decoded alpha inspection: `.qa/phase3r/asset-metadata.json`. Visual contact sheet: `.qa/phase3r/evidence/asset-contact-sheet.png`. All paths below are current local files. Ratios are width/height. Alpha percentages measure decoded pixels, not an artist's intent. RGBA format/hasAlpha alone does not establish clean transparency or motion readiness.
 
 ## Portrait and approved character

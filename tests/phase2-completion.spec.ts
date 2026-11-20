@@ -56,12 +56,18 @@ test("live reduced motion and visibility changes settle real entrance animations
   await expect(page.locator(".hero-actions")).toHaveCSS("opacity", "1");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.reload({ waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector(".hero-orbit")?.getAnimations().some(a => a.playState === "running"));
+  const ambient = page.locator(".cosmos-field");
+  await expect(ambient).toHaveAttribute("data-ambient-state", "running");
+  await expect.poll(async () => JSON.parse((await ambient.getAttribute("data-ambient-metrics"))!).frames).toBeGreaterThan(1);
   await page.evaluate(() => {
     Object.defineProperty(document, "hidden", { configurable: true, value: true });
     document.dispatchEvent(new Event("visibilitychange"));
   });
-  await expect.poll(() => page.locator(".hero-orbit").evaluate(el => el.getAnimations().every(a => a.playState === "finished"))).toBe(true);
+  await expect(ambient).toHaveAttribute("data-ambient-state", "paused");
+  const stopped = await ambient.getAttribute("data-ambient-metrics");
+  await page.waitForTimeout(150);
+  expect(await ambient.getAttribute("data-ambient-metrics")).toBe(stopped);
+  expect(await page.locator(".hero-orbit").evaluate(el => el.getAnimations().length)).toBe(0);
   await expect(page.locator(".hero-actions")).toHaveCSS("opacity", "1");
 });
 
@@ -199,7 +205,7 @@ test("approved portrait loads and Work uses authentic screens, not a character s
 });
 
 test("failed character image falls back to the architectural study", async ({ page }) => {
-  await page.route("**/_next/image?*", route => new URL(route.request().url()).searchParams.get("url")?.includes("/anees-idle.webp") ? route.abort() : route.continue());
+  await page.route("**/assets/profile/photo.png", route => route.abort());
   await ready(page);
   await expect(page.locator(".hero-artwork .character-fallback")).toBeVisible();
   await expect(page.locator(".hero-artwork .character-portrait")).toHaveCount(0);

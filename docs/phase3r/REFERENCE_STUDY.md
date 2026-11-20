@@ -1,5 +1,11 @@
 # Phase 3R-0 — reference research and current-state audit
 
+## Current visual correction — 20 November 2026
+
+The local workspace at `a105cbc` includes uncommitted Hero/About media changes absent from that remote commit. Inspection identified an Alabaster rectangular matte/8px outline in Hero and two separate About figures in `about.tsx`, with duplicated identity/captions. The owner confirms `photo.png` is the only original photograph; its measured size is 1268×1240. Preserved Elliott homepage/atomizer/starfield source and the performance article were reviewed for cloud formation, sampled colours, layered composition, slow depth and finite comet/lifecycle behavior. No source, artwork, blue ring, copy, metrics or service is transplanted. The standalone live comet-article request failed in the sandbox and again after network access (closed connection); the preserved starfield's comet implementation supplies the available technical reference.
+
+This correction uses the original photograph inside a matched ellipse, a broader curved 26% source-colour field, a bounded warm ambient canvas, coordinated native Hero depth and one editorial About story. The supplied desk PNG has no independent anatomical/object layers; it stays static. Current assertion results and limits are recorded in `../PHASE3_DELIVERY.md`; no new screenshot/recording/visual approval is claimed. Historical current-state descriptions below predate the installed GSAP foundation and this correction.
+
 18 November 2026. Research/blueprint only. No production source, dependency, token, navigation or deployed site is changed. Start at [DESIGN_STORYBOARD.md](DESIGN_STORYBOARD.md), then review the local board in `.qa/phase3r/blueprint/index.html`. Phase 3R-1 requires a separate owner authorization.
 
 ## Evidence and method

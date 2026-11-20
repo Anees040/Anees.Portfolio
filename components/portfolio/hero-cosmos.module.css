@@ -15,13 +15,18 @@
 .copper-cosmos [class~="hero-footnote"] a { min-block-size: 44px; }
 .copper-cosmos [class~="current-project"] { margin-block-start: 1rem; }
 .copper-cosmos [class~="hero-actions"] { opacity: 1 !important; transform: none !important; }
-.cosmos-field { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; z-index: -1; pointer-events: none; transition: transform var(--duration-entrance) var(--ease-out); }
+.cosmos-field { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; z-index: 0; pointer-events: none; transform-origin: center bottom; }
+.cosmos-field svg, .cosmos-ambient-canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; }
+.cosmos-ambient-canvas { display: none; }
+.cosmos-field[data-ambient-ready="true"] .cosmos-ambient-canvas { display: block; }
+.cosmos-field[data-ambient-ready="true"] .cosmos-static-field { visibility: hidden; }
+.cosmos-linen-points { fill: var(--color-bg-surface); opacity: 0.6; }
 .cosmos-gold-points { fill: var(--color-detail); opacity: 0.46; }
 .cosmos-clay-points { fill: var(--color-art-line); opacity: 0.34; }
-.copper-cosmos[data-cosmos-motion="active"] .cosmos-field { transform: translateY(-6px); }
-.copper-cosmos[data-cosmos-motion="paused"] .cosmos-field { transition: none; transform: none; }
 .copper-cosmos .cosmos-scene { display: block; margin: 0; background: transparent; container-type: inline-size; }
 .copper-cosmos .cosmos-scene [class~="pointer-scene"] { aspect-ratio: auto; min-block-size: 0; block-size: min(calc(100cqi * 1.2 + 3rem), clamp(34rem, 72vh, 43rem)); flex: none; }
+.copper-cosmos .cosmos-scene.cosmos-photo { inline-size: min(100%, 600px); margin-inline: auto; }
+.copper-cosmos .cosmos-scene.cosmos-photo [class~="pointer-scene"] { block-size: calc(100cqi * 0.83 + 3rem); }
 .cosmos-construction { position: absolute; inset: 0; pointer-events: none; }
 .copper-cosmos .cosmos-construction svg { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; stroke: var(--color-art-solid); stroke-width: 0.8; opacity: 0.48; animation: none; }
 .cosmos-construction .cosmos-datum { stroke: var(--color-art-line); opacity: 0.35; }
@@ -32,15 +37,13 @@
 .copper-cosmos:has([data-particle-first-frame="true"]) .cosmos-static-hint { display: none; }
 .copper-cosmos .cosmos-atomizer [class~="character-animation"] { inset: 0; }
 .cosmos-atomizer [class~="character-frame"], .cosmos-atomizer [class~="character-picture"] { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
-.cosmos-atomizer [class~="character-portrait"] { position: absolute; inset: 6% 11% auto; inline-size: 78%; block-size: 88%; object-fit: contain; object-position: center top; transition: none; }
+.cosmos-atomizer [class~="character-portrait"] { position: absolute; inset: 6% 11% auto; inline-size: 78%; block-size: auto; aspect-ratio: 1268 / 1240; object-fit: contain; object-position: center top; clip-path: ellipse(50% 50% at 50% 50%); transition: none; }
 .cosmos-atomizer [class~="particle-canvas"] { transition: none; }
 .copper-cosmos .cosmos-atomizer [class~="portrait-replay"] { display: inline-flex; inset-inline-start: 50%; transform: translateX(-50%); inset-block-end: 0; white-space: nowrap; background: transparent; color: var(--color-text-inverse-muted); border-color: color-mix(in srgb, var(--color-art-line) 30%, transparent); font-size: var(--type-caption); }
 .cosmos-atomizer[data-particle-phase="forming"] [class~="portrait-replay"] { color: var(--color-text-inverse); }
 .copper-cosmos a:focus-visible, .copper-cosmos button:focus-visible { outline-color: var(--color-detail); }
 @media (hover: hover) and (pointer: fine) {
   .copper-cosmos:has([data-particle-first-frame="true"]) .cosmos-mouse-hint { display: inline; }
-  .copper-cosmos[data-cosmos-motion="active"] .cosmos-construction svg { animation: cosmos-construction-settle var(--duration-entrance) var(--ease-out) both; }
-  @keyframes cosmos-construction-settle { from { transform: translateY(6px); } to { transform: translateY(0); } }
   .cosmos-caption a:hover, .copper-cosmos .cosmos-atomizer [class~="portrait-replay"]:hover { color: var(--color-text-inverse); }
 }
 @media (hover: none), (pointer: coarse) {
@@ -78,6 +81,10 @@
 @media (prefers-reduced-motion: reduce), (forced-colors: active) {
   .copper-cosmos .cosmos-construction svg { animation: none !important; }
   .cosmos-field { transition: none; transform: none !important; }
+  .cosmos-field { opacity: 1 !important; }
+  .cosmos-ambient-canvas { display: none !important; }
+  .cosmos-field[data-ambient-ready="true"] .cosmos-static-field { visibility: visible; }
+  .copper-cosmos [class~="scene-depth-foreground"] { opacity: 1 !important; }
   .copper-cosmos .cosmos-atomizer [class~="particle-canvas"], .copper-cosmos .cosmos-atomizer [class~="portrait-replay"] { display: none !important; }
   .cosmos-atomizer [class~="character-portrait"] { opacity: 1 !important; }
 }

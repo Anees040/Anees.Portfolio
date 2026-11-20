@@ -21,7 +21,6 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     const element = root.current;
     const image = element?.querySelector("img");
     const stage = element?.querySelector<HTMLElement>(".character-frame");
-    const hero = element?.closest<HTMLElement>("#home");
     if (!element || !image || !stage || failed) return;
     const eligible = matchMedia("(prefers-reduced-motion: no-preference) and (forced-colors: none)");
     const fine = matchMedia("(hover: hover) and (pointer: fine)");
@@ -35,7 +34,6 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     let resumePointer: { x: number; y: number } | undefined;
     const allowed = () => eligible.matches && visible && !document.hidden && !disposed;
     const phase = (value: string) => { element.dataset.particlePhase = value; };
-    const ambient = (active: boolean) => { if (hero) hero.dataset.cosmosMotion = !visible || document.hidden || disposed ? "paused" : active && navigator.hardwareConcurrency > 4 && fine.matches ? "active" : "still"; };
     const representation = (active: boolean) => { element.dataset.particleState = active ? "active" : "resting"; element.dataset.particleRepresentation = active ? "canvas" : "image"; };
     const metrics = (values: ParticleMetrics) => {
       element.dataset.particleMetrics = JSON.stringify({ ...values, mode: worker ? "worker" : "main", width, height, gap, portraitWidth, dpr: window.devicePixelRatio, cores: navigator.hardwareConcurrency });
@@ -45,7 +43,7 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     const armWatchdog = () => { clearTimeout(watchdog); watchdog = setTimeout(recover, 2500); };
     const post = (message: ParticleMessage) => { worker?.postMessage(message); };
     const settled = (values: ParticleMetrics) => {
-      clearTimeout(watchdog); metrics(values); element.dataset.particleSimulation = "settled"; ambient(false);
+      clearTimeout(watchdog); metrics(values); element.dataset.particleSimulation = "settled";
       if (values.reassembled) {
         formationActive = false;
         initial.current.complete = true; element.dataset.particleFormationComplete = "true";
@@ -62,7 +60,7 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       if (initial.current.begun) initial.current.complete = true;
       element.dataset.particleFormationComplete = String(initial.current.complete);
       element.dataset.particleInteraction = "none"; element.dataset.particleSimulation = "paused";
-      representation(false); phase("paused"); ambient(false);
+      representation(false); phase("paused");
     };
     const disposeEngine = () => {
       generation++; pause(); worker?.terminate(); worker = undefined; engine = undefined;
@@ -87,7 +85,7 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     }
     const start = (nextPhase: string) => {
       if (!allowed() || !ready) return;
-      representation(true); phase(nextPhase); ambient(true);
+      representation(true); phase(nextPhase);
       element.dataset.particleInteraction = interaction; element.dataset.particleSimulation = "running";
       if (worker) armWatchdog();
       if (engine && !frameId) { last = 0; frameId = requestAnimationFrame(tick); }
@@ -117,7 +115,7 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
         initial.current.begun = true; initial.current.count++;
         element.dataset.particleFormationCount = String(initial.current.count);
         element.dataset.particleFormationBegun = "true";
-        representation(true); phase("forming"); ambient(true);
+        representation(true); phase("forming");
         revealId = requestAnimationFrame(() => {
           revealId = 0; sequence++; post({ type: "play", sequence }); start("forming");
         });
@@ -135,7 +133,8 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       disposeEngine(); initializing = true; dirty = false; phase("loading");
       const run = generation;
       const low = navigator.hardwareConcurrency <= 4 || !fine.matches;
-      const scale = Math.min(Math.max(1, Math.min(2, window.devicePixelRatio)), (low ? 300 : 480) / bounds.width, (low ? 450 : 700) / bounds.height);
+      const high = !low && navigator.hardwareConcurrency >= 8;
+      const scale = Math.min(Math.max(1, Math.min(2, window.devicePixelRatio)), (low ? 300 : high ? 480 : 420) / bounds.width, (low ? 450 : high ? 700 : 560) / bounds.height);
       width = Math.max(1, Math.round(bounds.width * scale)); height = Math.max(1, Math.round(bounds.height * scale)); gap = low ? 3 : 2;
       const sample = document.createElement("canvas"); sample.width = width; sample.height = height;
       const context = sample.getContext("2d", { willReadFrequently: true });
@@ -145,10 +144,13 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       const portraitHeight = image!.naturalHeight * fit;
       let source: ParticleSource;
       try {
+        context.beginPath();
+        context.ellipse(width / 2, height * 0.06 + portraitHeight / 2, portraitWidth / 2, portraitHeight / 2, 0, 0, Math.PI * 2);
+        context.clip();
         context.drawImage(image!, (width - portraitWidth) / 2, height * 0.06, portraitWidth, portraitHeight);
         const token = getComputedStyle(element!).getPropertyValue("--duration-entrance").trim();
         const formationDuration = parseFloat(token) * (token.endsWith("ms") || !token.endsWith("s") ? 1 : 1000);
-        source = { width, height, pixels: context.getImageData(0, 0, width, height).data, gap, portraitWidth, footprint: 3, formationDuration: formationDuration || 600 };
+        source = { width, height, pixels: context.getImageData(0, 0, width, height).data, gap, portraitWidth, footprint: low ? 4 : 3, radiusRatio: 0.26, formationDuration: formationDuration || 600 };
       } catch { initializing = false; phase("failed"); return; }
       canvas = document.createElement("canvas"); canvas.width = width; canvas.height = height;
       canvas.className = "particle-canvas"; canvas.setAttribute("aria-hidden", "true"); stage!.appendChild(canvas);

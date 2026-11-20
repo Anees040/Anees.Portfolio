@@ -1,6 +1,8 @@
 # Personal content still needed
 
-Reviewed again on 17 November 2026. All corresponding optional content fields/layouts are implemented; these are owner-evidence dependencies, not a reason to delay the usable portfolio. No newly approved public photograph, resume, LinkedIn, aligned animation frames or private SportLynk implementation evidence was found during the continuation. The private reference remains unpublished. Verification is complete within the explicitly documented browser/device limits in `PHASE3_DELIVERY.md`.
+Current visual correction: Hero alone renders the confirmed original public photograph. About renders one static working illustration plus unchanged biography/facts; its repeated identity image and redundant labels are removed. Independently authored workspace/hand/head/lamp layers and approved game atlas remain separate art tasks. Exact shared-canvas requirements are in `phase3r/ASSET_INVENTORY.md`. The earlier two-portrait note below is historical.
+
+Updated on 20 November 2026. The owner supplied and explicitly approved a public identity photograph and a separate static working illustration. Hero and About use the unchanged photograph registered in `profileContent.photograph`; About's labeled supporting illustration is not a second identity photograph. The older private reference remains unpublished. Resume, LinkedIn, dates, personal contribution details and private SportLynk implementation evidence still require owner input.
 
 Phase 3 continues without these items. Nothing below is represented by public lorem ipsum, a fake link, an empty case-study section or an invented claim. Current profile data is in `lib/profile-content.ts`; project stories are in `lib/case-studies.ts`.
 
@@ -9,7 +11,6 @@ Phase 3 continues without these items. Nothing below is represented by public lo
 | Owner input | What to provide | Placement and data field |
 | --- | --- | --- |
 | Full education details | Exact degree/program name, campus, current status and dates; say whether any qualification is completed | About → Education; `profileContent.education`. Only student identity and COMSATS University Islamabad appear now. |
-| Approved professional photograph | A photograph explicitly approved for public use, with its ownership and preferred crop. Ideally 1200px or more on the long side, with no baked text | About's personal identity panel; `profileContent.photograph` stores local source, dimensions and alt text. The MA monogram remains until supplied. The private character reference is not an approved public headshot. |
 | Resume | A finished public PDF, accurate dates and the filename to publish | About/contact resume action via `profileContent.resume`. No nonexistent download is linked. |
 | LinkedIn | Exact public profile URL | About/contact professional links via `profileContent.linkedin`. No guessed handle is used. |
 | Personal introduction and interests | Preferred wording, personal interests you actually want public, and any location/availability you approve | About introduction and profile details; `introduction`, `interests`, `philosophy`, `direction`. Existing copy stays grounded in the supplied student/project context. |
@@ -42,6 +43,8 @@ Dates belong beside each chapter's category, not in a fabricated career timeline
 Repository screenshots contain their own application numbers; those are not Anees's portfolio impact metrics.
 
 ## Additional artwork
+
+Current identity and working artwork inputs are resolved. The newly supplied photograph and supporting PNG remain whole, static assets; independent face, finger or body motion is not authorized. The following older aligned-frame guidance is retained for legacy assets, not a requirement for this refinement.
 
 No new artwork is required for the shipped hero portrait and two whole workspace poses. For independent facial/typing/greeting animation, supply genuinely aligned transparent frames following `public/images/character/README.md`: matching 800×1200 hero or 480×480 workspace canvases, fixed face scale/anchor/crop, consistent light and camera, accurate alpha and explicit approval. No fake blink, skeleton rig, generated likeness or walk cycle is substituted.
 

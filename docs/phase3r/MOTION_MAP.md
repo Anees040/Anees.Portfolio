@@ -1,5 +1,13 @@
 # Complete motion map
 
+## Current correction and next handoff — 20 November 2026
+
+Hero now has two coordinated visual layers: the retained source-colour atomizer with a 26% field/exact reassembly, and a separate bounded warm ambient renderer with persistent drift/twinkle plus occasional comets. The ambient controller owns its canvas clock/lifecycle; `PointerScene` owns field/portrait/orbit scroll planes through the existing Motion subscription. The frozen GSAP provider/SceneBoundary and Work pin stay unchanged; Hero is unpinned. Hidden/offscreen stops the relevant renderer; live reduced motion/forced colours settle to complete static presentation.
+
+About is an editorial story with five facts and one static flattened desk illustration; repeated photograph/captions are removed. Only the wrapped story/notebook make the token-timed 16px entrance. No independently animated anatomical, typing or lamp layer exists.
+
+Phase 3R-4 remains **plan only**. Its five existing chapter anchors, proposed absolute holds, measured finite pin, continuous filament, artifact planes, reverse/hash/history/focus contract and vertical alternatives are in `PHASE_ROADMAP.md`. The older six-station proposal below is historical. Wait for owner approval of this correction before implementation.
+
 This is a proposed implementation contract, **not a list of effects already shipped**. Absolute normalized scroll progress is authoritative for narrative scenes; independent clocks belong only to finite pixel simulation and explicit game play. Durations read the existing CSS authority: hero/media 600ms, stagger 80ms, press 150ms, release 100ms; ease `cubic-bezier(0.23, 1, 0.32, 1)`. Scrubbed positions use linear progress, not time easing or a spring lag. Mobile means actual fit/input capability, not a UA string.
 
 | Section | Initial state | Entry | Scroll-driven behavior | Interaction | Exit | Mobile | Reduced-motion / no-JS | Required assets |

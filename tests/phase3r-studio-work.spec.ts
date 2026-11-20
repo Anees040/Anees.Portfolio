@@ -7,7 +7,7 @@ import { chooseWork, expectStackedWork, loadWork, seekWork, workIds, workProgres
 
 test.use({ screenshot: "off", video: "off", trace: "off" });
 
-test("About follows the hero with the approved illustration, truthful notebook and real actions", async ({ page }) => {
+test("About follows the hero with one working scene, truthful notebook and real actions", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await loadWork(page);
   const about = page.locator("#about");
@@ -20,10 +20,12 @@ test("About follows the hero with the approved illustration, truthful notebook a
   await expect(about.getByRole("link", { name: "Get in touch" })).toHaveAttribute("href", `mailto:${profile.email}`);
   if (!profileContent.resume) await expect(about.locator('a[href$=".pdf"]')).toHaveCount(0);
   if (!profileContent.linkedin) await expect(about.locator('a[href*="linkedin.com"]')).toHaveCount(0);
-  const image = about.locator("[data-about-image] img");
-  await image.scrollIntoViewIfNeeded();
-  await expect(image).toHaveAttribute("src", /anees-workspace-working/);
-  await expect.poll(() => image.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  await expect(about.locator("[data-about-image], img[src='/assets/profile/photo.png']")).toHaveCount(0);
+  const working = about.locator("[data-about-working] img");
+  await working.scrollIntoViewIfNeeded();
+  await expect(working).toHaveAttribute("src", "/assets/character/anees-working-illustration.png");
+  await expect.poll(() => working.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  await expect(about.locator("[data-about-working] figcaption")).toHaveCount(0);
   expect(await about.evaluate(element => element.closest("[data-scroll-scene]") === null)).toBe(true);
   expect(await page.locator('main [id="home"], main [id="about"], main [id="work"], main [id="engineering"], main [id="journey"], main [id="playground"], main .evidence-section').evaluateAll(elements => elements.map(element => element.id || "evidence"))).toEqual(["home", "about", "work", "engineering", "journey", "playground", "evidence"]);
   await expect(page.locator("[data-work-inspector]")).toHaveCount(1);
@@ -33,7 +35,7 @@ test("About follows the hero with the approved illustration, truthful notebook a
 
 test("About starts complete, enters once and settles immediately on a live motion preference change", async ({ page }) => {
   await loadWork(page);
-  const targets = page.locator("#about [data-about-image], #about [data-about-copy]");
+  const targets = page.locator("#about [data-about-copy], #about [data-about-facts]");
   await expect(targets).toHaveCount(2);
   for (const target of await targets.all()) await expect(target).toHaveCSS("opacity", "1");
   await page.locator("#about").evaluate(element => scrollTo({ top: scrollY + element.getBoundingClientRect().top - document.querySelector<HTMLElement>(".site-header")!.offsetHeight, behavior: "instant" }));
@@ -47,13 +49,15 @@ test("About starts complete, enters once and settles immediately on a live motio
   expect(await page.locator("#about").evaluate(element => element.closest(".pin-spacer") === null)).toBe(true);
 });
 
-test("an unavailable About illustration retains the complete text composition and real actions", async ({ page }) => {
-  await page.route("**/_next/image?**", route => new URL(route.request().url()).searchParams.get("url")?.includes("anees-workspace-working") ? route.abort() : route.continue());
+test("an unavailable Hero photograph retains About text, actions and its working scene", async ({ page }) => {
+  await page.route("**/assets/profile/photo.png", route => route.abort());
   await loadWork(page);
   await page.locator("#about").scrollIntoViewIfNeeded();
-  await expect(page.locator('#about [data-about-image-failed="true"]')).toBeVisible();
-  await expect(page.locator("#about [data-about-image]")).toBeHidden();
+  await expect(page.locator("#home .character-fallback")).toBeVisible();
+  await expect(page.locator("#about [data-about-image]")).toHaveCount(0);
   await expect(page.locator("#about [data-about-copy]")).toBeVisible();
+  await expect(page.locator("#about [data-about-working]")).toBeVisible();
+  await expect(page.locator("#about [data-about-working] figcaption")).toHaveCount(0);
   await expect(page.locator("#about dl > div")).toHaveCount(5);
   await expect(page.locator("#about")).toContainText(profileContent.introduction);
   await expect(page.locator("#about").getByRole("link", { name: "Get in touch" })).toHaveAttribute("href", `mailto:${profile.email}`);
@@ -236,7 +240,7 @@ test("touch-capable desktop never pins or hides project chapters", async ({ brow
   await expectStackedWork(page);
   await page.locator("#about").scrollIntoViewIfNeeded();
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
-  for (const target of await page.locator("#about [data-about-image], #about [data-about-copy]").all()) {
+  for (const target of await page.locator("#about [data-about-copy], #about [data-about-facts]").all()) {
     await expect(target).toHaveCSS("transform", "none");
     expect(await target.evaluate(element => element.getAnimations().length)).toBe(0);
   }

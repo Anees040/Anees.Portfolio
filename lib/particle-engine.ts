@@ -3,8 +3,10 @@ export type ParticleMetrics = {
   maxDisplacement: number; meanDisplacement: number; peakDisplacement: number; reassembled: boolean;
   settled: boolean; forming: boolean; formationMs: number; initialMeanDisplacement: number;
   intervalCount: number; intervalTotalMs: number; intervalMaxMs: number; intervalBuckets: number[]; bufferBytes: number; intervalP95Ms: number;
+  interactionRadius: number; affectedParticles: number;
 };
-export type ParticleSource = { width: number; height: number; pixels: Uint8ClampedArray; gap: number; portraitWidth?: number; footprint?: number; formationDuration?: number };
+export type ParticleSource = { width: number; height: number; pixels: Uint8ClampedArray; gap: number; portraitWidth?: number; footprint?: number; formationDuration?: number; radiusRatio?: number; forceRatio?: number; tangentialRatio?: number; response?: number };
+export const PARTICLE_BUDGET = { count: 32000, bytes: 8 * 1024 * 1024, surfacePixels: 480 * 700 } as const;
 const littleEndian = new Uint8Array(new Uint32Array([0x01020304]).buffer)[0] === 4;
 
 export class ParticleEngine {
@@ -32,12 +34,19 @@ export class ParticleEngine {
   constructor(private context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D, private source: ParticleSource) {
     const { width, height, pixels, gap } = source;
     if (gap < 1 || !Number.isInteger(gap) || pixels.length !== width * height * 4) throw new Error("Invalid portrait sampling surface");
-    const capacity = Math.ceil(width / gap) * Math.ceil(height / gap);
+    if (width * height > PARTICLE_BUDGET.surfacePixels) throw new Error("Portrait surface exceeds pixel budget");
+    let capacity = 0;
+    for (let row = 0; row < height; row += gap) for (let column = 0; column < width; column += gap) {
+      if (pixels[(row * width + column) * 4 + 3]) capacity++;
+    }
+    const footprint = source.footprint ?? 3;
+    const bytes = capacity * (32 + 4 * footprint * footprint + 4 * gap * gap) + width * height * 4 + 180 * 4;
+    if (capacity > PARTICLE_BUDGET.count || bytes > PARTICLE_BUDGET.bytes) throw new Error("Portrait exceeds particle memory budget");
     this.x = new Float32Array(capacity); this.y = new Float32Array(capacity);
     this.tx = new Float32Array(capacity); this.ty = new Float32Array(capacity);
     this.vx = new Float32Array(capacity); this.vy = new Float32Array(capacity);
     this.colors = new Uint32Array(capacity);
-    this.footprint = source.footprint ?? 3;
+    this.footprint = footprint;
     const area = this.footprint * this.footprint;
     this.stamps = new Uint32Array(capacity * area);
     this.tiles = new Uint32Array(capacity * gap * gap); this.weights = new Float32Array(capacity);
@@ -62,7 +71,7 @@ export class ParticleEngine {
       }
     }
     if (!this.count) throw new Error("Portrait has no visible source pixels");
-    this.metrics = { frames: 0, particles: this.count, updateMs: 0, drawMs: 0, maxFrameMs: 0, maxDisplacement: 0, meanDisplacement: 0, peakDisplacement: 0, reassembled: true, settled: true, forming: false, formationMs: 0, initialMeanDisplacement: 0, intervalCount: 0, intervalTotalMs: 0, intervalMaxMs: 0, intervalBuckets: [0, 0, 0, 0, 0, 0], bufferBytes: this.x.byteLength * 6 + this.colors.byteLength + this.stamps.byteLength + this.tiles.byteLength + this.weights.byteLength + this.buffer.data.byteLength + this.intervals.byteLength, intervalP95Ms: 0 };
+    this.metrics = { frames: 0, particles: this.count, updateMs: 0, drawMs: 0, maxFrameMs: 0, maxDisplacement: 0, meanDisplacement: 0, peakDisplacement: 0, reassembled: true, settled: true, forming: false, formationMs: 0, initialMeanDisplacement: 0, intervalCount: 0, intervalTotalMs: 0, intervalMaxMs: 0, intervalBuckets: [0, 0, 0, 0, 0, 0], bufferBytes: bytes, intervalP95Ms: 0, interactionRadius: (source.portraitWidth ?? width * 0.78) * (source.radiusRatio ?? 0.26), affectedParticles: 0 };
     this.x.set(this.tx); this.y.set(this.ty);
   }
 
@@ -121,6 +130,7 @@ export class ParticleEngine {
     this.x.set(this.tx); this.y.set(this.ty); this.vx.fill(0); this.vy.fill(0);
     this.metrics.maxDisplacement = 0; this.metrics.meanDisplacement = 0;
     this.metrics.reassembled = true; this.metrics.settled = true; this.metrics.forming = false;
+    this.metrics.affectedParticles = 0;
   }
 
   draw() {
@@ -156,17 +166,22 @@ export class ParticleEngine {
   step(delta: number) {
     const begin = performance.now(), elapsed = Math.min(32, Math.max(1, delta)), seconds = elapsed / 1000;
     const interacting = !this.forming && this.pointerX >= 0 && this.pointerY >= 0;
-    const omega = this.forming ? 20 * 600 / (this.source.formationDuration ?? 600) : 24, decay = Math.exp(-omega * seconds);
-    const radius = (this.source.portraitWidth ?? this.source.width * 0.78) * 0.13, radius2 = radius * radius;
-    let speed2 = 0, displacement2 = 0, total = 0;
+    const omega = this.forming ? 20 * 600 / (this.source.formationDuration ?? 600) : (this.source.response ?? 17), decay = Math.exp(-omega * seconds);
+    const radius = this.metrics.interactionRadius, radius2 = radius * radius;
+    let speed2 = 0, displacement2 = 0, total = 0, affected = 0;
     for (let index = 0; index < this.count; index++) {
       let goalX = this.tx[index], goalY = this.ty[index];
       if (interacting) {
         const distanceX = goalX - this.pointerX, distanceY = goalY - this.pointerY, distance2 = distanceX * distanceX + distanceY * distanceY;
         if (distance2 < radius2) {
-          const distance = Math.sqrt(Math.max(0.01, distance2)), force = (1 - distance / radius) ** 2 * radius * 0.8 * this.weights[index];
-          goalX += (distance2 < 0.01 ? (index % 2 ? 1 : -1) : distanceX / distance) * force;
-          goalY += (distance2 < 0.01 ? 0 : distanceY / distance) * force;
+          affected++;
+          const distance = Math.sqrt(Math.max(0.01, distance2)), falloff = 1 - distance / radius;
+          const force = falloff * falloff * Math.sqrt(distance2) * (this.source.forceRatio ?? 2.8) * (0.78 + this.weights[index] * 0.22);
+          const horizontal = distance2 < 0.01 ? (index % 2 ? 1 : -1) : distanceX / distance;
+          const vertical = distance2 < 0.01 ? 0 : distanceY / distance;
+          const tangent = force * (this.source.tangentialRatio ?? 0.32);
+          goalX += horizontal * force - vertical * tangent;
+          goalY += vertical * force + horizontal * tangent;
         }
       }
       const offsetX = this.x[index] - goalX, offsetY = this.y[index] - goalY;
@@ -180,6 +195,7 @@ export class ParticleEngine {
     this.quiet = speed2 < 1 && (interacting || displacement2 < 0.04) ? this.quiet + 1 : 0;
     const settled = this.quiet >= 2;
     this.metrics.maxDisplacement = Math.sqrt(displacement2); this.metrics.meanDisplacement = total / this.count;
+    this.metrics.affectedParticles = affected;
     this.metrics.peakDisplacement = Math.max(this.metrics.peakDisplacement, this.metrics.maxDisplacement);
     this.metrics.reassembled = false; this.metrics.settled = settled;
     if (this.forming) this.metrics.formationMs += elapsed;

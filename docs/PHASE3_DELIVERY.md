@@ -1,5 +1,61 @@
 # Muhammad Anees — Phase 3 / 3R delivery
 
+## Hero/About visual correction — 20 November 2026
+
+**Implemented, verified, awaiting Anees's manual recording review. Phase 3R-4 is planned only.** The local/remote commit was `a105cbc`; the incoming working tree already contained portrait/desk refinements and two root uploads. All incoming files and assets remain preserved. No agent/worktree, dependency install/fix, AI service, generated face, commit/push or deployment was performed.
+
+### Result and asset decision
+
+The former Alabaster rectangular matte/8px outline made Hero's portrait look mounted. Hero now owns the only identity photograph in a large elliptical composition with original orbit geometry. It uses the owner's confirmed original `/assets/profile/photo.png`: 1268×1240, unchanged bytes, original facial detail/background/colour, maximum 468 CSS pixels. There is no separate treated photograph to compare and no background-removal tool/model was installed or called. CSS and canvas use the same ellipse, scale and top offset.
+
+The retained atomizer uses a 26% radius, smooth radial dilation and restrained tangential response rather than a tiny pale disturbance. The center remains populated; sampled colours remain intact. Exact spring reassembly, visible cloud/replay, typed arrays/packed buffer reuse, worker/main/recovery, hidden/offscreen, touch `pan-y` and live preference fallbacks remain. Capability tiers separate density from force and enforce 32,000 particles / 8 MiB internal engine allocations / 480×700 maximum sample surface. Additional source/decode/compositor accounting is documented in `DESIGN_SYSTEM.md`.
+
+One separate warm ambient canvas sits behind all content: persistent slow drift/twinkle, at most 160/85 stars, 24 short tail samples, 1280×900/960×640 backing caps and 30/24 Hz drawing. The first comet appears within about 1.4 active seconds, then only at spaced intervals. Its single controlled rAF pauses offscreen/hidden, resets resume time, respects live reduced motion/forced colours, removes its canvas on unmount and leaves complete static SVG without JavaScript. The existing Motion Hero subscription owns coordinated field/portrait/orbit scroll planes; there is no Hero pin, additional ScrollTrigger or GSAP runtime change.
+
+About now has one editorial story: unchanged biography/actions, the five truthful education/interests/current-project/learning/direction facts and one static intact working illustration. The repeated identity image, oversized name backdrop and redundant captions are removed from rendering; all old files remain. The 1402×1122 RGBA desk PNG is flattened. **Zero independently authored head/body/hands/laptop/lamp/object layers exist.** No fake blinking/typing/warping or copied puzzle is implemented. Future shared-canvas art requirements are in `phase3r/ASSET_INVENTORY.md`. Selected Work, Engineering, Thread implementation, Always Building, Evidence and Contact remain unchanged.
+
+### File ledger for this correction
+
+| Area | Files changed |
+| --- | --- |
+| Hero presentation/ownership | `components/portfolio/hero.tsx`, `character-scene.tsx`, `hero-cosmos.module.css`, `pointer-scene.tsx`, `image-atomizer.tsx` |
+| Particle/ambient | `lib/particle-engine.ts`; new `lib/hero-ambient.ts` and `components/portfolio/hero-ambient.tsx` |
+| About | `components/portfolio/about.tsx`, `about-motion.tsx`, `about-work.module.css` |
+| Permanent assertions | `tests/phase2-completion.spec.ts`, `phase3.spec.ts`, `phase3r-hero.spec.ts`, `phase3r-studio-work.spec.ts`, existing untracked `portrait-refinement.spec.ts`, new `hero-ambient.spec.ts` |
+| Current product/delivery | `PRODUCT.md`, `docs/BUILD_LOG.md`, `PROJECT_STATUS.md`, `PHASE3_DELIVERY.md`, `DESIGN_SYSTEM.md`, `CONTENT_SOURCES.md`, `PERSONAL_CONTENT_NEEDED.md` |
+| Existing Phase 3R handoff | `docs/phase3r/PHASE_ROADMAP.md`, `MOTION_MAP.md`, `IMPLEMENTATION_ARCHITECTURE.md`, `REFERENCE_STUDY.md`, `ASSET_INVENTORY.md` |
+
+Incoming `character-portrait.tsx`, `lib/character-assets.ts`, `lib/profile-content.ts`, image-copy registrations and original upload/public-copy bytes were preserved. There is no new generated raster, report directory, disposable script, image intermediate, debug component or abstraction/runtime layer to clean up.
+
+### Exact verification
+
+For fixture checks, build, serve and test with `$env:PORTFOLIO_SCENE_FIXTURE='1'` and `$env:CAPTURE_VISUALS='0'`. Production server: `npm.cmd run start -- --hostname 127.0.0.1 --port 3100`. All browser runs use local Chrome, assertions only, list reporting and tracing off.
+
+| Command | Actual result |
+| --- | --- |
+| `npm.cmd run lint` | Passed, exit 0 |
+| `npm.cmd run typecheck` | Passed, exit 0 |
+| `npm.cmd run build` (fixture enabled) | Passed, exit 0; first sandbox attempt blocked Google Fonts and was retried with approved network access |
+| `npm.cmd run test:e2e -- tests/phase3r-hero.spec.ts tests/hero-ambient.spec.ts tests/portrait-refinement.spec.ts tests/phase3r-studio-work.spec.ts --reporter=list --trace=off` | Initial 94 passed / 4 failed; implementation fixes for immediate media settling and Linen label contrast followed |
+| `npm.cmd run test:e2e -- tests/hero-ambient.spec.ts tests/phase3r-studio-work.spec.ts --grep 'ambient\|capability\|Hero depth\|accessible names' --reporter=list --trace=off` | 14 passed in 38.0s |
+| `npm.cmd run test:e2e -- tests/phase2.spec.ts tests/phase2-completion.spec.ts tests/hero-ambient.spec.ts --grep 'live reduced motion and visibility\|without JavaScript or WebGL\|disposes on navigation\|ambient fallback' --reporter=list --trace=off` | 5 passed in 12.3s after the final no-JS/legacy-pause correction |
+| `npm.cmd run test:e2e -- --reporter=list --trace=off` | **235 passed in 8.6 minutes**, fresh matching fixture production build |
+| `npm.cmd run build` with `$env:PORTFOLIO_SCENE_FIXTURE='0'` | Passed, exit 0, warning-free public build |
+| `npm.cmd run test:e2e -- tests/hero-ambient.spec.ts tests/portrait-refinement.spec.ts --reporter=list --trace=off` (fixture disabled) | **32 passed in 1.0 minute**; first attempt was 31 passed / 1 failed because trigger count was sampled before Selected Work readiness; the assertion now waits for established scenes before comparing counts |
+| `git diff --check` | Passed during correction; final documentation check recorded in build log |
+
+Two earlier complete attempts were interrupted during legacy-contract integration: one before the unchanged rectangular-count expectation could reject the new ellipse; the other after finding the obsolete orbit-animation wait and unused no-JS canvas. Exact source-colour/count/return and Phase 2 pause/no-JS assertions were preserved or migrated to their verified equivalent. No failed check was skipped or weakened to accept an aggressive effect.
+
+Final local Chrome configured-tier measurements (1440×900, forced main path, 8/6/4 emulated cores): 27,048/20,723/4,710 particles; internal buffers 3,115,632/2,386,572/951,240 bytes; average update+draw approximately 2.73/2.44/1.26ms; maximum work 7.7/7.6/2.9ms; p95 simulation intervals 16.9/16.8/16.9ms. These are one local machine's configured-tier samples, not three physical devices or displayed-FPS certification.
+
+Follow-up public-build samples varied with local load: the 8-core main path peaked at 16.6ms in the first run and 11ms in the final run; p95 simulation intervals remained approximately 16.8–16.9ms. These results do not guarantee no dropped compositor frames on other hardware. The final readiness-wait correction changes assertion setup only; the product source is the same implementation covered by the 235-case complete run.
+
+### Limits and next phase
+
+The original photographed background remains visible inside the ellipse. The desk remains static until proper aligned layers are approved. Raw PNG transfer/decode cost remains; this pass prioritizes original likeness and does not claim loading/compositor improvements. Assets and preserved reference evidence were inspected directly, but this assertion-only pass produces no new screenshots, recordings, traces or galleries and does not establish manual visual approval. Physical devices, Safari, Firefox and real screen-reader sessions were not tested. The live comet article could not be retrieved; the preserved reference starfield/comet source and performance material were studied.
+
+`phase3r/PHASE_ROADMAP.md` prepares 3R-4 around the five existing truthful chapters: one continuous filament, measured finite desktop pin, reading holds, layered authentic artifacts, absolute progress and consistent forward/reverse/hash/history/focus. Mobile/short/enlarged/reduced/no-JS remain complete vertical stories. **Stop here for Anees's review.** No 3R-4 implementation; 3R-5 still needs approved game/character art and 3R-6 remains release hardening.
+
 ## Phase 3R-2 closeout + Phase 3R-3 — 20 November 2026
 
 **Implemented and awaiting the owner's manual review. Phase 3R-4 has not started.** Worked only in the existing `master` repository after verifying the local and current remote heads matched. No agent, worktree, branch switch, reset, user-file deletion, dependency upgrade, commit, push or deployment occurred. This current personal-portfolio record supersedes the historical branding, composition and visual verdicts below.

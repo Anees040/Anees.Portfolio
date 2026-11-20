@@ -2,6 +2,8 @@
 
 ## Approval gates
 
+The current Hero/About visual correction is authorized in this session. Review of that correction is the next gate; Phase 3R-4 is prepared below and must wait for the owner's approval. The earlier baseline/phase descriptions remain historical where superseded by the current delivery record.
+
 The owner authorized Phase 3R-2 closeout and Phase 3R-3 implementation on 20 November 2026. The foundation baseline closes at 160 passing assertions before About/Work implementation begins. Current verification belongs in `../BUILD_LOG.md`, `../PROJECT_STATUS.md` and `../PHASE3_DELIVERY.md`. Phase 3R-4 is not authorized by this assignment. Use one session, no parallel agents or worktrees, no deployment and no AI service; stop for the owner's manual review. Earlier research/parallel plans below are historical where they conflict with this boundary.
 
 Every implementation phase ends with targeted regression tests, `npm run lint`, `npm run typecheck`, a fresh `npm run build`, then the complete `npm run test:e2e` suite against the matching fixture-enabled production build and server. Preserve retained/equivalent Phase 2 coverage and Phase 3 truth/fallback cases. This assignment uses list reporting with screenshots, video and traces disabled; the owner performs visual review. Required widths: 320, 375, 390, 414, 768, 1024, 1280, 1440, 1920; include short-height desktops, doubled root text, keyboard, no-JS and live reduced-motion changes. Physical devices/additional browsers are separate named checks, not inferred from emulation.
@@ -33,14 +35,19 @@ Every implementation phase ends with targeted regression tests, `npm run lint`, 
 - **Visual acceptance:** four distinct chapters; screens, purpose, status and case link immediately clear; About uses approved artwork or a strong text composition, not monogram filler. Screens retain actual colors. The owner reviews the first/hold/transition states, stacked mobile scenes and text expansion manually; no visual approval is claimed by assertion checks.
 - **Execution:** Thread, game, Engineering and Contact remain unchanged apart from the required homepage ordering. Stop after 3R-3 verification; later implementation requires separate authorization.
 
-## Phase 3R-4 — Follow the Thread
+## Phase 3R-4 — Follow the Thread (prepared; not implemented)
 
-- **Owner/files:** Thread worker's trail/thread sources, scoped CSS/test; coordinator approved chapter data/legacy anchors/root/nav.
-- **Prerequisites/assets:** shared foundation; owner approves six thematic station sequence; source-backed chapter facts; original SVG station/path layers authored in this phase. No walk sprites required and no dates invented.
-- **Tasks:** copper-loom scene, finite measured pin, foreground/backplane/filament synchronization, reading holds, absolute chapter/progress model, reverse/jump/resize mapping, clear final release; complete vertical static/mobile alternative.
-- **Tests/risks:** all six chapter links plus old destinations, forward/reverse exact state, top/end release, focus, short height/200% text/RTL/low capability/live preference, source links and no-JS. Risks: huge empty scroll, chronology claims, focus under pin, inconsistent station timing.
-- **Visual acceptance:** new scene geometry and artifacts change materially by chapter; no globe/buildings/Elliott art; each chapter holds long enough to read; reversing produces the same frame; final filament passes cleanly into game baseline. Review start/mid/end + all station holds and a slow reversible recording.
-- **Parallel:** disjoint from About/Work; integrates only through the coordinator contract.
+**Gate:** Anees must review and approve the current Hero/About correction before this implementation begins. Phase 3R-5 still requires approved character/game artwork; 3R-6 remains final integration and release hardening. No later phase is authorized by this correction.
+
+Use the five existing, date-free `journeyChapters` in `lib/profile-content.ts`: foundation → everyday projects → underneath the interface → current SportLynk focus → continuing direction. Preserve `#journey`, `#trail-foundation`, `#trail-everyday`, `#trail-underneath`, `#trail-current`, `#trail-next`, their evidence links and caveats. The earlier six-station proposal is superseded; no new milestone or date is inferred.
+
+- **Composition:** one continuous original copper filament crosses five reading stations. Path and foreground/background layers share one coordinate system. Keep real chapter text in the DOM; use a few authentic FitPilot/Sukoon/EduVerse screens or existing source diagrams where they support a chapter. SportLynk stays conceptual, private and in development. No copied globe, buildings, walking character or reference artwork.
+- **Ownership:** migrate the existing `TrailMotion` scroll subscription into one stable `SceneBoundary` factory using the frozen shared GSAP timeline port. Remove the replaced Motion subscription in that same change. No second provider, direct ScrollTrigger import, refresh manager, wheel handler or scroll engine. The unpinned Engineering/Concurrency reading interval separates Work and Thread pins.
+- **Fit/distance:** measure the complete stage, tallest chapter, navigation, artifact, header clearance and root text. Target a finite desktop distance no greater than 2.8 available viewport heights, then tighten to actual readability and fit. Stack when the complete reading station does not fit. Release after the final hold, with no redundant pin or blank scroll interval.
+- **Progress:** one absolute normalized progress drives filament travel, chapter selection, marker and every plane. Proposed holds: `0–.12`, `.22–.34`, `.44–.56`, `.66–.78`, `.88–1`; destinations: `.06`, `.28`, `.50`, `.72`, `.94`. Transitions occupy the intervening bands. Validate reading time manually before finalizing these values. Foreground and background use independently owned wrappers with controlled transform ranges; copy stays still during each hold.
+- **Navigation/interruption:** forward/reverse scroll, direct chapter links, initial hashes, keyboard focus and back/forward history seek the same absolute state through the coordinator. Resize and live reduced motion retain the corresponding real chapter and reading position. Inactive staged content is inert and aria-hidden; the native destination remains authoritative.
+- **Static path:** mobile, touch, short-height, enlarged-text, reduced-motion, low-capability and no-JS modes show all five chapters and artifacts in a complete vertical sequence with a continuous static filament. No narrative information depends on pinning or motion.
+- **Acceptance:** test every anchor/history direction, equal-progress reversibility, fit/release, live preferences, font/image failure, cleanup/remount and truthful content. Run required lint/typecheck/fresh build/full E2E checks. The owner reviews every hold and a slow forward/reverse recording; assertions alone do not establish visual approval.
 
 ## Phase 3R-5 — Always Building mini-game
 

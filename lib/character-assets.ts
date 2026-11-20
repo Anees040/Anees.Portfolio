@@ -4,6 +4,7 @@ export type CharacterFrame = {
   width: number;
   height: number;
   alt: string;
+  unoptimized?: boolean;
   revision?: string;
   mobile?: { src: string; width: number; height: number };
 };

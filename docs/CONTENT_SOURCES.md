@@ -1,5 +1,15 @@
 # Verified content and asset sources
 
+## Hero/About correction provenance — 20 November 2026
+
+The owner confirms local `photo.png` is the original and only supplied photograph. It measures 1268×1240; the public copy remains byte-identical. Only Hero renders it, inside an ellipse with its original background. No face retouch, AI call, removal model or fabricated transparency. One unchanged 1402×1122 RGBA desk illustration supports About; its anatomy/objects are flattened, not animation layers. Earlier portraits and private references stay preserved and unused for the main identity.
+
+About's biography, COMSATS study description, interests, SportLynk FYP status, learning and direction are existing owner-approved `profileContent`, with no new dates, employment, achievements or metrics. Source/project narratives are unchanged. Preserved Elliott reference source and performance/comet material inform composition/interaction; no reference code, imagery, palette, claims or service is copied.
+
+## Owner-supplied identity refinement — 20 November 2026
+
+The owner explicitly approved the root `photo.png` as the public photograph for Hero and About and `anees-working-illustration.png` as a separate artistic, secondary About scene. The actual originals measure 1268×1240 RGB and 1402×1122 RGBA respectively, rather than the photograph dimensions stated in the brief. Byte-identical production copies live at `public/assets/profile/photo.png` and `public/assets/character/anees-working-illustration.png`; the root uploads remain untouched. Both render as original PNGs without optimization, background replacement, recolouring, regenerated detail or altered face/body proportions. The photograph keeps its supplied crop/background; the illustration keeps real transparency and is not an animation sequence. Earlier private references and approved legacy illustrations remain preserved, not substituted into the identity positions. Permanent assertion coverage pins the supplied SHA-256 values and validates alpha, source use and geometry; no new visual evidence is generated.
+
 ## Continuation re-verification — 17 November 2026
 
 All seventeen previously selected implementation/documentation files again matched the fixed public revisions. In addition, all fifteen distinct file-level implementation links used by the case studies were fetched and matched the local research source byte-for-byte, including FitPilot's `burn_provider.dart` and Sukoon's `prayer_service.dart`. Reports: `.qa/phase3-finish/sources/verification.json` and `.qa/phase3-finish/linked-source-verification.json`.
@@ -37,7 +47,7 @@ Each shipping screenshot also embeds its exact origin and acquisition date in JP
 - `public/projects/fitpilot-today.jpg`: https://raw.githubusercontent.com/Anees040/FitPilot/main/docs/screenshots/log/today_1.jpg
 - `public/projects/sukoon-home.jpeg`: https://raw.githubusercontent.com/Anees040/sukoon/main/assets/screenshots/home_screen.jpeg
 - `public/projects/eduverse-home.png`: https://raw.githubusercontent.com/Anees040/EduVerse/main/docs/screenshots/student_home_dashboard.png
-- Hero/former workspace: original architectural vector/CSS geometry and owner-approved illustrations. The owner approved `public/assets/character/anees-character-primary.png` and `anees-character-sheet.png` during Phase 2 completion. Hero uses the optimized primary cutout. The former standing/seated workspace derivatives remain preserved, but the final professional Digital Atelier does not mount them. Original rasters are unchanged; no likeness or in-between frame was generated. See `public/images/character/README.md`. The MA study remains the fallback.
+- Historical Hero/former workspace: original architectural vector/CSS geometry and owner-approved illustrations. The owner approved `public/assets/character/anees-character-primary.png` and `anees-character-sheet.png` during Phase 2 completion. The earlier Hero used the optimized primary cutout. Those originals and the former standing/seated derivatives remain preserved; current identity positions use the newly approved public photograph described above. No likeness or in-between frame was generated. See `public/images/character/README.md`. The MA study remains the fallback.
 - SportLynk: newly authored geometric court, labeled “Concept illustration.” Not a product screenshot or validated architecture diagram.
 - MA monogram: original vector drawn for this portfolio.
 

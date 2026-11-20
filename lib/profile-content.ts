@@ -13,6 +13,7 @@ export const profileContent: ProfileContent = {
   learning: "Exploring the connections between mobile interfaces, local data, backend services and applied AI tools.",
   building: "SportLynk, my flagship Final Year Project, focused on sports venue booking and competitive matchmaking.",
   direction: "Building practical digital products and going deeper into the engineering behind them.",
+  photograph: { src: "/assets/profile/photo.png", width: 1268, height: 1240, alt: "Photograph of Muhammad Anees.", caption: "Muhammad Anees, software developer and student." },
 };
 export const engineeringAreas = [
   { id: "mobile", name: "Mobile engineering", question: "What happens after the screen closes?", body: "A useful mobile feature has a life beyond its widget tree. Sukoon connects Flutter configuration to Kotlin alarms and receivers; FitPilot keeps local records for disconnected use.", flow: ["Interface", "Device state", "Daily routine"], projects: [{ name: "Sukoon", slug: "sukoon" }, { name: "FitPilot", slug: "fitpilot" }] },

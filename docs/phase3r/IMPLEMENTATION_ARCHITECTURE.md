@@ -1,5 +1,15 @@
 # Implementation architecture and decision record
 
+## Focused Hero/About correction — 20 November 2026
+
+One session, no agents/worktrees, preserving incoming local changes at `a105cbc` (remote `master` matched by `git ls-remote`). Contract v1, provider, registration, refresh ownership, project pin and downstream routes are unchanged. Hero's existing `PointerScene` Motion subscription maps absolute native scroll to coordinated field/foreground/orbit transforms; no added ScrollTrigger or pin. About remains server content through its existing local entrance adapter.
+
+`ImageAtomizer` retains decoded-image sampling, capability tiers and static/worker/main lifecycle. CSS and sampling now share an ellipse. The engine counts nontransparent samples first and allocates exact typed-array capacity, enforcing 32,000 particles / 8 MiB engine storage / 480×700 surface. The retained worker accepts the same source/force model without protocol changes. Radius, density and stamp footprint are separate; curved dilation preserves the center and exact target return.
+
+`components/portfolio/hero-ambient.tsx` owns one canvas renderer/rAF plus scoped size, Hero visibility, preference/hidden cleanup. `lib/hero-ambient.ts` contains deterministic stars and original finite comet rendering. It does not own portrait input, sampling, scroll, a shared runtime or React frame state. Static SVG is server-rendered. <=2 cores, context failure, no-JS, reduced motion and forced colours retain static presentation. The two renderers coordinate around Hero visibility/preferences while keeping their responsibilities distinct.
+
+The next Thread migration is planned, not started: consume the existing boundary/absolute-progress contract, remove its old Motion subscription only in approved 3R-4, and preserve five real chapter IDs. The roadmap records distance/holds/static alternatives; modular workspace/game art is a separate gate.
+
 ## Phase 3R-2 implemented foundation — 19 November 2026
 
 This section supersedes the historical proposal below. The owner authorized GSAP and the shared foundation, not About/Work/Thread redesigns, the game or AI. Public identity is **Muhammad Anees's personal developer portfolio**; the approved palette and fonts remain unchanged. No other workstream or agent was started.

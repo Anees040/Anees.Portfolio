@@ -1,5 +1,11 @@
 # Product
 
+## Current correction boundary — 20 November 2026
+
+The owner rejected the previous Hero/About visual result and authorized a focused correction. Hero alone owns the unchanged original `photo.png` (1268×1240); an intentional elliptical crop integrates it into the dark orbit composition, without a light card or invented background removal. About uses the existing truthful story and five facts plus one static 1402×1122 desk illustration, with no repeated photograph or redundant captions. Earlier two-portrait descriptions below are historical where they conflict.
+
+The retained atomizer now uses a 26% interaction radius, bounded radial/tangential response and explicit 32,000-particle / 8 MiB engine budgets. A separate lightweight warm Hero canvas provides drift, twinkle and occasional comets, with static SVG fallback. Existing Motion owns the unpinned Hero depth transition; the frozen GSAP runtime and completed downstream sections are unchanged. No dependency, generative service, new face, commit, deployment or later-phase implementation is authorized. Phase 3R-4 is planned in the existing roadmap and awaits manual approval of this correction.
+
 <!-- impeccable:product-schema 1 -->
 
 ## Platform
@@ -18,7 +24,7 @@ A professional developer portfolio that makes Anees's software projects, enginee
 
 Phases 1–3 are retained. The owner authorized Phase 3R-2 closeout and Phase 3R-3 implementation on 2026-11-20: a stronger About section immediately after the hero and one consolidated Selected Work inspector with four source-grounded project chapters. Preserve the portrait, case studies, Engineering Workbook, Build Trail, Concurrency Lab, evidence and contact. Stop for manual review after verification; do not start Phase 3R-4, deploy, build Ask Anees AI, fabricate project claims or publish the private reference photograph.
 
-The owner approved the supplied primary portrait and character sheet during Phase 2 completion. Use their registered derivatives, with the architectural fallback for absent/failed hero assets. About uses the approved static working illustration on Linen; it already includes its desk and equipment. Its partial transparency is not an animation sequence. Independent facial motion requires aligned exports. Do not fabricate appearance or pose frames; retain a strong text composition if the illustration is unavailable.
+On 2026-11-20, the owner approved a focused post-review refinement: the newly supplied `photo.png` is the real identity source for Hero and About. The measured original is 1268×1240, served unchanged from `public/assets/profile/photo.png` and displayed at no more than approximately 402 CSS pixels wide. The separate 1402×1122 `anees-working-illustration.png` retains its alpha and proportions as secondary, static About artwork. It already contains its desk and equipment; do not add props, fabricate face/body movement or create another desk scene. Earlier illustration originals and character-sheet derivatives remain preserved but are not used in the identity positions. The older private reference remains unpublished.
 
 Use TypeScript, Next.js App Router, Tailwind CSS 4, CSS variables, Motion for React, Lucide and next/font. The approved Phase 3R-2 GSAP/ScrollTrigger runtime and @gsap/react integration own the finite Work pin through SceneBoundary; Motion remains appropriate for non-scroll entrances. Do not introduce an independent scroll engine or let both libraries write the same property. Preserve the original bounded Canvas 2D portrait/worker architecture and static fallbacks. No R3F, Three.js, Lenis, additional dependency or AI service is needed for 3R-3.
 
@@ -34,9 +40,9 @@ Muhammad Anees's personal developer portfolio, not a studio or agency. Preserve 
 - SportLynk is private/in development; user describes venue booking and competitive matchmaking. Its implementation and technologies have not been independently verified.
 - User describes Sukoon as completed; the public README also notes verification and hardening. Do not equate project completion with a production release.
 - Approved public contact: muhammadanees0511@gmail.com.
-- The owner approved a primary illustration and a character sheet. The hero portrait remains integrated; the registered working pose is a single static About illustration. Aligned facial animation frames and project metrics are unavailable. The private reference photograph is not used by the site.
+- The owner explicitly approved the newly supplied public photograph for both identity positions and a separate supporting working illustration. Original upload bytes, source proportions and transparency are preserved; both root uploads remain untouched. Earlier approved illustration assets are retained as history. No new face or pose frames were generated, and the older private reference is not used by the site.
 - Phase 3 source review checks the actual FitPilot domain/sync code, Sukoon Flutter/native scheduling contract, and EduVerse course/quiz services against fixed public revisions. Source observations do not establish individual authorship, runtime correctness or production adoption.
-- Profile dates, a resume, LinkedIn, an approved public photograph and additional personal contribution details remain owner inputs. The date-free Build Trail presents learning chapters, not a fabricated employment chronology.
+- Profile dates, a resume, LinkedIn and additional personal contribution details remain owner inputs. The public photograph input is resolved. The date-free Build Trail presents learning chapters, not a fabricated employment chronology.
 
 ## Product Principles
 

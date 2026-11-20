@@ -2,13 +2,13 @@ import { expect, test, type Page } from "@playwright/test";
 import { ParticleEngine, type ParticleSource } from "../lib/particle-engine";
 
 type ParticleArrays = { x: Float32Array; y: Float32Array; tx: Float32Array; ty: Float32Array; colors: Uint32Array; buffer: ImageData; count: number };
-function fixture() {
+function fixture(overrides: Partial<ParticleSource> = {}) {
   const width = 120, height = 180, pixels = new Uint8ClampedArray(width * height * 4);
   for (let row = 20; row < 160; row++) for (let column = 20; column < 100; column++) {
     const offset = (row * width + column) * 4;
     pixels.set([column + 80, row, 63, column === 20 ? 128 : 255], offset);
   }
-  const source: ParticleSource = { width, height, pixels, gap: 2, portraitWidth: 80 };
+  const source: ParticleSource = { width, height, pixels, gap: 2, portraitWidth: 80, ...overrides };
   const context = {
     createImageData: (width: number, height: number) => ({ width, height, data: new Uint8ClampedArray(width * height * 4) }),
     putImageData: () => {},
@@ -61,11 +61,11 @@ test("pointer force is local, stationary equilibrium holds displacement and exit
   for (let index = 0; index < arrays.count; index++) {
     const distance2 = (arrays.tx[index] - 60) ** 2 + (arrays.ty[index] - 54) ** 2;
     const moved = Math.abs(arrays.x[index] - arrays.tx[index]) + Math.abs(arrays.y[index] - arrays.ty[index]);
-    if (distance2 > (80 * 0.18) ** 2) expect(moved).toBe(0);
+    if (distance2 >= (80 * 0.26) ** 2) expect(moved).toBe(0);
     if (moved > 1) changed++;
   }
-  expect(changed).toBeGreaterThan(12);
-  expect(changed).toBeLessThan(arrays.count * 0.1);
+  expect(changed).toBeGreaterThan(100);
+  expect(changed).toBeLessThan(arrays.count * 0.2);
   engine.pointer(-1000, -1000); finish(engine);
   expect(engine.metrics.reassembled).toBe(true);
   expect(arrays.x).toEqual(arrays.tx);
@@ -77,6 +77,41 @@ test("scatter is distinct from cloud formation and returns to targets", () => {
   expect(engine.metrics.forming).toBe(false);
   expect(engine.metrics.maxDisplacement).toBeGreaterThan(1);
   finish(engine); expect(engine.metrics.reassembled).toBe(true);
+});
+
+test("the wider curved field affects substantially more source pixels while retaining the center and a bounded portrait", () => {
+  const narrow = fixture({ radiusRatio: 0.13 }), wide = fixture();
+  narrow.engine.pointer(60, 54); wide.engine.pointer(60, 54); finish(narrow.engine); finish(wide.engine);
+  expect(wide.engine.metrics.affectedParticles).toBeGreaterThan(narrow.engine.metrics.affectedParticles * 3.5);
+  expect(wide.engine.metrics.maxDisplacement).toBeGreaterThan(narrow.engine.metrics.maxDisplacement * 1.8);
+  expect(wide.engine.metrics.maxDisplacement).toBeLessThan(wide.engine.metrics.interactionRadius * 0.5);
+  const center = Array.from(wide.arrays.tx).findIndex((value, index) => value === 60 && wide.arrays.ty[index] === 54);
+  expect(wide.arrays.x[center]).toBe(60); expect(wide.arrays.y[center]).toBe(54);
+  const curved = Array.from(wide.arrays.tx).findIndex((value, index) => value === 70 && wide.arrays.ty[index] === 54);
+  expect(wide.arrays.y[curved]).toBeGreaterThan(54);
+  wide.engine.pointer(-1000, -1000); finish(wide.engine);
+  expect(wide.arrays.x).toEqual(wide.arrays.tx); expect(wide.arrays.y).toEqual(wide.arrays.ty);
+  expect(wide.arrays.buffer.data).toEqual(wide.source.pixels);
+});
+
+for (const gap of [2, 3, 4]) {
+  test(`density ${gap} keeps the same interaction radius, exact return and bounded memory`, () => {
+    const { engine, arrays, source } = fixture({ gap });
+    const buffer = arrays.buffer;
+    engine.pointer(60, 54); finish(engine);
+    expect(engine.metrics.interactionRadius).toBeCloseTo(20.8);
+    expect(engine.metrics.particles).toBeLessThanOrEqual(32000); expect(engine.metrics.bufferBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
+    engine.pointer(-1000, -1000); finish(engine);
+    expect(arrays.x).toEqual(arrays.tx); expect(arrays.y).toEqual(arrays.ty); expect(arrays.buffer).toBe(buffer);
+    // Gap 3/4 can omit a partial edge tile; sampled colors and full covered tiles remain exact.
+    const packed = new Uint32Array(source.pixels.buffer);
+    for (let index = 0; index < arrays.count; index++) expect(arrays.colors[index]).toBe(packed[arrays.ty[index] * source.width + arrays.tx[index]]);
+  });
+}
+
+test("a dense source is rejected before exceeding the particle allocation budget", () => {
+  const pixels = new Uint8ClampedArray(120 * 280 * 4).fill(255);
+  expect(() => fixture({ width: 120, height: 280, pixels, gap: 1 })).toThrow("Portrait exceeds particle memory budget");
 });
 
 async function stable(page: Page) {
@@ -210,7 +245,7 @@ for (const preference of ["reduce", "forced"] as const) {
 
 for (const failure of ["image", "context"] as const) {
   test(`${failure} failure retains an accessible hero and usable links`, async ({ page }) => {
-    if (failure === "image") await page.route(/\/_next\/image.*anees-idle/, route => route.abort());
+    if (failure === "image") await page.route("**/assets/profile/photo.png", route => route.abort());
     else await page.addInitScript(() => { HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext; });
     await page.goto("/", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
