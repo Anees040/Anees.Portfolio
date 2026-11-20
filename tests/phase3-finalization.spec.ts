@@ -1,15 +1,19 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
+import { chooseWork, loadWork, workScene } from "./work-helpers";
+
+type ParticleTransition = { state?: string; phase?: string; maxDisplacement?: number; frames?: number };
 
 async function observeParticleTransitions(page: Page) {
   await page.locator(".image-atomizer").evaluate(element => {
-    const target = window as Window & { particleTransitions?: { state?: string; phase?: string }[] };
+    const target = window as Window & { particleTransitions?: ParticleTransition[] };
     target.particleTransitions = [];
     new MutationObserver(() => {
       const portrait = element as HTMLElement;
-      target.particleTransitions!.push({ state: portrait.dataset.particleState, phase: portrait.dataset.particlePhase });
-    }).observe(element, { attributes: true, attributeFilter: ["data-particle-state", "data-particle-phase"] });
+      const values = JSON.parse(portrait.dataset.particleMetrics ?? "{}");
+      target.particleTransitions!.push({ state: portrait.dataset.particleState, phase: portrait.dataset.particlePhase, maxDisplacement: values.maxDisplacement, frames: values.frames });
+    }).observe(element, { attributes: true, attributeFilter: ["data-particle-state", "data-particle-phase", "data-particle-metrics"] });
   });
 }
 
@@ -87,13 +91,22 @@ test("a fresh mobile tap moves actual particles before smooth reassembly", async
   const stage = page.locator(".image-atomizer .character-frame"); await stage.scrollIntoViewIfNeeded();
   const portrait = page.locator(".image-atomizer");
   await expect(portrait).toHaveAttribute("data-particle-metrics", /particles/);
-  expect(JSON.parse((await portrait.getAttribute("data-particle-metrics"))!).peakDisplacement).toBe(0);
+  await expect(portrait).toHaveAttribute("data-particle-formation-complete", "true", { timeout: 15000 });
+  await expect(portrait).toHaveAttribute("data-particle-state", "resting");
+  const baseline = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
+  expect(baseline.initialMeanDisplacement).toBeGreaterThan(baseline.portraitWidth * 0.25);
+  expect(baseline.peakDisplacement).toBeGreaterThan(1);
+  expect(baseline.maxDisplacement).toBe(0);
+  expect(baseline.reassembled).toBe(true);
   await observeParticleTransitions(page);
   const bounds = (await stage.boundingBox())!; await page.touchscreen.tap(bounds.x + bounds.width * .5, bounds.y + bounds.height * .3);
   await expect.poll(() => page.evaluate(() => (window as Window & { particleTransitions?: { state?: string; phase?: string }[] }).particleTransitions!.some(state => state.phase === "dispersing" && state.state === "active"))).toBe(true);
+  await expect.poll(() => page.evaluate(frames => (window as Window & { particleTransitions?: ParticleTransition[] }).particleTransitions!.some(state => state.phase === "dispersing" && state.state === "active" && state.maxDisplacement! > 1 && state.frames! > frames), baseline.frames)).toBe(true);
   await expect(portrait).toHaveAttribute("data-particle-state", "resting", { timeout: 15000 });
   const metrics = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
-  expect(metrics.peakDisplacement).toBeGreaterThan(1); expect(metrics.frames).toBeGreaterThan(10); expect(metrics.reassembled).toBe(true);
+  expect(metrics.peakDisplacement).toBeGreaterThanOrEqual(baseline.peakDisplacement);
+  expect(metrics.frames).toBeGreaterThan(baseline.frames);
+  expect(metrics.maxDisplacement).toBe(0); expect(metrics.meanDisplacement).toBe(0); expect(metrics.reassembled).toBe(true);
   await context.close();
 });
 
@@ -118,9 +131,14 @@ test("a runtime worker error restores the main renderer and the active hover fie
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto("/", { waitUntil: "networkidle" });
   const portrait = page.locator(".image-atomizer");
   await expect(portrait).toHaveAttribute("data-particle-mode", "worker");
+  await expect(portrait).toHaveAttribute("data-particle-formation-complete", "true", { timeout: 15000 });
+  await expect(portrait).toHaveAttribute("data-particle-state", "resting");
   const bounds = (await page.locator(".image-atomizer .character-frame").boundingBox())!;
   await page.mouse.move(bounds.x + bounds.width * .5, bounds.y + bounds.height * .3);
-  await expect(portrait).toHaveAttribute("data-particle-state", "active");
+  await expect(portrait).toHaveAttribute("data-particle-phase", "holding", { timeout: 15000 });
+  const held = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
+  expect(held.maxDisplacement).toBeGreaterThan(4);
+  expect(held.reassembled).toBe(false);
   await page.evaluate(() => (window as Window & { portfolioWorker?: Worker }).portfolioWorker!.dispatchEvent(new Event("error")));
   await expect(portrait).toHaveAttribute("data-particle-mode", "main");
   await expect(portrait).toHaveAttribute("data-particle-phase", "holding", { timeout: 15000 });
@@ -177,22 +195,26 @@ test("thread chapters seek, synchronize, reverse, expose correct links and relea
 });
 
 for (const slug of ["sportlynk", "fitpilot", "sukoon", "eduverse"]) {
-  test(`atelier ${slug} changes project, authentic artifact, notes and documented build record`, async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" }); const studio = page.locator(".digital-atelier");
-    await studio.locator(`input[name="atelier-project"][value="${slug}"]`).check();
-    await expect(studio).toHaveAttribute("data-atelier-project", slug);
+  test(`work ${slug} changes project, authentic artifact, notes and documented build record`, async ({ page }) => {
+    await loadWork(page); const studio = page.locator("#work");
+    await chooseWork(page, slug);
+    await expect(workScene(page)).toHaveAttribute("data-work-project", slug);
     const project = studio.locator(`[data-project="${slug}"]`);
-    await expect(project.locator('[data-view="projects"]')).toBeVisible();
-    await expect(project.locator(".atelier-study-link")).toHaveAttribute("href", `/work/${slug}`);
+    await expect(project.locator('[data-work-view="projects"]')).toBeVisible();
+    await expect(project.locator("[data-work-case-link]")).toHaveAttribute("href", `/work/${slug}`);
     if (slug === "sportlynk") { await expect(project.locator(".folio-artifact")).toContainText("Conceptual"); await expect(project.locator(".folio-artifact img")).toHaveCount(0); }
-    else for (const image of await project.locator(".folio-artifact img").all()) { await image.scrollIntoViewIfNeeded(); await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0)).toBe(true); }
+    else {
+      const images = project.locator("[data-work-screens] img");
+      await expect(images).toHaveCount(3);
+      for (const image of await images.all()) { await expect(image).toBeInViewport(); await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.complete && element.naturalWidth > 0)).toBe(true); }
+    }
     await studio.getByRole("radio", { name: "Engineering Notes" }).check();
-    await expect(project.locator('[data-view="notes"]')).toBeVisible(); await expect(project.locator(".atelier-notes section")).toHaveCount(2);
-    await expect(project.locator('.atelier-notes-view .atelier-note-title .text-link')).toHaveAttribute("href", `/work/${slug}#decisions`);
+    await expect(project.locator('[data-work-view="notes"]')).toBeVisible(); await expect(project.locator('[data-work-view="notes"] section')).toHaveCount(2);
+    await expect(project.locator('[data-work-view="notes"]').getByRole("link", { name: "Open the complete study" })).toHaveAttribute("href", `/work/${slug}#decisions`);
     await studio.getByRole("radio", { name: "Build Log" }).check();
-    await expect(project.locator('[data-view="log"]')).toContainText("not a reconstructed commit history");
-    await expect(project.locator(".atelier-build-record li").first()).toBeVisible();
-    await project.locator('.atelier-log-view .text-link').click();
+    await expect(project.locator('[data-work-view="log"]')).toContainText("not a reconstructed commit history");
+    await expect(project.locator('[data-work-view="log"] li').first()).toBeVisible();
+    await project.locator('[data-work-view="log"]').getByRole("link", { name: "Read the project record" }).click();
     await expect(page).toHaveURL(new RegExp(`/work/${slug}#outcome$`));
     await expect(page.locator("#outcome")).toBeInViewport();
   });
@@ -221,7 +243,7 @@ test("enlarged editorial headings keep project names and closing punctuation who
     await page.goto("/", { waitUntil: "networkidle" });
     await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
     const lines = await page.evaluate(() => {
-      const project = document.querySelector('.atelier-project-panel[data-project="sportlynk"] h3')!;
+      const project = document.querySelector('#sportlynk h3')!;
       const contact = document.querySelector("#contact-heading")!;
       const measurements = [
         { node: project.firstChild!, start: 0, end: "SportLynk".length },
@@ -235,12 +257,12 @@ test("enlarged editorial headings keep project names and closing punctuation who
     });
     expect(lines).toEqual([1, 1, 1]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(page.locator(".atelier-note-index")).toHaveCount(0);
+    await expect(page.locator("[data-work-project-navigation]")).toHaveCount(1);
   }
 });
 
 test("finalized surfaces retain names, focus, contrast and accessible structure", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto("/", { waitUntil: "networkidle" });
-  const scan = await new AxeBuilder({ page }).include("#workspace").include("#journey").include("#contact").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+  const scan = await new AxeBuilder({ page }).include("#about").include("#work").include("#journey").include("#contact").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(scan.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) }))).toEqual([]);
 });

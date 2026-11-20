@@ -2,9 +2,9 @@
 
 ## Approval gates
 
-Phase 3R-0 ends with eight research documents, a local visual board and actual review evidence. **Only 3R-0 is currently authorized.** Each later phase needs explicit owner authorization; no deploy/publish/AI service is implied. Review storyboard direction before buying/commissioning art or adding dependencies.
+The owner authorized Phase 3R-2 closeout and Phase 3R-3 implementation on 20 November 2026. The foundation baseline closes at 160 passing assertions before About/Work implementation begins. Current verification belongs in `../BUILD_LOG.md`, `../PROJECT_STATUS.md` and `../PHASE3_DELIVERY.md`. Phase 3R-4 is not authorized by this assignment. Use one session, no parallel agents or worktrees, no deployment and no AI service; stop for the owner's manual review. Earlier research/parallel plans below are historical where they conflict with this boundary.
 
-Every implementation phase ends with targeted regression tests, `npm run lint`, `npm run typecheck`, a fresh `npm run build`, then `npm run test:e2e` against that production build; preserve all retained/equivalent Phase 2 coverage and current Phase 3 truth/fallback cases. Record actual exit/results and limits, inspect screenshots and at least the relevant interaction/scroll recording. Required widths: 320, 375, 390, 414, 768, 1024, 1280, 1440, 1920; include short-height desktops, doubled-root-text, keyboard, no-JS and live reduced-motion changes. Physical devices/additional browsers are separate named checks, not inferred from emulation.
+Every implementation phase ends with targeted regression tests, `npm run lint`, `npm run typecheck`, a fresh `npm run build`, then the complete `npm run test:e2e` suite against the matching fixture-enabled production build and server. Preserve retained/equivalent Phase 2 coverage and Phase 3 truth/fallback cases. This assignment uses list reporting with screenshots, video and traces disabled; the owner performs visual review. Required widths: 320, 375, 390, 414, 768, 1024, 1280, 1440, 1920; include short-height desktops, doubled root text, keyboard, no-JS and live reduced-motion changes. Physical devices/additional browsers are separate named checks, not inferred from emulation.
 
 ## Phase 3R-1 — Image Atomizer and Hero
 
@@ -22,16 +22,16 @@ Every implementation phase ends with targeted regression tests, `npm run lint`, 
 - **Tasks:** scoped browser registration, shared token adapter, measured pin-fit helpers, coalesced readiness/refresh, visibility/preference/cleanup contract, absolute progress/hash mapping, immutable worker fixture and port-aware test harness. Migrate one bounded reference fixture, not all sections blindly.
 - **Tests/risks:** Strict Mode remount/route changes, exactly one trigger set, font/image failure/readiness, resize without refresh loop, doubled-text/short-height stack, live preference mid-pin, native anchors/back/forward, no-JS and wheel/touch scrolling. Main risks are global kill/scroll takeover and two libraries writing one transform.
 - **Visual acceptance:** no flash of hidden content, pin spacer jump or content under header; reversibility/direct hash/focus correct; fixture stacks completely when fit fails. Existing homepage scenes still pass until separately replaced.
-- **Parallel:** only non-writing research/art preparation until shared contract is frozen; then 3R-3 and 3R-4 may proceed in distinct worktrees.
+- **Execution:** the contract is frozen. This closeout and 3R-3 run remains single-session; it does not authorize parallel worktrees or 3R-4.
 
 ## Phase 3R-3 — About and Selected Work
 
 - **Owner/files:** About/Work worker named components/scoped CSS/tests; coordinator root order/global CSS/profile data/native anchor compatibility. Shared project-artifact/case components remain coordinator-owned.
 - **Prerequisites/assets:** foundation contract; approved working pose/light-plane fallback; existing 12 genuine screenshots; conceptual SportLynk court; exact personal contribution evidence if first-person language is requested. Optional blink/hand art may wait.
-- **Tasks:** layered Personal Studio, distinct typography/image timings, useful native notes; cinematic four-project panels with reading holds/sliding fields/authentic screen hierarchy; integrate Digital Atelier native inspection views instead of duplicate section; preserve #workspace/#work/#about and four project anchors/routes.
+- **Tasks:** spacious Linen About with the approved static working pose, truthful biography/notebook and restrained opposing entrance; one cinematic four-project inspector with reading holds, sliding fields and authentic screen hierarchy. Integrate Projects / Engineering Notes / Build Log instead of a duplicate section; preserve #workspace/#work/#about and four project anchors/routes. Personal portfolio language only, not a studio identity.
 - **Tests/risks:** project nav/focus/hash, reverse/continue/release, native radios/popovers/Escape/no-JS, reduced motion/200% text, semantic headings and source accuracy. Risks: hidden/offscreen focus, oversized sticky stage, lost native view state and private stack inference.
-- **Visual acceptance:** four genuinely distinct scene transitions; screens/purpose/status/case link immediately clear; studio uses approved person, not static monogram filler; current contact and honest caveats remain easy to find; screenshots retain actual colors. Inspect each project's first/hold/transition frame at desktop, each full stacked mobile scene and studio text expansion.
-- **Parallel:** Thread can proceed on frozen contract; coordinator engineering/contact work can proceed without touching these files.
+- **Visual acceptance:** four distinct chapters; screens, purpose, status and case link immediately clear; About uses approved artwork or a strong text composition, not monogram filler. Screens retain actual colors. The owner reviews the first/hold/transition states, stacked mobile scenes and text expansion manually; no visual approval is claimed by assertion checks.
+- **Execution:** Thread, game, Engineering and Contact remain unchanged apart from the required homepage ordering. Stop after 3R-3 verification; later implementation requires separate authorization.
 
 ## Phase 3R-4 — Follow the Thread
 

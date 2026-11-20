@@ -1,6 +1,48 @@
-# Copper Atelier — Phase 3 delivery
+# Muhammad Anees — Phase 3 / 3R delivery
 
-## Finalization — 18 November 2026
+## Phase 3R-2 closeout + Phase 3R-3 — 20 November 2026
+
+**Implemented and awaiting the owner's manual review. Phase 3R-4 has not started.** Worked only in the existing `master` repository after verifying the local and current remote heads matched. No agent, worktree, branch switch, reset, user-file deletion, dependency upgrade, commit, push or deployment occurred. This current personal-portfolio record supersedes the historical branding, composition and visual verdicts below.
+
+### Closeout and licence
+
+All five reported portrait failures were examined individually. Three one-frame assumptions, the initial-rest draw-count assumption and the zero-initial-peak mobile assumption were obsolete after genuine cloud formation. Tests now require real displaced formation/multiple frames, exact completed assembly, drawing cessation and interaction measured against the settled baseline. Worker/main rendering, replay, touch, pointer return and worker-error recovery remain tested. The particle engine, worker and hero were not modified.
+
+The correct matching fixture build/server/test baseline passed lint, typecheck, build and **160/160 tests in 6.1 minutes**, including all 31 foundation cases. The earlier mismatched-fixture attempt reported 116 passed / 44 failed and was corrected, not hidden. Existing licence documentation verifies the official Standard Licence redirect, permitted website/web-application/digital-interface uses and no-charge commercial use for both GSAP packages. Neither package is MIT; Standard Licence conditions still apply.
+
+### Implemented experience
+
+- **About:** immediately follows Hero; Linen editorial layout, approved static transparent working illustration, existing biography and fact notebook, real GitHub/email and conditional owner-supplied actions. A single opposing, token-timed entrance is unpinned; touch/reduced-motion/image-failure layouts remain complete. No face, equipment, fake typing or continuous animation was added.
+- **Selected Work:** one inspector replaces the old Selected Work plus separate workspace gallery. Four real project chapters combine purpose/status, verified technology metadata, engineering context and direct case links. SportLynk remains conceptual/private/in development. FitPilot, Sukoon and EduVerse use all nine genuine project screens, without recolouring or false stack claims.
+- **Perspectives:** Projects / Engineering Notes / Build Log are native radios on the same selected project, not independent galleries. Decisions, constraints, immutable source references and documented build snapshots are retained from existing case-study data. Native controls and all four project articles work without JavaScript.
+- **Choreography:** one stable `SceneBoundary` factory uses the existing scoped GSAP timeline and actual stage/deck/navigation/CTA measurements. A finite pin of at most 2.7 available viewport heights contains four reading holds, distinct planes, differential screen motion and clipped titles; absolute progress reverses deterministically. The old Motion scroll subscription is gone. All seven public About/Work/workspace/project hashes and four case routes remain usable, with a clean release into unchanged Engineering.
+- **Responsive/accessibility:** complete vertically stacked chapters for mobile, touch desktop, no-JS, reduced motion, enlarged text and failed-image/insufficient-fit states. Tested 1024×600 and 1280×720 use static mode; 1440×900 fits the pin. Live reduced motion, native radio arrows/tab order, real-anchor focus/history and inert inactive staged content are asserted. No wheel/touch locking or hidden focusable project panel remains.
+
+Two focused runtime defects blocked integration and were fixed with permanent regressions: completed static geometry was left pending, and a direct downstream hash could resolve before a late upstream scene shifted its position. The shared contract/provider/boundary are unchanged. A one-line header integration fix follows real section DOM order; a narrow existing-loader exclusion preserves the new CSS module without changing other styling.
+
+### Final verification and limits
+
+- `npm run lint`, `npm run typecheck` and the matching fixture-enabled production build exit zero. **The full existing Playwright suite passes 198/198 in 6.5 minutes**, with no skipped or deleted cases: retained foundation coverage plus two runtime regressions and 36 new About/Work cases.
+- A separate fixture-disabled shipping production build exits zero without CSS warnings; all **36 About/Work smoke cases pass in 1.1 minutes** against it. Build, server and test fixture flags matched for each run; the final compiled build has the reference fixture disabled.
+- Reporting was list-only, screenshots/videos/traces were off and `CAPTURE_VISUALS=0`. No screenshot, recording, review gallery, new `.qa` directory, exported image or performance capture was generated. Corrected intermediate results are recorded in `BUILD_LOG.md`, including the 188/8 implementation run.
+- The only disposable artifact was `.phase3r-assertion-results/` with the runner's small last-run file; it was removed. No temporary script, patch file, debug component or abandoned experiment was added. Existing QA evidence/assets, ignored build output and useful historical records are preserved.
+- No visual approval or physical-device, Safari/Firefox, screen-reader or field-performance certification is claimed. Manual website review belongs to the owner. SportLynk implementation evidence and missing personal inputs remain limited as previously documented. No automatic advisory fix or unrelated upgrade was attempted.
+
+### Relevant created and modified files
+
+| Change | Permanent paths |
+| --- | --- |
+| Created components/styles | `components/portfolio/about-motion.tsx`, `components/portfolio/about-work.module.css` |
+| Created tests/helpers | `tests/phase3r-studio-work.spec.ts`, `tests/work-helpers.ts` |
+| Modified homepage/config | `app/page.tsx`, `next.config.ts` |
+| Modified components | `components/portfolio/about.tsx`, `components/portfolio/selected-work.tsx`, `components/portfolio/project-journey.tsx`, `components/portfolio/workspace-scene.tsx`, `components/portfolio/workspace-interaction.tsx`, `components/portfolio/site-header.tsx` |
+| Focused runtime fixes | `lib/scroll-scene-runtime.ts` |
+| Retained/migrated tests | `tests/phase2-completion.spec.ts`, `tests/phase2.spec.ts`, `tests/phase3-finalization.spec.ts`, `tests/phase3-hardening.spec.ts`, `tests/phase3.spec.ts`, `tests/portfolio.spec.ts`, `tests/scroll-scenes.spec.ts` |
+| Existing documentation updated | `PRODUCT.md`, `README.md`, `docs/BUILD_LOG.md`, `docs/PROJECT_STATUS.md`, `docs/DESIGN_SYSTEM.md`, `docs/PHASE3_DELIVERY.md`, `docs/THIRD_PARTY_NOTICES.md`, `docs/phase3r/LICENCE_AND_ATTRIBUTION.md`, `docs/phase3r/PHASE_ROADMAP.md` |
+
+Hero/portrait implementation, case-study/project/profile data, project pages, tokens/global CSS and downstream sections are unchanged. Stop here for owner review; no Phase 3R-4 work is included.
+
+## Historical finalization — 18 November 2026
 
 The owner's finalization assignment replaces the four experiences described in the historical delivery below. Current implementation and exit gate: [PHASE3_FINALIZATION.md](PHASE3_FINALIZATION.md). Current rendered evidence: [finalization review gallery](../.qa/phase3-finalization/review.html). The older review's independent verdict does not apply to these subsequent changes.
 

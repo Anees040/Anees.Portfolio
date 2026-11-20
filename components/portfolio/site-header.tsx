@@ -11,7 +11,7 @@ export function SiteHeader() {
   const menu = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
-    const sections = [{ href: "#home" }, ...navigation].map(({ href }) => document.querySelector<HTMLElement>(href)).filter((element): element is HTMLElement => !!element);
+    const sections = Array.from(document.querySelectorAll<HTMLElement>(["#home", ...navigation.map(({ href }) => href)].join(",")));
     let frame = 0;
     const updateActive = () => {
       frame = 0;

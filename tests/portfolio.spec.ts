@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir } from "node:fs/promises";
+import { chooseWork, loadWork } from "./work-helpers";
 
 const widths = [320, 375, 390, 414, 768, 1024, 1280, 1440, 1920];
 const captureDir = ".qa/phase3-finish/baseline";
@@ -10,15 +11,15 @@ for (const width of widths) {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
-    await page.setViewportSize({ width, height: width < 768 ? 844 : 1000 });
-    await page.goto("/", { waitUntil: "networkidle" });
+    await loadWork(page, width, width < 768 ? 844 : 1000);
     await page.evaluate(() => document.fonts.ready);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Thoughtful software. A human perspective.");
     await expect(page.getByRole("link", { name: "Explore my work", exact: true })).toBeVisible();
-    for (const image of await page.locator(".project-screenshot").all()) {
-      // Every scene must be reachable through its real project navigation.
+    const images = page.locator("[data-work-screens] img");
+    await expect(images).toHaveCount(9);
+    for (const image of await images.all()) {
       const id = await image.evaluate(el => el.closest("article")!.id);
-      await page.locator(`.journey-navigation a[href="#${id}"]`).click();
+      await chooseWork(page, id);
       await image.scrollIntoViewIfNeeded();
       await expect(image).toBeVisible();
       await expect.poll(() => image.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
@@ -27,8 +28,7 @@ for (const width of widths) {
     await page.waitForTimeout(800);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     const offscreenText = await page.locator("main h1, main h2, main h3, main p, .contact-email").evaluateAll((elements) => elements.filter((element) => {
-      // Inactive desktop scenes intentionally sit inside a clipped horizontal track.
-      if (element.closest('[data-journey-mode="horizontal"] .project-scene')) return element.scrollWidth > element.clientWidth + 1;
+      if (!element.checkVisibility()) return false;
       const bounds = element.getBoundingClientRect();
       return bounds.left < -1 || bounds.right > innerWidth + 1 || element.scrollWidth > element.clientWidth + 1;
     }).map((el) => el.textContent));
@@ -82,7 +82,8 @@ test("skip link, real destinations, and no inactive assistant or fake form", asy
   const missingTargets = await page.locator('a[href^="#"]').evaluateAll(elements => elements.map(el => el.getAttribute("href")!).filter(href => !document.getElementById(href.slice(1))));
   expect(missingTargets).toEqual([]);
   await expect(page.locator(".contact-email")).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
-  await expect(page.locator(".project-card-link")).toHaveCount(3);
+  await expect(page.locator("[data-work-case-link]")).toHaveCount(4);
+  for (const link of await page.locator("[data-work-case-link]").all()) await expect(link).toHaveAttribute("href", /^\/work\//);
   await expect(page.locator("#ask-anees")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Write to Anees" })).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
   await expect(page.locator("#sportlynk")).toContainText("Private repository");

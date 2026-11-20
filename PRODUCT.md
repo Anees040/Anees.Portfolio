@@ -16,15 +16,15 @@ A professional developer portfolio that makes Anees's software projects, enginee
 
 ## Capabilities and Constraints
 
-Phase 1 and Phase 2 are retained. The owner authorized the complete Phase 3 immersive portfolio redesign on 2026-11-16: a signature particle portrait, a functional workshop, four detailed source-grounded case studies, an engineering workbook, a scroll-linked Build Trail, one original educational Concurrency Lab, and a richer profile/evidence/contact narrative. Stop after Phase 3 verification and handoff; do not deploy, build Ask Anees AI, fabricate project claims or publish the private reference photograph.
+Phases 1–3 are retained. The owner authorized Phase 3R-2 closeout and Phase 3R-3 implementation on 2026-11-20: a stronger About section immediately after the hero and one consolidated Selected Work inspector with four source-grounded project chapters. Preserve the portrait, case studies, Engineering Workbook, Build Trail, Concurrency Lab, evidence and contact. Stop for manual review after verification; do not start Phase 3R-4, deploy, build Ask Anees AI, fabricate project claims or publish the private reference photograph.
 
-The owner approved the supplied primary portrait and character sheet during Phase 2 completion. Use their registered derivatives, with the architectural fallback for absent/failed assets. Independent facial motion requires aligned exports. Do not fabricate appearance or pose frames. The final Phase 3 assignment replaces the mounted illustrated workspace with Anees’s Digital Atelier; its old character/furniture assets remain preserved, not forced into the new professional folio.
+The owner approved the supplied primary portrait and character sheet during Phase 2 completion. Use their registered derivatives, with the architectural fallback for absent/failed hero assets. About uses the approved static working illustration on Linen; it already includes its desk and equipment. Its partial transparency is not an animation sequence. Independent facial motion requires aligned exports. Do not fabricate appearance or pose frames; retain a strong text composition if the illustration is unavailable.
 
-Use TypeScript, Next.js App Router, Tailwind CSS 4, CSS variables, Motion for React, Lucide and next/font. Existing starter dependencies remain preserved. Motion and native SVG/CSS remain the narrative tools. Phase 3 adds an original, bounded Canvas 2D portrait engine with capability-gated worker rendering and static fallbacks; no GSAP, R3F, Three.js, Lenis, paid dependency or AI service is required.
+Use TypeScript, Next.js App Router, Tailwind CSS 4, CSS variables, Motion for React, Lucide and next/font. The approved Phase 3R-2 GSAP/ScrollTrigger runtime and @gsap/react integration own the finite Work pin through SceneBoundary; Motion remains appropriate for non-scroll entrances. Do not introduce an independent scroll engine or let both libraries write the same property. Preserve the original bounded Canvas 2D portrait/worker architecture and static fallbacks. No R3F, Three.js, Lenis, additional dependency or AI service is needed for 3R-3.
 
 ## Brand Commitments
 
-Copper Atelier. Preserve the exact eight primitives, Instrument Serif, DM Sans, IBM Plex Mono, editorial composition and honest storytelling. Refine tonal roles and interaction while retaining this identity. Current tokens and Phase 2 behavior are documented in app/tokens.css and docs/DESIGN_SYSTEM.md.
+Muhammad Anees's personal developer portfolio, not a studio or agency. Preserve the exact eight warm primitives, Instrument Serif, DM Sans, IBM Plex Mono, editorial composition and honest storytelling. Copper is an accent, not a brand identity. Current tokens and behavior are documented in app/tokens.css and docs/DESIGN_SYSTEM.md; historical design extractions remain preserved.
 
 ## Evidence on Hand
 
@@ -34,7 +34,7 @@ Copper Atelier. Preserve the exact eight primitives, Instrument Serif, DM Sans, 
 - SportLynk is private/in development; user describes venue booking and competitive matchmaking. Its implementation and technologies have not been independently verified.
 - User describes Sukoon as completed; the public README also notes verification and hardening. Do not equate project completion with a production release.
 - Approved public contact: muhammadanees0511@gmail.com.
-- The owner approved a primary illustration and a character sheet. The hero portrait remains integrated; whole workspace poses remain registered/preserved but are not mounted in the professional Digital Atelier. Aligned facial animation frames and project metrics are unavailable. The private reference photograph is not used by the site.
+- The owner approved a primary illustration and a character sheet. The hero portrait remains integrated; the registered working pose is a single static About illustration. Aligned facial animation frames and project metrics are unavailable. The private reference photograph is not used by the site.
 - Phase 3 source review checks the actual FitPilot domain/sync code, Sukoon Flutter/native scheduling contract, and EduVerse course/quiz services against fixed public revisions. Source observations do not establish individual authorship, runtime correctness or production adoption.
 - Profile dates, a resume, LinkedIn, an approved public photograph and additional personal contribution details remain owner inputs. The date-free Build Trail presents learning chapters, not a fabricated employment chronology.
 

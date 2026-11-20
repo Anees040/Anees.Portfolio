@@ -1,4 +1,32 @@
-# Copper Atelier design system
+# Muhammad Anees — Portfolio design system
+
+## Phase 3R-3 About / Selected Work contract — 20 November 2026
+
+This is a professional personal developer portfolio. The eight exact primitives, accessible derived roles, optimized Instrument Serif / DM Sans / IBM Plex Mono fonts and `app/tokens.css` authority are unchanged. Copper is an accent, not a studio identity. Current About/Work styling lives in the scoped `components/portfolio/about-work.module.css`; no broad token/global-style redesign is introduced. The earlier contracts below are historical wherever superseded here.
+
+### About
+
+- Immediately after Hero, with the heading **About**, a spacious Linen surface, oversized quiet name typography, restrained geometry and a biography/fact notebook sourced from `profileContent` and `profile`.
+- The approved 480×480 working illustration is a static, partially transparent asset on a light surface. Its existing desk, laptop, mug and plant are not overlaid with fabricated props or animation. No contact-sheet frames, new face, private photograph or opaque checkerboard original are used.
+- One measured opposing image/text entrance uses the shared timing/easing tokens and a maximum 24px translation. It does not pin, loop or control scrolling. Touch, reduced motion and failed-image states keep a complete static composition; live reduced-motion changes settle the entrance.
+- Text-relative container rules preserve actual doubled body/control sizing and recompose the notebook instead of hiding or clipping biography, facts or actions.
+
+### One project inspector
+
+- Four real server-rendered project articles retain `#sportlynk`, `#fitpilot`, `#sukoon` and `#eduverse`. `#work` identifies the section and `#workspace` identifies its native navigation/perspective controls. About retains `#about`.
+- Native project anchor links and Projects / Engineering Notes / Build Log radio controls operate on the same project. Notes expose existing decisions, constraints and source links; Build Log is a documented snapshot, not a fabricated chronological history. All perspectives work without JavaScript.
+- SportLynk retains original conceptual court artwork and its private, in-development Final Year Project status, without an invented stack or screenshot. FitPilot uses Today / Log / Plan; Sukoon uses Home / Permissions / Tracker; EduVerse uses Student Course / Teacher / Admin. Genuine screens retain their product colours and aspect ratios. Existing Flutter/native integration, local/sync and Firebase Realtime Database context comes from the unchanged case-study data.
+- The old separate workspace gallery is no longer mounted. Its useful inspection content is integrated; the reusable conceptual `SportLynkPreview` remains available to the unchanged case-study route.
+
+### Shared finite choreography and accessibility
+
+- `ProjectJourney` owns one stable `SceneBoundary` factory named `selected-work`; the old Motion scroll subscription is removed. Only the scoped GSAP timeline interface writes Work transforms. No direct ScrollTrigger import, second provider, global observer, wheel/touch interception or new smooth-scroll engine is introduced.
+- Actual stage, complete deck, navigation and CTA elements determine fit. The pin distance is bounded to **2.7 available viewport heights**. Four reading holds occupy normalized progress `0–.16`, `.28–.44`, `.56–.72`, `.84–1`; real project anchors map to `.08`, `.36`, `.64`, `.92`. Background planes and authentic screens move at different rates, titles cross local clipping boundaries, and copy/screen labels retain contrast during transitions. Background overscan is staged-only, not empty static spacing.
+- Eligible fine-pointer desktop fits pin; measured 1024×600 and 1280×720 fall back, while 1440×900 fits. Mobile, touch-capable desktop, no-JS, enlarged-text and reduced-motion modes keep complete stacked chapters. Live preference changes retain the selected real content, focus and reading position. Inactive staged contents are inert/aria-hidden, with no hidden focusable controls or duplicate project panels.
+- Native anchors, direct hashes, browser history and deterministic reverse progress remain authoritative. Registration cleanup removes owned timeline, listeners and measurement observer, including Next.js cached-route hiding. Two regression-backed runtime guards prevent completed static scenes remaining pending and hashes resolving before upstream readiness; the shared contract/provider/boundary are unchanged.
+- Homepage order is Hero → About → Selected Work → existing Engineering → Follow the Thread → Always Building → Evidence → Contact. No downstream section is redesigned. Header section tracking follows this actual DOM order.
+
+Verification is assertion-only: lint/typecheck/build pass, **198/198** fixture-enabled browser cases and **36/36** fixture-disabled About/Work cases pass. No screenshots, videos, traces, new review boards or visual approval were produced. Actual coverage limits and file changes are in [PHASE3_DELIVERY.md](PHASE3_DELIVERY.md).
 
 ## Phase 3 finalization contract — 18 November 2026
 

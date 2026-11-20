@@ -1,0 +1,189 @@
+.about { position: relative; isolation: isolate; container-type: inline-size; background: var(--color-bg-surface); padding-block: clamp(4rem, 7vw, 7rem); }
+.aboutBackdrop { position: absolute; inset: 0; z-index: -1; overflow: clip; pointer-events: none; }
+.aboutBackdrop span { position: absolute; inset-inline-start: -0.035em; inset-block-end: -0.22em; font-family: var(--font-instrument-serif), serif; font-size: clamp(12rem, 31vw, 34rem); line-height: 1; letter-spacing: -0.03em; color: var(--color-art-line); opacity: 0.36; }
+.aboutHeading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 1rem 3rem; margin-block-end: clamp(2.5rem, 5vw, 5rem); }
+.aboutHeading h2 { margin: 0; font-size: clamp(3.75rem, 7vw, 6rem); line-height: 1; }
+.aboutHeading p { color: var(--color-text-secondary); margin: 0; }
+.aboutLayout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: start; gap: clamp(3rem, 6vw, 6rem); }
+.aboutIllustration { position: relative; margin: 0; padding-block-start: 4rem; }
+.aboutIllustration::before { content: ""; position: absolute; inset: 1rem 4% 17%; border: 1px solid var(--color-art-line); border-radius: 50%; z-index: -1; }
+.aboutIllustration img { display: block; inline-size: 100%; max-inline-size: 34rem; block-size: auto; margin-inline: auto; }
+.aboutIllustration figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding-block-start: 1.5rem; font-size: var(--type-small); }
+.aboutIllustration figcaption span { color: var(--color-text-on-surface); }
+.aboutCopy { min-inline-size: 0; }
+.aboutLead { margin: 0; font-size: clamp(1.25rem, 1.8vw, 1.6rem); line-height: 1.55; text-wrap: pretty; }
+.aboutPhilosophy { margin-block: 1.5rem 2.5rem; line-height: 1.7; }
+.factNotebook { border-block-start: 1px solid var(--color-border-strong); }
+.factNotebook h3 { font-size: var(--type-subheading); margin-block: 1.5rem 1rem; }
+.factNotebook dl { margin: 0; }
+.factNotebook dl > div { display: grid; grid-template-columns: minmax(8rem, 0.85fr) minmax(0, 2fr); gap: 1rem; border-block-end: 1px solid var(--color-art-line); padding-block: 1.15rem; }
+.factNotebook dt { font-size: var(--type-small); color: var(--color-text-secondary); }
+.factNotebook dd { margin: 0; line-height: 1.6; overflow-wrap: anywhere; }
+.factNotebook dd span { display: block; }
+.aboutActions { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; margin-block-start: 2rem; }
+.aboutNext { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem 2rem; margin-block-start: clamp(3rem, 6vw, 6rem); padding-block-start: 1.5rem; border-block-start: 1px solid var(--color-border-strong); }
+.aboutNext > span { font-family: var(--font-instrument-serif), serif; font-size: clamp(1.6rem, 2.5vw, 2rem); }
+.about [data-about-image-failed="true"] .aboutIllustration { display: none; }
+.about [data-about-image-failed="true"] .aboutLayout, .aboutLayout:not(:has(.aboutIllustration)) { grid-template-columns: minmax(0, 1fr); }
+.about [data-about-image-failed="true"] .aboutCopy, .aboutLayout:not(:has(.aboutIllustration)) .aboutCopy { max-inline-size: 65ch; }
+
+.workSection { padding-block: clamp(4rem, 6vw, 6rem); }
+.workBoundary { position: relative; }
+.workStage { display: grid; gap: 1rem; min-inline-size: 0; }
+.workHeading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 2rem; margin-block-end: 2rem; }
+.workHeading h2 { margin: 0; font-size: clamp(2.5rem, 3.7vw, 3.5rem); line-height: 1.12; }
+.workNavigation { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1.5rem; container-type: inline-size; }
+.workNavigation nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; }
+.workNavigation nav a { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; min-block-size: 2.75rem; padding-block: 0.5rem; text-decoration: none; }
+.workNavigation nav a > span:first-child { color: var(--color-text-secondary); font-size: var(--type-small); font-variant-numeric: tabular-nums; }
+.workNavigation nav a::after { content: ""; position: absolute; inset-inline: 0; inset-block-end: 0.25rem; block-size: 2px; background: var(--color-accent-solid); visibility: hidden; }
+.workNavigation nav a[aria-current="location"]::after { visibility: visible; }
+.viewControls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1.25rem; border: 0; padding: 0; margin: 0; min-inline-size: 0; }
+.viewControls label { display: inline-flex; align-items: center; gap: 0.5rem; min-block-size: 2.75rem; cursor: pointer; }
+.viewControls input { accent-color: var(--color-accent-solid); inline-size: 1rem; block-size: 1rem; flex-shrink: 0; }
+.viewControls label:has(input:checked) { color: var(--color-accent-text); }
+.viewControls label:has(input:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+.workDeck { display: grid; gap: 2.5rem; min-inline-size: 0; }
+.projectChapter { --work-bg: var(--color-bg-page); --work-ink: var(--color-text-primary); --work-muted: var(--color-text-secondary); --work-rule: var(--color-border-strong); --screen-ink: var(--work-ink); --screen-muted: var(--work-muted); position: relative; isolation: isolate; min-inline-size: 0; color: var(--work-ink); container-type: inline-size; }
+.projectChapter[data-project="sportlynk"] { --work-bg: var(--color-bg-inverse); --work-ink: var(--color-text-inverse); --work-muted: var(--color-text-inverse-muted); --work-rule: var(--color-border-inverse); }
+.projectChapter[data-project="fitpilot"] { --work-bg: var(--color-bg-surface); --screen-ink: var(--color-text-inverse); --screen-muted: var(--color-text-inverse-muted); }
+.projectChapter[data-project="sukoon"] { --work-bg: var(--color-bg-subtle); --work-ink: var(--color-ink-on-tint); --work-muted: var(--color-ink-on-tint); }
+.projectPlane { position: absolute; inset: 0; z-index: -1; background: var(--work-bg); pointer-events: none; }
+.projectPlane::after { content: ""; position: absolute; pointer-events: none; }
+.workStage:has(input[value="projects"]:checked) .projectChapter[data-project="fitpilot"] .projectPlane::after { inset-block: 0; inset-inline: 47% 0; background: var(--color-bg-deep); }
+.projectChapter[data-project="sukoon"] .projectPlane::after { inline-size: 34%; aspect-ratio: 1; inset-inline-end: 6%; inset-block-start: 8%; border-radius: 50%; background: var(--color-bg-surface); }
+.projectChapter[data-project="eduverse"] .projectPlane::after { inset-inline: 47% 3%; inset-block: 8% 8%; border-block: 1px solid var(--color-art-line); background: var(--color-bg-surface); }
+.chapterContent { display: grid; grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.25fr); gap: clamp(1.5rem, 3vw, 3rem); padding: 1.5rem clamp(1.25rem, 2.3vw, 2rem); min-inline-size: 0; }
+.projectCopy { display: flex; flex-direction: column; align-items: flex-start; gap: 0.85rem; min-inline-size: 0; overflow-wrap: anywhere; background: var(--work-bg); }
+.projectTitleLine { display: flex; align-items: baseline; gap: 1rem; inline-size: 100%; min-inline-size: 0; }
+.projectNumber { flex-shrink: 0; font-size: var(--type-small); color: var(--work-muted); font-variant-numeric: tabular-nums; }
+.titleClip { overflow: hidden; min-inline-size: 0; padding: 0.1rem 0.2rem 0.35rem; }
+.titleClip h3 { margin: 0; font-size: clamp(2.75rem, 7cqi, 5.75rem); line-height: 1.06; white-space: nowrap; letter-spacing: -0.025em; }
+.projectPurpose { margin: 0; font-family: var(--font-instrument-serif), serif; font-size: clamp(1.5rem, 2.1vw, 2rem); line-height: 1.15; text-wrap: pretty; }
+.projectSummary { margin: 0; font-size: 1rem; line-height: 1.55; text-wrap: pretty; }
+.projectMetadata { margin: 0; display: grid; gap: 0.85rem; }
+.projectMetadata dt { color: var(--work-muted); font-size: var(--type-small); margin-block-end: 0.25rem; }
+.projectMetadata dd { margin: 0; font-size: 1rem; line-height: 1.5; }
+.statusDetail { display: block; margin-block-start: 0.3rem; font-size: var(--type-small); color: var(--work-muted); }
+.projectMetadata .technologies { font-family: var(--font-ibm-plex-mono), monospace; font-size: var(--type-small); overflow-wrap: anywhere; }
+.caseLink { margin-block-start: auto; padding-block-start: 0.5rem; }
+.projectChapter :global(.text-link) { color: var(--work-ink); }
+.projectChapter a:focus-visible { outline-color: var(--work-ink); }
+.projectChapter:focus-visible { outline: 2px solid var(--work-ink); outline-offset: -4px; }
+.perspectives { display: grid; align-items: center; min-inline-size: 0; overflow-wrap: anywhere; }
+.projectPresentation, .engineeringNotes { min-inline-size: 0; }
+.perspectives > section { grid-area: 1 / 1; min-inline-size: 0; display: none; }
+.workStage:has(input[value="projects"]:checked) [data-work-view="projects"], .workStage:has(input[value="notes"]:checked) [data-work-view="notes"], .workStage:has(input[value="log"]:checked) [data-work-view="log"] { display: block; }
+.screenStory { color: var(--screen-ink); }
+.projectChapter[data-project="fitpilot"] .screenStory { background: var(--color-bg-deep); padding-inline: 1rem; }
+.screenSequence { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; align-items: start; max-inline-size: 37.5rem; margin-inline: auto; }
+.screenSequence figure { margin: 0; min-inline-size: 0; }
+.screenSequence img { display: block; inline-size: 100%; block-size: auto; box-shadow: 0 0.4rem 0.9rem var(--color-overlay-scrim); }
+.screenSequence figcaption { font-size: var(--type-small); line-height: 1.4; margin-block-start: 0.5rem; }
+.projectChapter[data-project="fitpilot"] .screenSequence figure:nth-child(2) { padding-block-start: 0.75rem; }
+.projectChapter[data-project="fitpilot"] .screenSequence figure:nth-child(3) { padding-block-start: 1.5rem; }
+.projectChapter[data-project="sukoon"] .screenSequence { grid-template-columns: 1.08fr 0.96fr 0.96fr; }
+.projectChapter[data-project="sukoon"] .screenSequence figure:not(:first-child) { padding-block-start: 1rem; }
+.screenContext { margin-block-start: 1rem; }
+.screenContext h4 { margin: 0 0 0.4rem; font-family: var(--font-dm-sans), sans-serif; font-size: 1rem; font-weight: 500; line-height: 1.4; letter-spacing: 0; }
+.screenContext p { margin: 0; font-size: var(--type-small); line-height: 1.5; }
+.screenContext > span { display: block; margin-block-start: 0.5rem; color: var(--screen-muted); font-size: var(--type-caption); }
+.court :global(.folio-artifact) { margin: 0; padding: 0; background: none; color: var(--work-ink); }
+.court :global(.folio-concept) { min-block-size: 0; background: none; }
+.court :global(.folio-concept svg) { max-block-size: 28rem; }
+.court :global(.folio-artifact figcaption) { color: var(--work-muted); }
+.evidenceBoundary { margin: 0 0 1.25rem; color: var(--work-muted); font-size: var(--type-small); line-height: 1.5; }
+.notePages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-block-end: 1.5rem; }
+.notePages > section { padding-block-start: 1rem; border-block-start: 1px solid var(--work-rule); }
+.notePages h4, .buildLog h4 { margin: 0 0 0.6rem; font-family: var(--font-dm-sans), sans-serif; font-size: 1.15rem; font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; }
+.notePages p, .buildLog section p { margin: 0; font-size: 1rem; line-height: 1.55; }
+.notePages :global(.text-link) { margin-block-start: 0.75rem; font-size: var(--type-small); }
+.buildLog > section { margin-block-end: 1.5rem; }
+.buildLog ul { margin: 0; padding-inline-start: 1.25rem; line-height: 1.6; }
+.buildLog li + li { margin-block-start: 0.5rem; }
+.recordSource { font-size: var(--type-small); color: var(--work-muted); margin-block: 1.5rem; }
+.workFooter { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding-block-end: 0.5rem; }
+.workFooter p { margin: 0; color: var(--color-text-secondary); font-size: var(--type-small); }
+.workMeter { display: none; position: absolute; inset-inline: 0; inset-block-end: 0; block-size: 2px; overflow: hidden; background: var(--color-border-subtle); }
+.workMeter span { display: block; inline-size: 100%; block-size: 100%; background: var(--color-accent-solid); }
+
+.workBoundary[data-work-layout="stage"] .projectPlane { inset-block: -8%; }
+.workBoundary[data-work-layout="stage"] .workDeck, .workBoundary[data-work-measuring="true"] .workDeck { gap: 0; min-block-size: var(--work-panel-height, 0px); overflow: clip; }
+.workBoundary[data-work-layout="stage"] .projectChapter, .workBoundary[data-work-measuring="true"] .projectChapter { grid-area: 1 / 1; overflow: clip; contain: paint; }
+.workBoundary[data-work-layout="stage"] .projectChapter:nth-child(1) { z-index: 1; }
+.workBoundary[data-work-layout="stage"] .projectChapter:nth-child(2) { z-index: 2; }
+.workBoundary[data-work-layout="stage"] .projectChapter:nth-child(3) { z-index: 3; }
+.workBoundary[data-work-layout="stage"] .projectChapter:nth-child(4) { z-index: 4; }
+.workBoundary[data-work-layout="stage"] .projectPlane, .workBoundary[data-work-layout="stage"] .projectCopy, .workBoundary[data-work-layout="stage"] .perspectives { visibility: hidden; }
+.workBoundary[data-work-layout="stage"] [data-work-visible="true"] .projectPlane, .workBoundary[data-work-layout="stage"] [data-work-current="true"] .projectCopy, .workBoundary[data-work-layout="stage"] [data-work-current="true"] .perspectives { visibility: visible; }
+.workBoundary[data-work-layout="stage"] .workStage:has(input[value="projects"]:checked) [data-work-visible="true"] .perspectives { visibility: visible; }
+.workBoundary[data-work-layout="stage"] .projectChapter:not([data-work-current="true"]) { pointer-events: none; }
+.workBoundary[data-work-layout="stage"] .workMeter { display: block; }
+.workBoundary[data-work-measuring="true"] .workDeck { min-block-size: 0; }
+.workBoundary[data-work-measuring="true"] .perspectives > section { display: block; }
+.workBoundary[data-work-measuring="true"] [data-work-plane], .workBoundary[data-work-measuring="true"] [data-work-screens], .workBoundary[data-work-measuring="true"] [data-work-title] { transform: none !important; }
+
+@container (max-width: 64rem) {
+  .aboutLayout { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .aboutCopy { grid-row: 1; }
+  .aboutIllustration { padding-block-start: 0; max-inline-size: 32rem; justify-self: center; inline-size: 100%; }
+  .aboutIllustration::before { inset-block-start: 0; }
+  .chapterContent { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .projectCopy { max-inline-size: 65ch; }
+  .notePages { grid-template-columns: minmax(0, 1fr); }
+}
+
+@container (max-width: 34rem) {
+  .titleClip h3 { font-size: clamp(1.45rem, 9cqi, 3.5rem); }
+  .projectTitleLine { gap: 0.65rem; }
+}
+
+@container (max-width: 22rem) {
+  .workNavigation nav[data-work-project-navigation] { grid-template-columns: minmax(0, 1fr); }
+  .projectTitleLine { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .titleClip { inline-size: 100%; }
+  .titleClip h3 { font-size: clamp(1rem, 9cqi, 3.5rem); white-space: normal; overflow-wrap: anywhere; }
+}
+
+@media (max-width: 1023px) {
+  .aboutLayout { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .aboutCopy { grid-row: 1; }
+  .aboutIllustration { padding-block-start: 0; max-inline-size: 32rem; justify-self: center; inline-size: 100%; }
+  .aboutIllustration::before { inset-block-start: 0; }
+  .aboutIllustration figcaption { justify-content: center; }
+  .chapterContent { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .notePages { grid-template-columns: minmax(0, 1fr); }
+  .projectCopy { max-inline-size: 65ch; }
+  .workNavigation { gap: 1rem; }
+  .workNavigation nav { justify-content: space-between; inline-size: 100%; gap: 0.25rem 1rem; }
+  .workStage:has(input[value="projects"]:checked) .projectChapter[data-project="fitpilot"] .projectPlane::after { display: none; }
+  .projectChapter[data-project="eduverse"] .projectPlane::after { inset-inline: 5%; inset-block-start: 45%; }
+}
+
+@media (max-width: 599px) {
+  .aboutHeading { display: block; }
+  .aboutHeading h2 { font-size: clamp(2.5rem, 12vw, 4.5rem); }
+  .aboutHeading p { margin-block-start: 1rem; }
+  .factNotebook dl > div { grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }
+  .aboutActions { flex-direction: column; align-items: flex-start; }
+  .workHeading { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .workHeading h2 { font-size: clamp(1.75rem, 10vw, 3rem); }
+  .workNavigation nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .viewControls { gap: 0.5rem 1rem; }
+  .viewControls label { min-block-size: 2.75rem; }
+  .screenSequence, .projectChapter[data-project="sukoon"] .screenSequence { grid-template-columns: minmax(0, 1fr); max-inline-size: 16rem; gap: 1.5rem; }
+  .projectChapter[data-project="fitpilot"] .screenSequence figure, .projectChapter[data-project="sukoon"] .screenSequence figure { padding-block-start: 0; }
+  .screenSequence figcaption { font-size: 1rem; }
+  .screenContext { margin-block-start: 1.5rem; }
+  .workFooter { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about [data-about-image], .about [data-about-copy] { transform: none !important; opacity: 1 !important; }
+  .workBoundary [data-work-plane], .workBoundary [data-work-screens], .workBoundary [data-work-title] { transform: none !important; opacity: 1 !important; }
+  .workBoundary .workMeter { display: none; }
+}
+
+.workBoundary[data-scene-mode="failed"] .workDeck { gap: 2.5rem; min-block-size: 0; overflow: visible; }
+.workBoundary[data-scene-mode="failed"] .projectChapter { grid-area: auto; overflow: visible; contain: none; pointer-events: auto; }
+.workBoundary[data-scene-mode="failed"] .projectPlane, .workBoundary[data-scene-mode="failed"] .projectCopy, .workBoundary[data-scene-mode="failed"] .perspectives { visibility: visible; }

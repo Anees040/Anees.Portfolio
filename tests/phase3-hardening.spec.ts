@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { journeyChapters, profileContent } from "../lib/profile-content";
+import { chooseWork, expectStackedWork, loadWork } from "./work-helpers";
 
 test("profile and journey support owner content without invented dates or assets", () => {
   expect(new Set(journeyChapters.map(chapter => chapter.id)).size).toBe(journeyChapters.length);
@@ -15,18 +16,18 @@ test("profile and journey support owner content without invented dates or assets
 });
 
 for (const width of [390, 1440]) {
-  test(`atelier native selection keeps focus and contrast at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 1000 }); await page.goto("/", { waitUntil: "networkidle" });
-    const studio = page.locator(".digital-atelier");
+  test(`work native selection keeps focus and contrast at ${width}px`, async ({ page }) => {
+    await loadWork(page, width, 1000);
+    const studio = page.locator("#work");
     const notes = studio.getByRole("radio", { name: "Engineering Notes" }); await notes.focus(); await page.keyboard.press("Space");
     await expect(notes).toBeChecked(); await expect(notes).toBeFocused();
-    const scan = await new AxeBuilder({ page }).include("#workspace").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+    const scan = await new AxeBuilder({ page }).include("#work").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(scan.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) }))).toEqual([]);
-    await studio.getByRole("radio", { name: "FitPilot" }).check();
-    await expect(studio.getByRole("article", { name: "FitPilot engineering notes" })).toContainText("neutral");
+    await chooseWork(page, "fitpilot");
+    await expect(studio.getByRole("region", { name: "FitPilot engineering notes" })).toContainText("neutral");
     await page.emulateMedia({ reducedMotion: "reduce" });
     await studio.getByRole("radio", { name: "Build Log" }).check();
-    await expect(studio.getByRole("article", { name: "FitPilot build log" })).toHaveCSS("animation-name", "none");
+    await expect(studio.getByRole("region", { name: "FitPilot build log" })).toHaveCSS("animation-name", "none");
   });
 }
 
@@ -83,8 +84,15 @@ test("main-thread particle drawing really stops after rest, hidden state, and of
   const portrait = page.locator(".image-atomizer");
   const draws = () => page.evaluate(() => (window as Window & { particleDrawCount?: number }).particleDrawCount ?? 0);
   await expect(portrait).toHaveAttribute("data-particle-metrics", /particles/, { timeout: 10000 });
+  await expect(portrait).toHaveAttribute("data-particle-formation-complete", "true", { timeout: 10000 });
+  await expect(portrait).toHaveAttribute("data-particle-state", "resting");
+  const formed = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
   const count = await draws();
-  expect(count).toBe(1);
+  expect(count).toBeGreaterThan(20);
+  expect(count).toBe(formed.frames);
+  expect(formed.initialMeanDisplacement).toBeGreaterThan(formed.portraitWidth * 0.25);
+  expect(formed.reassembled).toBe(true);
+  expect(formed.maxDisplacement).toBe(0);
   await page.waitForTimeout(250);
   expect(await draws()).toBe(count);
   await page.getByRole("button", { name: "Reassemble portrait" }).click();
@@ -152,7 +160,8 @@ for (const width of [320, 375, 390, 414, 768, 1024, 1280, 1440, 1920]) {
       await page.goto(route, { waitUntil: "networkidle" });
       await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
       if (route === "/") {
-        expect(await page.locator(".atelier-work-surface").evaluate(element => element.clientHeight >= element.querySelector('.atelier-project-panel[data-project="sportlynk"]')!.scrollHeight)).toBe(true);
+        await expectStackedWork(page);
+        expect(await page.locator("[data-work-panel]").evaluateAll(elements => elements.every(element => element.clientHeight >= element.querySelector<HTMLElement>("[data-work-content]")!.scrollHeight))).toBe(true);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const clipped = await page.locator("h1,h2,h3,p,summary,button").evaluateAll(elements => elements.filter(element => element.checkVisibility()).filter(element => {

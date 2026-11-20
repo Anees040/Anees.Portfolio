@@ -1,6 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir, writeFile } from "node:fs/promises";
+import { caseStudies } from "../lib/case-studies";
+import { chooseWork, loadWork, seekWork, workScene } from "./work-helpers";
 
 const captures = ".qa/phase3-finish/baseline";
 
@@ -11,25 +13,27 @@ async function settle(page: Page) {
   });
 }
 
-test("atelier native project and view controls work with keyboard and retain focus", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/", { waitUntil: "networkidle" });
-  const studio = page.locator(".digital-atelier");
-  const project = studio.getByRole("radio", { name: "FitPilot" });
-  await project.focus(); await page.keyboard.press("Space");
-  await expect(project).toBeChecked(); await expect(project).toBeFocused();
-  await expect(studio.getByRole("heading", { name: "FitPilot." })).toBeVisible();
-  await page.keyboard.press("ArrowRight");
-  await expect(studio.getByRole("radio", { name: "Sukoon" })).toBeChecked();
+test("native project links and view controls work with keyboard and retain focus", async ({ page }) => {
+  await loadWork(page, 1440, 1000);
+  const studio = page.locator("#work");
+  const project = studio.getByRole("navigation", { name: "Selected projects" }).getByRole("link", { name: "FitPilot" });
+  await project.focus(); await page.keyboard.press("Enter");
+  await expect(page.locator("#fitpilot")).toBeFocused();
+  await expect(project).toHaveAttribute("aria-current", "location");
+  await expect(studio.getByRole("heading", { name: "FitPilot", exact: true })).toBeVisible();
+  await project.focus(); await page.keyboard.press("ArrowRight");
+  await expect(studio.getByRole("navigation", { name: "Selected projects" }).getByRole("link", { name: "Sukoon" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#sukoon")).toBeFocused();
   const notes = studio.getByRole("radio", { name: "Engineering Notes" });
   await notes.focus(); await page.keyboard.press("Space");
   await expect(notes).toBeChecked(); await expect(notes).toBeFocused();
-  await expect(studio.getByRole("article", { name: "Sukoon engineering notes" })).toBeVisible();
+  await expect(studio.getByRole("region", { name: "Sukoon engineering notes" })).toBeVisible();
   await page.keyboard.press("ArrowRight");
   await expect(studio.getByRole("radio", { name: "Build Log" })).toBeChecked();
-  await expect(studio.getByRole("article", { name: "Sukoon build log" })).toContainText("documented snapshot");
+  await expect(studio.getByRole("region", { name: "Sukoon build log" })).toContainText("documented snapshot");
   await studio.getByRole("radio", { name: "Projects", exact: true }).check();
-  const scan = await new AxeBuilder({ page }).include("#workspace").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+  const scan = await new AxeBuilder({ page }).include("#work").withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   expect(scan.violations.map(violation => ({ id: violation.id, targets: violation.nodes.map(node => node.target) }))).toEqual([]);
   if (process.env.CAPTURE_VISUALS === "1") await mkdir(captures, { recursive: true });
   if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${captures}/atelier-keyboard.png` });
@@ -41,6 +45,7 @@ test("hero depth, progress, active section and project motion respond without co
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => { if (message.type() === "error" || message.type() === "warning") errors.push(message.text()); });
+  await page.addInitScript(() => { Object.defineProperty(navigator, "maxTouchPoints", { value: 0 }); });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/", { waitUntil: "networkidle" });
   await settle(page);
@@ -60,16 +65,16 @@ test("hero depth, progress, active section and project motion respond without co
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Engineering", exact: true }).click();
   await expect(page.locator("#engineering")).toBeFocused();
   await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Engineering", exact: true })).toHaveAttribute("aria-current", "location");
-  const card = page.locator(".project-card-link").first();
-  await page.locator('.journey-navigation a[href="#fitpilot"]').click();
-  await card.scrollIntoViewIfNeeded();
+  await chooseWork(page, "fitpilot");
+  const card = page.locator("#fitpilot [data-work-case-link]");
   await settle(page);
-  const shot = card.locator(".project-screenshot");
+  const shot = page.locator("#fitpilot [data-work-screens]");
   const before = await shot.evaluate(el => getComputedStyle(el).transform);
-  await card.hover();
+  await seekWork(page, 0.2);
   await expect.poll(() => shot.evaluate(el => getComputedStyle(el).transform)).not.toBe(before);
   await settle(page);
-  if (process.env.CAPTURE_VISUALS === "1") await page.locator(".journey-viewport").screenshot({ path: `${captures}/project-hover.png` });
+  if (process.env.CAPTURE_VISUALS === "1") await page.locator("[data-work-stage]").screenshot({ path: `${captures}/project-hover.png` });
+  await chooseWork(page, "fitpilot");
   await card.focus();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Shift+Tab");
@@ -79,35 +84,37 @@ test("hero depth, progress, active section and project motion respond without co
 });
 
 for (const width of [320, 390, 768]) {
-  test(`atelier touch project and view selection at ${width}px`, async ({ browser }) => {
+  test(`work touch project and view selection at ${width}px`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: true, isMobile: width < 768 });
     const page = await context.newPage(); await page.goto("http://127.0.0.1:3100", { waitUntil: "networkidle" });
-    const studio = page.locator(".digital-atelier");
-    await studio.getByRole("radio", { name: "FitPilot" }).tap();
-    await expect(studio.getByRole("heading", { name: "FitPilot." })).toBeVisible();
+    const studio = page.locator("#work");
+    await studio.locator('[data-work-project-navigation] a[href="#fitpilot"]').tap();
+    await expect(page.locator("#fitpilot")).toBeFocused();
+    await expect(studio.getByRole("heading", { name: "FitPilot", exact: true })).toBeVisible();
     await studio.getByRole("radio", { name: "Engineering Notes" }).tap();
-    const note = studio.getByRole("article", { name: "FitPilot engineering notes" });
+    const note = studio.getByRole("region", { name: "FitPilot engineering notes" });
     await expect(note).toBeVisible(); await expect(note).toContainText("neutral");
     await studio.getByRole("radio", { name: "Build Log" }).tap();
-    await expect(studio.getByRole("article", { name: "FitPilot build log" })).toBeVisible();
-    await studio.getByRole("radio", { name: "SportLynk" }).tap();
-    await expect(studio.getByRole("article", { name: "SportLynk build log" })).toContainText("no claimed production release");
+    await expect(studio.getByRole("region", { name: "FitPilot build log" })).toBeVisible();
+    await studio.locator('[data-work-project-navigation] a[href="#sportlynk"]').tap();
+    await expect(studio.getByRole("region", { name: "SportLynk build log" })).toContainText(caseStudies[0].outcomes);
     await studio.getByRole("radio", { name: "Projects", exact: true }).tap();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${captures}/atelier-touch-${width}.png` }); await context.close();
   });
 }
 
-test("atelier projects, notes and build record work without JavaScript or WebGL", async ({ browser }) => {
+test("work projects, notes and build record work without JavaScript or WebGL", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
   const page = await context.newPage(); await page.goto("http://127.0.0.1:3100");
-  const studio = page.locator(".digital-atelier");
-  await studio.getByRole("radio", { name: "FitPilot" }).check();
-  await expect(studio.getByRole("heading", { name: "FitPilot." })).toBeVisible();
+  const studio = page.locator("#work");
+  await studio.locator('[data-work-project-navigation] a[href="#fitpilot"]').click();
+  await expect(page).toHaveURL(/#fitpilot$/);
+  await expect(studio.getByRole("heading", { name: "FitPilot", exact: true })).toBeVisible();
   await studio.getByRole("radio", { name: "Engineering Notes" }).check();
-  await expect(studio.getByRole("article", { name: "FitPilot engineering notes" })).toContainText("neutral");
+  await expect(studio.getByRole("region", { name: "FitPilot engineering notes" })).toContainText("neutral");
   await studio.getByRole("radio", { name: "Build Log" }).check();
-  await expect(studio.getByRole("article", { name: "FitPilot build log" })).toContainText("Next documented direction");
+  await expect(studio.getByRole("region", { name: "FitPilot build log" })).toContainText("Next documented direction");
   await studio.getByRole("radio", { name: "Projects", exact: true }).check();
   await expect(page.locator("canvas")).toHaveCount(0);
   await expect(page.locator(".hero-artwork .character-portrait")).toBeVisible();
@@ -115,12 +122,12 @@ test("atelier projects, notes and build record work without JavaScript or WebGL"
   await expect(page).toHaveURL(/\/work\/fitpilot$/); await context.close();
 });
 
-test("reduced motion preserves atelier views, enlarged text and no spatial transitions", async ({ page }) => {
+test("reduced motion preserves work views, enlarged text and no spatial transitions", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 }); await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/", { waitUntil: "networkidle" });
-  const studio = page.locator(".digital-atelier");
+  const studio = page.locator("#work");
   await studio.getByRole("radio", { name: "Engineering Notes" }).check();
-  const note = studio.getByRole("article", { name: "SportLynk engineering notes" });
+  const note = studio.getByRole("region", { name: "SportLynk engineering notes" });
   await expect(note).toHaveCSS("animation-name", "none");
   await expect(page.locator(".scene-depth-foreground")).toHaveCSS("transform", "none");
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
@@ -128,7 +135,8 @@ test("reduced motion preserves atelier views, enlarged text and no spatial trans
   expect(await note.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
   if (process.env.CAPTURE_VISUALS === "1") await studio.screenshot({ path: `${captures}/atelier-reduced-text-200.png` });
   await studio.getByRole("radio", { name: "Projects", exact: true }).check();
-  await expect(studio.getByRole("heading", { name: "SportLynk." })).toBeVisible();
+  await expect(studio.getByRole("heading", { name: "SportLynk", exact: true })).toBeVisible();
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "static");
 });
 
 test("record local production loading measurements", async ({ page }) => {

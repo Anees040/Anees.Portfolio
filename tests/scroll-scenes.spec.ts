@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import type { SceneMeasurements, ScrollScene } from "../lib/scroll-scene-contract";
 import { normalizeProgress, progressToScroll, RefreshQueue, SceneRegistry, sceneFits, waitForSceneReadiness } from "../lib/scroll-scene-runtime";
+import { chooseWork, workScene } from "./work-helpers";
 
 const measurements: SceneMeasurements = {
   viewportWidth: 1440, viewportHeight: 900, headerHeight: 80, clearance: 96,
@@ -102,7 +103,9 @@ async function loadReference(page: Page, hash = "") {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`/${hash}`);
   await expect(reference(page)).toHaveAttribute("data-scene-mode", "pinned", { timeout: 10000 });
-  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pinned", { timeout: 10000 });
+  await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "2");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "2");
 }
 
 async function seek(page: Page, progress: number) {
@@ -116,6 +119,26 @@ async function seek(page: Page, progress: number) {
 test.describe("build-gated reference fixture", () => {
 test.skip(process.env.PORTFOLIO_SCENE_FIXTURE !== "1", "Build and serve with PORTFOLIO_SCENE_FIXTURE=1 to exercise the isolated reference.");
 
+test("unchanged static geometry still completes delayed scene readiness", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => {
+    const fonts = document.fonts.ready;
+    const delayed = new Promise<void>(resolve => {
+      (window as Window & { releaseSceneFonts?: () => void }).releaseSceneFonts = () => { void fonts.then(() => resolve()); };
+    });
+    Object.defineProperty(document.fonts, "ready", { value: delayed });
+  });
+  await page.goto("/", { waitUntil: "networkidle" });
+  await expect(reference(page)).toHaveAttribute("data-scene-mode", "pending");
+  await expect.poll(() => page.evaluate(() => document.fonts.status)).toBe("loaded");
+  const dimensions = await page.locator(".scroll-reference-stage").boundingBox();
+  await page.evaluate(() => (window as Window & { releaseSceneFonts?: () => void }).releaseSceneFonts!());
+  await expect(reference(page)).toHaveAttribute("data-scene-mode", "static");
+  await expect(page.locator('[data-scroll-scene="selected-work"]')).toHaveAttribute("data-scene-mode", "static");
+  expect(await page.locator(".scroll-reference-stage").boundingBox()).toEqual(dimensions);
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "0");
+});
+
 test("reference pins once, coordinates distinct layers, reverses deterministically and releases", async ({ page }) => {
   await loadReference(page);
   await seek(page, 0.5);
@@ -128,7 +151,33 @@ test("reference pins once, coordinates distinct layers, reverses deterministical
   await seek(page, 1.2);
   await expect(page.locator(".scroll-reference-stage")).not.toHaveCSS("position", "fixed");
   await expect(page.locator(".scroll-reference-after")).toBeVisible();
-  await expect(page.locator(".pin-spacer")).toHaveCount(1);
+  await expect(page.locator(".pin-spacer")).toHaveCount(2);
+});
+
+test("late upstream project readiness cannot invalidate a direct downstream chapter hash", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "maxTouchPoints", { value: 0 });
+    const state = window as Window & { releaseWorkImages?: () => void };
+    const delayed = new Promise<void>(resolve => { state.releaseWorkImages = resolve; });
+    const decode = HTMLImageElement.prototype.decode;
+    HTMLImageElement.prototype.decode = function () {
+      return this.closest('[data-scroll-scene="selected-work"]') ? delayed.then(() => decode.call(this)) : decode.call(this);
+    };
+  });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#motion-reference-middle", { waitUntil: "networkidle" });
+  await expect(reference(page)).toHaveAttribute("data-scene-mode", "pinned");
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pending");
+  await page.evaluate(() => (window as Window & { releaseWorkImages?: () => void }).releaseWorkImages!());
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pinned");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "2");
+  await expect(page.locator("#motion-reference-middle")).toBeFocused();
+  await expect.poll(async () => Number(await reference(page).getAttribute("data-reference-progress"))).toBeCloseTo(0.5, 2);
+  const error = await reference(page).evaluate(element => {
+    const scene = element as HTMLElement;
+    return Math.abs(scrollY - (Number(scene.dataset.sceneStart) + Number(scene.dataset.sceneEnd)) / 2);
+  });
+  expect(error).toBeLessThan(1);
 });
 
 test("scene disposal, remount and repeated preference changes leave exactly one trigger set", async ({ page }) => {
@@ -136,17 +185,19 @@ test("scene disposal, remount and repeated preference changes leave exactly one 
   const toggle = page.getByLabel("Enable reference enhancement");
   for (let index = 0; index < 3; index++) {
     await toggle.uncheck();
-    await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "0");
-    await expect(page.locator(".pin-spacer")).toHaveCount(0);
+    await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "1");
+    await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
+    await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pinned");
+    await expect(page.locator(".pin-spacer")).toHaveCount(1);
     await toggle.check();
     await expect(reference(page)).toHaveAttribute("data-scene-mode", "pinned");
-    await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
+    await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "2");
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(reference(page)).toHaveAttribute("data-scene-mode", "static");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await expect(reference(page)).toHaveAttribute("data-scene-mode", "pinned");
-  await expect(page.locator(".pin-spacer")).toHaveCount(1);
+  await expect(page.locator(".pin-spacer")).toHaveCount(2);
 });
 
 test("live reduced motion keeps focus and the reading position in a complete static scene", async ({ page }) => {
@@ -262,16 +313,19 @@ test("hidden scenes stop visual writes and resume at absolute progress", async (
   await expect.poll(async () => Number(await reference(page).getAttribute("data-reference-progress"))).toBe(1);
 });
 
-test("route exit cleans the runtime; re-entry registers one fresh scene", async ({ page }) => {
+test("route exit cleans the runtime; re-entry registers both scenes exactly once", async ({ page }) => {
   await loadReference(page);
-  await page.locator(".project-card-link").first().click();
+  await chooseWork(page, "fitpilot");
+  await page.locator("#fitpilot [data-work-case-link]").click();
   await expect(page).toHaveURL(/\/work\/fitpilot$/);
   await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "0");
   await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "0");
   await expect(page.locator(".pin-spacer")).toHaveCount(0);
   await page.getByRole("link", { name: "All work", exact: true }).click();
   await expect(reference(page)).toHaveAttribute("data-scene-mode", "pinned");
-  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pinned");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "2");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "2");
 });
 
 test("touch-capable desktop uses the complete static layout", async ({ browser }) => {
@@ -310,8 +364,10 @@ test("failed scene setup cleans only its owned animations and retains static con
   await page.locator(".scroll-reference-plane").evaluate(element => element.remove());
   await page.evaluate(() => { (window as Window & { releaseScrollFonts?: () => void }).releaseScrollFonts!(); });
   await expect(reference(page)).toHaveAttribute("data-scene-mode", "failed");
-  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "0");
-  await expect(page.locator(".pin-spacer")).toHaveCount(0);
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pinned");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
+  await expect(page.locator(".pin-spacer")).toHaveCount(1);
+  await expect(reference(page).locator(".pin-spacer")).toHaveCount(0);
   await expect(page.locator(".scroll-reference-chapters article")).toHaveCount(3);
   await expect(page.locator(".scroll-reference-foreground")).toHaveCSS("transform", "none");
 });
@@ -327,12 +383,13 @@ test("disposal cancels pending readiness; a late completion cannot restore an ol
   const toggle = page.getByLabel("Enable reference enhancement");
   await toggle.uncheck();
   await page.evaluate(() => { (window as Window & { releaseScrollFonts?: () => void }).releaseScrollFonts!(); });
-  await page.waitForTimeout(100);
-  await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "0");
-  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "0");
+  await expect(workScene(page)).toHaveAttribute("data-scene-mode", "pinned");
+  await expect(reference(page)).toHaveAttribute("data-scene-mode", "static");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-scenes", "1");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
   await toggle.check();
   await expect(reference(page)).toHaveAttribute("data-scene-mode", "pinned");
-  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "1");
+  await expect(runtime(page)).toHaveAttribute("data-scroll-triggers", "2");
 });
 
 test("without JavaScript the fixture has readable chapters, working anchors and disclosures", async ({ browser }) => {

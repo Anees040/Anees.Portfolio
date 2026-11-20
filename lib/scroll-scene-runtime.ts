@@ -209,6 +209,7 @@ function startScrollSceneRuntime(root: HTMLElement, gsap: typeof Gsap, ScrollTri
 
   const resolveHash = () => {
     if (!pendingHash) return;
+    if (Array.from(records.values()).some(record => !record.ready)) return;
     let id: string;
     try { id = decodeURIComponent(pendingHash.slice(1)); } catch { pendingHash = ""; return; }
     for (const record of records.values()) {
@@ -247,7 +248,8 @@ function startScrollSceneRuntime(root: HTMLElement, gsap: typeof Gsap, ScrollTri
       catch { record.snapshot.readinessFailures++; }
       const previous = record.measurements;
       const unchanged = previous && (Object.keys(dimensions) as (keyof SceneMeasurements)[]).every(key => key === "stageHeight" ? Math.abs(dimensions.stageHeight - previous.stageHeight) <= 1 : dimensions[key] === previous[key]);
-      if (unchanged && (record.snapshot.mode === "pinned") === fits) continue;
+      const expectedMode = !record.ready ? "pending" : record.snapshot.readinessFailures ? "failed" : fits ? "pinned" : "static";
+      if (unchanged && record.snapshot.mode === expectedMode) continue;
       record.measurements = dimensions;
       if (!record.trigger && !fits) {
         record.snapshot.mode = record.ready ? record.snapshot.readinessFailures ? "failed" : "static" : "pending";

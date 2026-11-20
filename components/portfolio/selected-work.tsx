@@ -1,10 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, LockKeyhole } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { caseStudies, type CaseStudy, type StoryImage } from "@/lib/case-studies";
 import { profile, projects } from "@/lib/portfolio-content";
-import { TextLink } from "./text-link";
-import { MediaReveal } from "./motion";
+import { ProjectArtifact } from "./project-artifact";
 import { ProjectJourney } from "./project-journey";
+import { WorkspaceInteraction } from "./workspace-interaction";
+import { WorkspaceScene } from "./workspace-scene";
+import { TextLink } from "./text-link";
+import styles from "./about-work.module.css";
 
 export function SportLynkPreview() {
   return (
@@ -16,51 +20,52 @@ export function SportLynkPreview() {
   );
 }
 
+function ProjectScreens({ study }: { study: CaseStudy }) {
+  if (study.architecture.conceptual) return <div className={styles.court} data-work-screens><ProjectArtifact study={study} /></div>;
+  const project = projects.find(project => project.slug === study.slug)!;
+  const home: StoryImage = { src: project.image, width: project.imageWidth, height: project.imageHeight, alt: project.imageAlt, caption: study.slug === "fitpilot" ? "Today" : "Home" };
+  const screens = study.slug === "eduverse" ? study.screenshots : [home, ...study.screenshots.slice(0, 2)];
+  const labels = study.slug === "fitpilot" ? ["Today", "Log", "Plan"] : study.slug === "sukoon" ? ["Home", "Permissions", "Tracker"] : ["Student · Course", "Teacher", "Admin"];
+
+  return <div className={styles.screenStory} data-work-screens>
+    <div className={styles.screenSequence}>{screens.map((screen, index) => <figure key={screen.src}>
+      <Image src={screen.src} width={screen.width} height={screen.height} alt={screen.alt} sizes="(max-width: 599px) 70vw, (max-width: 1023px) 28vw, 192px" loading="eager" />
+      <figcaption>{labels[index]}</figcaption>
+    </figure>)}</div>
+    <div className={styles.screenContext}>
+      <h4>{study.architecture.title}</h4>
+      <p>{study.slug === "fitpilot" ? "Food logging → activity options. SQLite records and a queue connect local use to Supabase sync." : study.slug === "sukoon" ? "Daily configuration → a versioned schedule → native Android alarms and restoration." : "Student, teacher and admin views connect around course identities in Firebase Realtime Database."}</p>
+      <span>{study.name} · Repository screenshots</span>
+    </div>
+  </div>;
+}
+
 export function SelectedWork() {
-  return (
-    <section id="work" className="work-section section-space" aria-labelledby="work-heading" tabIndex={-1}>
-      <div className="site-shell">
-        <div className="section-heading-row" data-reveal><div><h2 id="work-heading">Selected <em>work.</em></h2><p>Practical problems. Considered solutions. A few things I’m building.</p></div><TextLink href={profile.github}>Explore GitHub</TextLink></div>
-        <ProjectJourney>
-        <article id="sportlynk" className="featured-project project-scene" aria-labelledby="sportlynk-heading" tabIndex={-1}>
-          <MediaReveal className="featured-media"><SportLynkPreview /></MediaReveal>
-          <div className="featured-project-copy" data-reveal>
-            <div className="project-status"><span className="status-dot" aria-hidden="true" />In development</div>
-            <h3 id="sportlynk-heading" translate="no">SportLynk</h3>
-            <p className="featured-statement">Less organizing.<br /><em>More playing.</em></p>
-            <p>A sports venue booking and competitive matchmaking platform, built around a simple idea: make it easier to get people into the game.</p>
-            <ul className="project-tags" aria-label="SportLynk product focus"><li>Venue booking</li><li>Matchmaking</li></ul>
-            <div className="private-project-note"><LockKeyhole size={14} strokeWidth={1.6} aria-hidden="true" /><span>Private repository · Work in progress</span></div>
-            <p className="project-status-note">Flagship Final Year Project</p>
-            <Link className="text-link" href="/work/sportlynk"><span>Inside SportLynk</span><ArrowUpRight size={18} aria-hidden="true" /></Link>
+  return <section id="work" className={styles.workSection} aria-labelledby="work-heading" tabIndex={-1}>
+    <header className={`site-shell ${styles.workHeading}`}><h2 id="work-heading">Selected <em>Work</em></h2><TextLink href={profile.github}>Explore GitHub</TextLink></header>
+    <ProjectJourney>
+      <WorkspaceInteraction>
+        <div className={styles.workStage} data-work-stage>
+          <div id="workspace" className={styles.workNavigation} data-work-navigation tabIndex={-1}>
+            <nav aria-label="Selected projects" data-work-project-navigation>{caseStudies.map((study, index) => <a href={`#${study.slug}`} key={study.slug}><span aria-hidden="true">0{index + 1}</span><span>{study.name}</span></a>)}</nav>
+            <fieldset className={styles.viewControls}><legend className="visually-hidden">Choose a work perspective</legend>{[{ id: "projects", name: "Projects" }, { id: "notes", name: "Engineering Notes" }, { id: "log", name: "Build Log" }].map((view, index) => <label key={view.id}><input type="radio" name="work-perspective" value={view.id} defaultChecked={index === 0} /><span>{view.name}</span></label>)}</fieldset>
           </div>
-        </article>
-        <div className="project-grid">
-          {projects.map((project) => (
-            <article id={project.slug} className={`project-card project-scene project-${project.slug}`} aria-labelledby={`${project.slug}-heading`} tabIndex={-1} key={project.slug}>
-              <Link className="project-card-link" href={`/work/${project.slug}`} aria-label={`Read the ${project.name} case study`}>
-                <MediaReveal className="project-media">
-                  <div className="project-media-label" aria-hidden="true"><span>{project.name}</span><ArrowUpRight size={18} strokeWidth={1.6} /></div>
-                  <span className="project-visual-word" aria-hidden="true">{project.slug === "fitpilot" ? "Move." : project.slug === "sukoon" ? "Pause." : "Grow."}</span>
-                  <div className="project-screen"><Image src={project.image} alt={project.imageAlt} width={project.imageWidth} height={project.imageHeight} sizes="(max-width: 767px) 180px, 230px" className="project-screenshot" /></div>
-                  <span className="project-media-caption">From the application</span>
-                </MediaReveal>
-                <div className="project-card-heading"><h3 id={`${project.slug}-heading`} translate="no">{project.name}</h3><span className="project-repository-icon"><ArrowUpRight size={20} strokeWidth={1.5} aria-hidden="true" /></span></div>
-                <p className="project-category">{project.category}</p>
-              </Link>
-              <div className="project-detail" data-reveal data-reveal-group>
-              <p className="project-description">{project.description}</p>
-              <p className="project-engineering-thread">{project.slug === "fitpilot" ? "Inside the build: offline records, a sync queue, and a day-state engine." : project.slug === "sukoon" ? "Inside the build: a versioned schedule crossing from Flutter into Android." : "Inside the build: one course identity across student, teacher and admin workflows."}</p>
-              <ul className="project-tech" aria-label={`${project.name} technologies`}>{project.technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul>
-              <p className="project-status-note">{project.status}</p>
-              <p className="project-status-detail">{project.statusDetail}</p>
-              <Link className="text-link" href={`/work/${project.slug}`}><span>Inside {project.name}</span><ArrowUpRight size={18} aria-hidden="true" /></Link>
+          <div className={styles.workDeck} data-work-deck>{caseStudies.map((study, index) => <article id={study.slug} className={styles.projectChapter} data-work-panel data-project={study.slug} aria-labelledby={`${study.slug}-heading`} tabIndex={-1} key={study.slug}>
+            <div className={styles.projectPlane} data-work-plane aria-hidden="true" />
+            <div className={styles.chapterContent} data-work-content>
+              <div className={styles.projectCopy} data-work-copy>
+                <div className={styles.projectTitleLine}><span className={styles.projectNumber} aria-label={`Project ${index + 1} of 4`}>0{index + 1}</span><div className={styles.titleClip}><h3 id={`${study.slug}-heading`} data-work-title translate="no">{study.name}</h3></div></div>
+                <p className={styles.projectPurpose}>{study.headline}</p>
+                <p className={styles.projectSummary}>{study.summary}</p>
+                <dl className={styles.projectMetadata}><div><dt>Current state</dt><dd>{study.status}<span className={styles.statusDetail}>{study.statusDetail}</span></dd></div>{study.technologies.length > 0 && <div><dt>Technologies</dt><dd className={styles.technologies}>{study.technologies.join(" / ")}</dd></div>}</dl>
+                <Link className={`text-link ${styles.caseLink}`} data-work-case-link href={`/work/${study.slug}`}><span>Explore {study.name}</span><ArrowUpRight size={18} aria-hidden="true" /></Link>
               </div>
-            </article>
-          ))}
+              <WorkspaceScene study={study}><ProjectScreens study={study} /></WorkspaceScene>
+            </div>
+          </article>)}</div>
+          <footer className={styles.workFooter} data-work-cta><p>Four projects. Different constraints.</p><a className="text-link" href="#engineering"><span>Into the engineering</span><ArrowDown size={17} aria-hidden="true" /></a><span className={styles.workMeter} aria-hidden="true"><span data-work-meter /></span></footer>
         </div>
-        </ProjectJourney>
-      </div>
-    </section>
-  );
+      </WorkspaceInteraction>
+    </ProjectJourney>
+  </section>;
 }

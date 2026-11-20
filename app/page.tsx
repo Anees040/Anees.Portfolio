@@ -3,7 +3,6 @@ import { Contact } from "@/components/portfolio/contact";
 import { Hero } from "@/components/portfolio/hero";
 import { SelectedWork } from "@/components/portfolio/selected-work";
 import { SiteHeader } from "@/components/portfolio/site-header";
-import { WorkspaceScene } from "@/components/portfolio/workspace-scene";
 import { ScrollExperience } from "@/components/portfolio/scroll-experience";
 import { Engineering } from "@/components/portfolio/engineering";
 import { BuildTrail } from "@/components/portfolio/build-trail";
@@ -19,12 +18,11 @@ export default function Home() {
       <SiteHeader />
       <main id="main-content" tabIndex={-1}>
         <Hero />
-        <WorkspaceScene />
+        <About />
         <SelectedWork />
         <Engineering />
         <BuildTrail />
         <Playground />
-        <About />
         <Evidence />
         {process.env.PORTFOLIO_SCENE_FIXTURE === "1" ? <ScrollSceneFixture /> : null}
       </main>
