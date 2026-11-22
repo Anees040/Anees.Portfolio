@@ -84,7 +84,7 @@ test("skip link, real destinations, and no inactive assistant or fake form", asy
   await expect(page.locator(".contact-email")).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
   await expect(page.locator("[data-work-case-link]")).toHaveCount(4);
   for (const link of await page.locator("[data-work-case-link]").all()) await expect(link).toHaveAttribute("href", /^\/work\//);
-  await expect(page.locator("#ask-anees")).toHaveCount(0);
+  await expect(page.locator("#ask-anees")).toBeHidden();
   await expect(page.getByRole("link", { name: "Write to Anees" })).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
   await expect(page.locator("#sportlynk")).toContainText("Private repository");
   await expect(page.locator('input:not([type="checkbox"]):not([type="radio"]), textarea')).toHaveCount(0);

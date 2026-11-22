@@ -48,6 +48,14 @@ export function SiteHeader() {
     document.querySelector<HTMLElement>(href)?.focus({ preventScroll: true });
   }
 
+  function openAsk(event: React.MouseEvent<HTMLAnchorElement>, mobile = false) {
+    event.preventDefault();
+    if (menu.current) menu.current.open = false;
+    if (mobile) menu.current?.querySelector("summary")?.focus();
+    else event.currentTarget.focus();
+    window.dispatchEvent(new Event("ask-anees:open"));
+  }
+
   return (
     <header className="site-header">
       <ScrollProgress />
@@ -56,7 +64,7 @@ export function SiteHeader() {
         <nav className="desktop-nav" aria-label="Main navigation">
           {navigation.map(({ label, href }) => <a key={href} href={href} aria-current={active === href ? "location" : undefined} onClick={() => setActive(href)}>{label}</a>)}
         </nav>
-        <a className="ask-link" href="#contact"><MessageCircle size={16} strokeWidth={1.6} aria-hidden="true" /><span>Let’s talk</span></a>
+        <a className="ask-link" href="#contact" onClick={openAsk}><MessageCircle size={16} strokeWidth={1.6} aria-hidden="true" /><span>Ask Anees</span></a>
         <details ref={menu} className="mobile-menu" onKeyDown={(event) => {
           if (event.key === "Escape" && menu.current?.open) { menu.current.open = false; menu.current.querySelector("summary")?.focus(); }
         }} onBlur={(event) => {
@@ -66,6 +74,7 @@ export function SiteHeader() {
           <nav className="menu-panel" aria-label="Mobile navigation">
             {navigation.map(({ label, href }) => <a key={href} href={href} aria-current={active === href ? "location" : undefined} onClick={() => followAnchor(href)}>{label}<ArrowUpRight size={20} strokeWidth={1.5} aria-hidden="true" /></a>)}
             <a className="mobile-ask" href="#playground" onClick={() => followAnchor("#playground")}>Concurrency Lab <ArrowUpRight size={20} aria-hidden="true" /></a>
+            <a className="mobile-ask" href="#contact" onClick={event => openAsk(event, true)}>Ask Anees <MessageCircle size={20} aria-hidden="true" /></a>
           </nav>
         </details>
       </div>

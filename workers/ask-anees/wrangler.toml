@@ -1,0 +1,14 @@
+name = "ask-anees"
+main = "src/worker.ts"
+compatibility_date = "2026-11-23"
+workers_dev = true
+
+[ai]
+binding = "AI"
+
+[vars]
+# Policy assertion only; the account must remain on Workers Free in the dashboard.
+ASK_ANEES_PLAN = "free"
+
+[observability]
+enabled = false

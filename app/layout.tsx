@@ -1,6 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
 import { DM_Sans, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import { MotionProvider } from "@/components/portfolio/motion";
+import { AskAnees } from "@/components/portfolio/ask-anees";
 import "./globals.css";
 
 const display = Instrument_Serif({ variable: "--font-instrument-serif", weight: "400", style: ["normal", "italic"], subsets: ["latin"], display: "swap" });
@@ -22,7 +23,7 @@ export const viewport: Viewport = { themeColor: "#F4F0E8", width: "device-width"
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" dir="ltr" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
-      <body><MotionProvider>{children}</MotionProvider></body>
+      <body><MotionProvider>{children}<AskAnees /></MotionProvider></body>
     </html>
   );
 }

@@ -1,0 +1,4 @@
+# Distinct randomly generated values, each at least 32 characters.
+# Deployed secrets use Wrangler secret put, not this file.
+ASK_ANEES_WORKER_SECRET=
+ASK_ANEES_INDEX_SECRET=

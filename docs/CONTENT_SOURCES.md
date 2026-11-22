@@ -1,5 +1,11 @@
 # Verified content and asset sources
 
+## Phase 6 approved knowledge — 23 November 2026
+
+The 13 allowlisted documents under `knowledge/ask-anees/` adapt the current approved profile, skill groups, case studies and the owner's explicit Phase 6 factual boundaries. Only these documents are read; the repository, agent instructions, QA materials, private notes and environment files are never ingested. The documents cover profile, education, skills, experience, four projects, engineering decisions, certificates, goals, contact and local portfolio experiences. No biography, academic results, internship tasks, credentials, private implementation or metrics were invented.
+
+Elliott's README, ingestion, query and streaming source were read at `df9a683e9481e1b0358117d24be172796ae4619b`, along with the supplied technical article. They establish curated Markdown → recursive chunking → document/query embeddings → hybrid retrieval → bounded context → streamed generation, rather than foundation-model training. The independently written application follows those principles with Cloudflare bindings and a small static index; no source or assets were copied. Official Cloudflare model/binding/pricing/error documentation and Wrangler-generated types verify the exact model IDs, native stream use, numeric BGE output and error 3036. Live responses, dimensions and semantic calibration remain unverified until owner setup.
+
 ## Phase 5 identity and credibility — 22 November 2026
 
 Profile additions draw from the existing approved student identity, interests and case-study narratives. Education stays “Studying Software Engineering” at COMSATS University Islamabad, without dates, grades or completion claims. Skill groups describe actual project use (Flutter/Riverpod, Dart/Kotlin, Supabase/Firebase Auth/MethodChannel, SQLite/Realtime Database and public GitHub sources); AI capture/study integrations remain exploration. Evidence reuses `caseStudies.role` and status fields: SportLynk is team/in development/not launched, FitPilot is a solo personal project, Sukoon is completed personal work with hardening, and EduVerse is an academic semester project. No additional individual team task or employment claim is inferred.

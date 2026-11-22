@@ -234,7 +234,7 @@ for (const failure of [false, true]) {
     if (!failure) expect(await page.evaluate(() => (window as Window & { copiedEmail?: string }).copiedEmail)).toBe("muhammadanees0511@gmail.com");
     await expect(page.getByRole("link", { name: "Write to Anees" })).toHaveAttribute("href", "mailto:muhammadanees0511@gmail.com");
     await expect(page.getByRole("link", { name: "Explore my GitHub" })).toHaveAttribute("href", "https://github.com/Anees040");
-    await expect(page.locator("#contact form")).toHaveCount(0); await expect(page.locator("#ask-anees")).toHaveCount(0);
+    await expect(page.locator("#contact form")).toHaveCount(0); await expect(page.locator("#ask-anees")).toBeHidden();
     await page.emulateMedia({ reducedMotion: "reduce" }); await page.getByRole("link", { name: "Back to top", exact: true }).click();
     await expect(page.locator("#home")).toBeFocused(); await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(10);
   });

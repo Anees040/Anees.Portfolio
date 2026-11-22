@@ -32,6 +32,12 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+.dev.vars*
+!workers/ask-anees/.dev.vars.example
+**/.wrangler/
+workers/ask-anees/.qa/
+workers/ask-anees/src/knowledge/index.json.tmp
 
 # vercel
 .vercel

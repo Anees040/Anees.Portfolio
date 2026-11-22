@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "status": "unindexed",
+  "embeddingModel": "@cf/baai/bge-m3",
+  "dimensions": null,
+  "generatedAt": null,
+  "corpusHash": null,
+  "documents": [],
+  "chunks": []
+}

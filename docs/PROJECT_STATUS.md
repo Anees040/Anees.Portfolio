@@ -1,5 +1,13 @@
 # Project status
 
+## Current state — Phase 6 review gate, 23 November 2026
+
+Ask Anees is implemented with a separate authenticated Cloudflare Workers AI service and the owner-approved new drawer in this checkout. Exact Gemma 4/BGE-M3 bindings, hybrid retrieval, bounded streaming, registered sources, cancellation, separate indexing authentication and fail-closed free-quota handling are complete. The existing portfolio sections, assets and motion remain preserved. No OpenAI/Supabase runtime is required; neither was present to remove.
+
+The 13 approved knowledge documents produce 42 prepared chunks. `npm run ask-anees:index` generates real embeddings through the Worker; the checked-in index currently has **zero vectors** and an explicit unindexed state. Account login, Workers Free dashboard confirmation, deployment, secrets, real embeddings and live model smoke testing remain owner setup. No account/billing resource was modified, no model weights were downloaded, and nothing was committed, pushed or deployed. See `ASK_ANEES_SETUP.md`.
+
+Lint, typecheck, production build and Wrangler dry-run checks pass. All 24 latest mocked/backend cases and 15 production drawer cases pass, covering the 14 evaluation questions and essential security/retrieval/stream controls. Two desktop/mobile screenshots were opened; the independent reviewer returned **ship** for the drawer. Actual Cloudflare output, embedding dimensions, physical mobile keyboard/safe-area behavior and additional browsers remain unverified. The full inherited shipping suite exits 1: **244 passed / 60 failed / 21 build-gated fixture cases skipped**. Failures are in preserved portfolio areas, including older expectations/selectors, contrast and lifecycle checks; no whole-suite pass is claimed. Exact results and limits are in BUILD_LOG.md. The session-owned test server is stopped. Earlier current-state entries below are historical. Stop at Phase 6 review; Phase 7 and deployment are not authorized.
+
 ## Current state — Phase 5 review gate, 22 November 2026
 
 Development follow-up: `npm run dev` now opens `http://localhost:3200`. Native case-study loading boundaries resolve the repeated Next.js URL-data navigation diagnostic without disabling Cache Components or instant validation. Development/production client navigation through all four studies and the unknown-slug 404 pass; lint/typecheck/build pass. Broader route accessibility checks expose an existing challenge-copy contrast issue, recorded in BUILD_LOG.md and left outside this focused fix.

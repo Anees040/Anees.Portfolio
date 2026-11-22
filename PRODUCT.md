@@ -1,5 +1,9 @@
 # Product
 
+## Current implementation boundary — Phase 6, 23 November 2026
+
+The owner explicitly authorized Ask Anees using free Cloudflare Workers AI, and confirmed that this checkout should receive a new drawer because the referenced previous interface/backend was absent. This overrides earlier AI-service exclusions for this task. Preserve the existing portfolio identity and all completed sections. A separate authenticated Worker uses the exact Gemma 4 and BGE-M3 models; approved Markdown and a compact server-side static index provide RAG. No paid provider/fallback, billing change, local model weights, account authentication, deployment, commit or push is authorized. Stop at Phase 6 review. The initial index remains explicitly unindexed pending owner account setup and real embeddings.
+
 ## Current correction boundary — 20 November 2026
 
 The owner rejected the previous Hero/About visual result and authorized a focused correction. Hero alone owns the unchanged original `photo.png` (1268×1240); an intentional elliptical crop integrates it into the dark orbit composition, without a light card or invented background removal. About uses the existing truthful story and five facts plus one static 1402×1122 desk illustration, with no repeated photograph or redundant captions. Earlier two-portrait descriptions below are historical where they conflict.

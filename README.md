@@ -1,6 +1,6 @@
 # Muhammad Anees — Personal Developer Portfolio
 
-Phase 3R-3 brings About directly after the hero and consolidates Selected Work into one four-project inspection experience. The original particle portrait, evidence-led case studies, Engineering Workbook, Follow the Thread, local Concurrency Lab and contact remain. Next.js 16.4.6 App Router, TypeScript, Tailwind CSS 4, Motion, the shared GSAP foundation, Lucide and approved typography support this personal portfolio. Phase 3R-4 is not started; manual visual review belongs to the owner.
+Phase 6 adds Ask Anees through a separate authenticated Cloudflare Workers AI service and a drawer matching the existing portfolio. The portrait, case studies, Engineering, Follow the Thread, Build Circuit, Concurrency Lab, evidence, certificates and contact remain. Next.js 16.4.6 App Router, TypeScript, Tailwind CSS 4, Motion, the shared GSAP foundation, Lucide and approved typography support this personal portfolio. Manual review belongs to the owner; nothing is deployed.
 
 ## Run locally
 
@@ -18,7 +18,9 @@ npm run build
 npm run start -- --port 3100
 ```
 
-A first build needs Google Fonts access/cache. next/font then serves fonts locally. No API keys are needed. The assertion fixture below uses an optional build/server flag; use the same value in both environments. Ordinary previews omit it or set it to `0`. Ask Anees backend and deployment are excluded.
+A first build needs Google Fonts access/cache. next/font then serves fonts locally. The portfolio renders without AI configuration. Ask Anees requires only a server-side Worker URL and application secret, with no paid inference API key. Follow [the short Cloudflare setup guide](docs/ASK_ANEES_SETUP.md) to authenticate your free account, deploy and generate real embeddings. The checked-in index remains explicitly unindexed until that setup succeeds. The assertion fixture below uses an optional build/server flag; use the same value in both environments. Ordinary previews omit it or set it to `0`.
+
+`npm run ask-anees:index -- --dry-run` checks the 13 approved knowledge documents without inference. `npm run ask-anees:index` builds the static index through the authenticated BGE-M3 endpoint. `npm run test:ask` runs focused mock/backend and production-browser checks. `npm run ask-anees:worker:check` bundles the Worker locally without deployment. No model weights are downloaded.
 
 ## Checks
 

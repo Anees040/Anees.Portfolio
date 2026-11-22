@@ -1,5 +1,9 @@
 # Muhammad Anees — Portfolio design system
 
+## Phase 6 Ask Anees extension — 23 November 2026
+
+The owner authorized adding the missing drawer in this checkout. Existing semantic tokens and typography remain unchanged: Graphite/Espresso surfaces, Alabaster/Dusty Clay reading text, Copper send action and Antique Gold display/focus/source accents. The desktop drawer caps at 34rem; mobile fills the viewport. A native dialog protects focus and restores it on Escape/close. Header/menu links retain direct contact destinations without JavaScript. Conversation, source links and composer wrap; text-relative short-height handling and VisualViewport measurements preserve the input when space contracts. No new visual world, animation library, raster asset or global styling change was introduced. Root DESIGN.md and its historical sidecar remain preserved.
+
 ## Hero/About visual correction — 20 November 2026
 
 This supersedes the earlier two-portrait refinement. The eight primitives and typography remain exact. `photo.png` is the owner's confirmed original, measured at 1268×1240; its public copy is byte-identical. No other original photograph or professionally treated photo is available for comparison. Existing generated hoodie portraits remain preserved outside the identity position. No background-removal model/tool was installed or called. Hero intentionally retains the photographed background inside an ellipse, with no Alabaster matte, rectangular border or face retouch. The static image and sampler share 78% stage width, natural aspect and 6% top offset; stage width caps at 600px, so the photograph never exceeds 468 CSS pixels and is not upscaled.
