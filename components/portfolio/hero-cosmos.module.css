@@ -6,7 +6,7 @@
   color: var(--color-text-inverse);
 }
 .copper-cosmos > [class~="site-shell"] { position: relative; z-index: 1; }
-.copper-cosmos [class~="hero-grid"] { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: clamp(1.5rem, 3.5vw, 4rem); padding-block: clamp(2rem, 4vh, 3rem) 1.5rem; }
+.copper-cosmos [class~="hero-grid"] { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: clamp(1.5rem, 3.5vw, 4rem); padding-block: clamp(2rem, 4svh, 3rem) 1.5rem; }
 .copper-cosmos [class~="hero-copy"] { position: relative; z-index: 2; padding-block: 1rem; container-type: inline-size; }
 .copper-cosmos h1 { font-size: min(clamp(4.25rem, 6.4vw, 6rem), calc(100cqi / 4.9)); line-height: 1; max-inline-size: 12ch; }
 .copper-cosmos [class~="hero-introduction"] { font-size: var(--type-body); max-inline-size: 43ch; margin-block-start: 1.5rem; }
@@ -24,7 +24,7 @@
 .cosmos-gold-points { fill: var(--color-detail); opacity: 0.46; }
 .cosmos-clay-points { fill: var(--color-art-line); opacity: 0.34; }
 .copper-cosmos .cosmos-scene { display: block; margin: 0; background: transparent; container-type: inline-size; }
-.copper-cosmos .cosmos-scene [class~="pointer-scene"] { aspect-ratio: auto; min-block-size: 0; block-size: min(calc(100cqi * 1.2 + 3rem), clamp(34rem, 72vh, 43rem)); flex: none; }
+.copper-cosmos .cosmos-scene [class~="pointer-scene"] { aspect-ratio: auto; min-block-size: 0; block-size: min(calc(100cqi * 1.2 + 3rem), clamp(34rem, 72svh, 43rem)); flex: none; }
 .copper-cosmos .cosmos-scene.cosmos-photo { inline-size: min(100%, 600px); margin-inline: auto; }
 .copper-cosmos .cosmos-scene.cosmos-photo [class~="pointer-scene"] { block-size: calc(100cqi * 0.83 + 3rem); }
 .cosmos-construction { position: absolute; inset: 0; pointer-events: none; }
@@ -33,12 +33,16 @@
 .cosmos-caption { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.25rem 0.75rem; font-size: var(--type-caption); color: var(--color-text-inverse-muted); }
 .cosmos-caption p { max-inline-size: 30ch; }
 .cosmos-caption a { display: inline-flex; align-items: center; gap: 0.4rem; min-block-size: 44px; flex-shrink: 0; }
+.copper-cosmos .cosmos-sky-control { display: none; align-items: center; gap: .5rem; min-block-size: 44px; font-size: var(--type-caption); color: var(--color-text-inverse-muted); cursor: pointer; }
+.copper-cosmos:has([data-ambient-ready="true"]) .cosmos-sky-control { display: inline-flex; }
+.cosmos-sky-control input { accent-color: var(--color-detail); inline-size: 1rem; block-size: 1rem; }
+.cosmos-sky-control:has(input:focus-visible) { outline: 2px solid var(--color-detail); outline-offset: 4px; }
 .cosmos-mouse-hint, .cosmos-touch-hint { display: none; }
 .copper-cosmos:has([data-particle-first-frame="true"]) .cosmos-static-hint { display: none; }
 .copper-cosmos .cosmos-atomizer [class~="character-animation"] { inset: 0; }
 .cosmos-atomizer [class~="character-frame"], .cosmos-atomizer [class~="character-picture"] { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
 .cosmos-atomizer [class~="character-portrait"] { position: absolute; inset: 6% 11% auto; inline-size: 78%; block-size: auto; aspect-ratio: 1268 / 1240; object-fit: contain; object-position: center top; clip-path: ellipse(50% 50% at 50% 50%); transition: none; }
-.cosmos-atomizer [class~="particle-canvas"] { transition: none; }
+.cosmos-atomizer [class~="particle-canvas"] { inset: 6% 11% auto; inline-size: 78%; block-size: auto; transition: none; }
 .copper-cosmos .cosmos-atomizer [class~="portrait-replay"] { display: inline-flex; inset-inline-start: 50%; transform: translateX(-50%); inset-block-end: 0; white-space: nowrap; background: transparent; color: var(--color-text-inverse-muted); border-color: color-mix(in srgb, var(--color-art-line) 30%, transparent); font-size: var(--type-caption); }
 .cosmos-atomizer[data-particle-phase="forming"] [class~="portrait-replay"] { color: var(--color-text-inverse); }
 .copper-cosmos a:focus-visible, .copper-cosmos button:focus-visible { outline-color: var(--color-detail); }
@@ -65,6 +69,7 @@
   .copper-cosmos [class~="hero-artwork"] { max-inline-size: 34rem; justify-self: center; min-block-size: 0; }
   .copper-cosmos h1 { font-size: min(clamp(3.5rem, 8vw, 5.5rem), calc(100cqi / 4.9)); max-inline-size: 14ch; }
   .copper-cosmos [class~="hero-line"] { display: inline; }
+  .copper-cosmos h1 em { display: inline; }
   .copper-cosmos .cosmos-scene [class~="pointer-scene"] { block-size: calc(100cqi * 1.1 + 3rem); }
 }
 @media (max-width: 47.99rem) {

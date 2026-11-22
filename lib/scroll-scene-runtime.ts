@@ -81,7 +81,7 @@ export async function waitForSceneReadiness(scene: ScrollScene, signal: AbortSig
   });
   const timer = setTimeout(() => controller.abort(new Error("Scene readiness timed out")), timeout);
   try {
-    const images = Array.from(scene.root.querySelectorAll("img"), image => new Promise<void>((resolve, reject) => {
+    const images = scene.scroll === "flow" ? [] : Array.from(scene.root.querySelectorAll("img"), image => new Promise<void>((resolve, reject) => {
       const cleanup = () => { image.removeEventListener("load", load); image.removeEventListener("error", error); combined.removeEventListener("abort", error); };
       const decoded = () => { cleanup(); resolve(); };
       const error = () => { cleanup(); reject(new Error("Scene image unavailable")); };
@@ -217,11 +217,12 @@ function startScrollSceneRuntime(root: HTMLElement, gsap: typeof Gsap, ScrollTri
       const target = findAnchor(record.scene, id);
       if (!anchor || !target) continue;
       if (!record.ready) return;
-      const top = record.trigger ? progressToScroll(anchor.progress, record.trigger.start, record.trigger.end) : scrollY + target.getBoundingClientRect().top - measure(record.scene).clearance;
+      const pinned = record.snapshot.mode === "pinned";
+      const top = record.trigger && pinned ? progressToScroll(anchor.progress, record.trigger.start, record.trigger.end) : scrollY + target.getBoundingClientRect().top - measure(record.scene).clearance;
       if (!target.hasAttribute("tabindex") && !target.matches("a,button,input,select,textarea,summary")) target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: true });
       window.scrollTo({ top, behavior: "instant" });
-      if (record.trigger) update(record, anchor.progress);
+      if (record.trigger && pinned) update(record, anchor.progress);
       pendingHash = "";
       return;
     }
@@ -244,11 +245,15 @@ function startScrollSceneRuntime(root: HTMLElement, gsap: typeof Gsap, ScrollTri
     for (let index = 0; index < ordered.length; index++) {
       const record = ordered[index], dimensions = measurements[index];
       let fits = false;
-      try { fits = record.ready && !record.snapshot.readinessFailures && sceneFits(dimensions) && (record.scene.fits?.(dimensions) ?? true); }
+      let flow = record.scene.scroll === "flow";
+      if (record.scene.scroll === "adaptive") flow = !sceneFits(dimensions) || !(record.scene.fits?.(dimensions) ?? true);
+      try { fits = record.ready && !record.snapshot.readinessFailures
+        && (flow ? !dimensions.reducedMotion && matchMedia("(forced-colors: none)").matches : sceneFits(dimensions))
+        && (flow && record.scene.scroll === "adaptive" ? true : record.scene.fits?.(dimensions) ?? true); }
       catch { record.snapshot.readinessFailures++; }
       const previous = record.measurements;
       const unchanged = previous && (Object.keys(dimensions) as (keyof SceneMeasurements)[]).every(key => key === "stageHeight" ? Math.abs(dimensions.stageHeight - previous.stageHeight) <= 1 : dimensions[key] === previous[key]);
-      const expectedMode = !record.ready ? "pending" : record.snapshot.readinessFailures ? "failed" : fits ? "pinned" : "static";
+      const expectedMode = !record.ready ? "pending" : record.snapshot.readinessFailures ? "failed" : fits ? flow ? "scrolling" : "pinned" : "static";
       if (unchanged && record.snapshot.mode === expectedMode) continue;
       record.measurements = dimensions;
       if (!record.trigger && !fits) {
@@ -271,13 +276,13 @@ function startScrollSceneRuntime(root: HTMLElement, gsap: typeof Gsap, ScrollTri
       if (fits) {
         try {
           const distance = record.scene.distance(dimensions);
-          if (!Number.isFinite(distance) || distance <= 0 || distance > dimensions.viewportHeight * Math.max(1, record.scene.anchors.length)) throw new Error("Scene pin distance must be finite and content-bounded");
+          if (!flow && (!Number.isFinite(distance) || distance <= 0 || distance > dimensions.viewportHeight * Math.max(1, record.scene.anchors.length))) throw new Error("Scene pin distance must be finite and content-bounded");
           record.context = gsap.context(() => {}, record.scene.root);
           record.styles = new Map();
           record.context.add(() => {
             const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
             record.timeline = timeline;
-            record.playback = record.scene.setup({ scope: record.scene.root, measurements: dimensions, timeline: {
+            record.playback = record.scene.setup({ scope: record.scene.root, measurements: dimensions, pinned: !flow, timeline: {
               fromTo(target, from, to, start, duration) {
                 if (!record.scene.root.contains(target)) throw new Error("Scene timeline target outside its scope");
                 if (!record.styles!.has(target)) record.styles!.set(target, target.getAttribute("style"));
@@ -285,14 +290,14 @@ function startScrollSceneRuntime(root: HTMLElement, gsap: typeof Gsap, ScrollTri
               },
             } }) || undefined;
             record.trigger = ScrollTrigger.create({
-              id: `scene:${record.scene.id}`, trigger: record.scene.root, pin: record.scene.stage,
-              start: () => `top top+=${dimensions.clearance}`,
-              end: () => `+=${distance}`,
+              id: `scene:${record.scene.id}`, trigger: record.scene.root, pin: flow ? false : record.scene.stage,
+              start: () => flow ? "top bottom" : `top top+=${dimensions.clearance}`,
+              end: () => flow ? "bottom top" : `+=${distance}`,
               invalidateOnRefresh: true,
               onUpdate: trigger => update(record, trigger.progress),
             });
           });
-          record.snapshot.mode = "pinned";
+          record.snapshot.mode = flow ? "scrolling" : "pinned";
           record.snapshot.triggers = 1;
           record.playback?.visibility?.(record.snapshot.visible && !document.hidden);
         } catch {

@@ -23,10 +23,12 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     const stage = element?.querySelector<HTMLElement>(".character-frame");
     if (!element || !image || !stage || failed) return;
     const eligible = matchMedia("(prefers-reduced-motion: no-preference) and (forced-colors: none)");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const forced = matchMedia("(forced-colors: active)");
     const fine = matchMedia("(hover: hover) and (pointer: fine)");
     let canvas: HTMLCanvasElement | undefined, worker: Worker | undefined, engine: ParticleEngine | undefined;
     let frameId = 0, revealId = 0, last = 0, generation = 0, sequence = 0;
-    let visible = false, disposed = false, workerFailed = false, initializing = false, ready = false, dirty = true, formationActive = false;
+    let visible = false, disposed = false, workerFailed = false, initializing = false, ready = false, dirty = true, formationActive = false, qualityBlocked = false;
     let interaction: "none" | "hover" | "touch" | "replay" = "none";
     let pointerId: number | undefined, pointerX = -1000, pointerY = -1000, touchX = 0, touchY = 0, touchStarted = 0;
     let releaseTimer: ReturnType<typeof setTimeout> | undefined, watchdog: ReturnType<typeof setTimeout> | undefined;
@@ -67,6 +69,11 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       canvas?.remove(); canvas = undefined; ready = false; initializing = false;
       element.dataset.particleFirstFrame = "false";
     };
+    const qualityFallback = (reason: string) => {
+      qualityBlocked = true; disposeEngine();
+      element.dataset.particleQualityFallback = reason; phase("fallback"); setAvailable(false);
+    };
+    const acceptablePerformance = (values: ParticleMetrics) => values.frames < 20 || (values.updateMs + values.drawMs) / values.frames <= 12;
     function recover() {
       if (disposed || !worker) return;
       resumePointer = interaction === "hover" ? { x: pointerX, y: pointerY } : undefined;
@@ -76,9 +83,15 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     }
     function tick(time: number) {
       frameId = 0;
-      if (!allowed() || !engine) return;
+      if (!allowed()) {
+        if (!eligible.matches) { disposeEngine(); phase("fallback"); setAvailable(false); }
+        else pause();
+        return;
+      }
+      if (!engine) return;
       try {
         const done = engine.step(last ? time - last : 16.667); last = time;
+        if (!acceptablePerformance(engine.metrics)) { qualityFallback("performance"); return; }
         if (done) settled(engine.snapshot());
         else { if (engine.metrics.frames % 6 === 0) metrics(engine.snapshot()); frameId = requestAnimationFrame(tick); }
       } catch { disposeEngine(); phase("failed"); setAvailable(false); }
@@ -122,40 +135,47 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       });
     };
     async function initialize() {
-      if (initializing || !allowed()) return;
+      if (initializing || qualityBlocked || !allowed()) return;
       if (ready && !dirty) { representation(false); phase("assembled"); element!.dataset.particleSimulation = "settled"; return; }
       initializing = true;
       try { await image!.decode(); } catch { if (!disposed && image!.complete && !image!.naturalWidth) setFailed(true); initializing = false; return; }
       if (!allowed()) { initializing = false; return; }
       element!.dataset.particleDecoded = "true";
-      const bounds = stage!.getBoundingClientRect();
+      const bounds = { width: image!.offsetWidth, height: image!.offsetHeight };
       if (!bounds.width || !bounds.height) { initializing = false; return; }
       disposeEngine(); initializing = true; dirty = false; phase("loading");
       const run = generation;
-      const low = navigator.hardwareConcurrency <= 4 || !fine.matches;
-      const high = !low && navigator.hardwareConcurrency >= 8;
-      const scale = Math.min(Math.max(1, Math.min(2, window.devicePixelRatio)), (low ? 300 : high ? 480 : 420) / bounds.width, (low ? 450 : high ? 700 : 560) / bounds.height);
-      width = Math.max(1, Math.round(bounds.width * scale)); height = Math.max(1, Math.round(bounds.height * scale)); gap = low ? 3 : 2;
+      const cores = navigator.hardwareConcurrency || 6;
+      if (cores <= 2) { qualityFallback("hardware"); return; }
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const scale = Math.min(dpr, 700 / bounds.width, 700 / bounds.height, Math.sqrt(480 * 700 / (bounds.width * bounds.height)));
+      if (scale < (dpr > 1 ? 1.5 : 1) - .01) { qualityFallback("resolution"); return; }
+      width = Math.max(1, Math.floor(bounds.width * scale)); height = Math.max(1, Math.floor(bounds.height * scale));
       const sample = document.createElement("canvas"); sample.width = width; sample.height = height;
       const context = sample.getContext("2d", { willReadFrequently: true });
       if (!context) { initializing = false; phase("failed"); return; }
-      const fit = Math.min(width * 0.78 / image!.naturalWidth, height * 0.88 / image!.naturalHeight);
-      portraitWidth = image!.naturalWidth * fit;
-      const portraitHeight = image!.naturalHeight * fit;
+      context.imageSmoothingQuality = "high";
+      portraitWidth = width;
       let source: ParticleSource;
       try {
         context.beginPath();
-        context.ellipse(width / 2, height * 0.06 + portraitHeight / 2, portraitWidth / 2, portraitHeight / 2, 0, 0, Math.PI * 2);
+        context.ellipse(width / 2, height / 2, width / 2, height / 2, 0, 0, Math.PI * 2);
         context.clip();
-        context.drawImage(image!, (width - portraitWidth) / 2, height * 0.06, portraitWidth, portraitHeight);
+        context.drawImage(image!, 0, 0, width, height);
+        const pixels = context.getImageData(0, 0, width, height).data;
+        const { chooseParticleGap } = await import("@/lib/particle-engine");
+        if (disposed || run !== generation || !allowed()) { initializing = false; return; }
+        gap = chooseParticleGap(pixels, width, height, cores <= 4 ? 18000 : 32000);
         const token = getComputedStyle(element!).getPropertyValue("--duration-entrance").trim();
         const formationDuration = parseFloat(token) * (token.endsWith("ms") || !token.endsWith("s") ? 1 : 1000);
-        source = { width, height, pixels: context.getImageData(0, 0, width, height).data, gap, portraitWidth, footprint: low ? 4 : 3, radiusRatio: 0.26, formationDuration: formationDuration || 600 };
+        source = { width, height, pixels, gap, portraitWidth, footprint: 1, radiusRatio: .44, forceRatio: .22, maxDisplacementRatio: .24, tangentialRatio: .12, formationDuration: formationDuration || 600 };
       } catch { initializing = false; phase("failed"); return; }
       canvas = document.createElement("canvas"); canvas.width = width; canvas.height = height;
       canvas.className = "particle-canvas"; canvas.setAttribute("aria-hidden", "true"); stage!.appendChild(canvas);
+      canvas.style.aspectRatio = `${image!.naturalWidth} / ${image!.naturalHeight}`;
+      delete element!.dataset.particleQualityFallback;
       const forming = !initial.current.begun && !initial.current.complete;
-      if (!low && !workerFailed && "transferControlToOffscreen" in canvas && typeof Worker !== "undefined") {
+      if (cores > 4 && !workerFailed && "transferControlToOffscreen" in canvas && typeof Worker !== "undefined") {
         try {
           worker = new Worker(new URL("../../lib/particle-worker.ts", import.meta.url), { type: "module" });
           worker.onerror = () => { if (run === generation) recover(); };
@@ -167,6 +187,7 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
             if (type === "paused") { if (replySequence === sequence) metrics(values); return; }
             if (type === "ready") prepared(values, forming);
             else if (replySequence === sequence && allowed()) {
+              if (!acceptablePerformance(values)) { qualityFallback("performance"); return; }
               if (type === "settled") settled(values);
               else { metrics(values); armWatchdog(); }
             }
@@ -178,8 +199,9 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       }
       const { ParticleEngine } = await import("@/lib/particle-engine");
       if (disposed || run !== generation || !canvas) return;
+      if (!allowed()) { disposeEngine(); setAvailable(false); return; }
       try {
-        const target = canvas.getContext("2d");
+        const target = canvas.getContext("2d", { willReadFrequently: true });
         if (!target) throw new Error("Portrait canvas unavailable");
         engine = new ParticleEngine(target, source);
         if (forming) engine.form();
@@ -199,7 +221,8 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       if (!allowed() || !ready || formationActive || !initial.current.complete || (event.pointerType !== "mouse" && event.pointerId !== pointerId)) return;
       if (event.pointerType === "mouse") { if (!fine.matches) return; interaction = "hover"; }
       if (event.pointerType !== "mouse" && Math.abs(event.clientY - touchY) > 12 && Math.abs(event.clientY - touchY) > Math.abs(event.clientX - touchX) * 1.2) { leave(); return; }
-      const rect = stage!.getBoundingClientRect(); pointerX = (event.clientX - rect.left) / rect.width; pointerY = (event.clientY - rect.top) / rect.height;
+      const rect = image!.getBoundingClientRect(); pointerX = (event.clientX - rect.left) / rect.width; pointerY = (event.clientY - rect.top) / rect.height;
+      if ((pointerX - .5) ** 2 + (pointerY - .5) ** 2 > .25) { leave(); return; }
       sendPointer();
     };
     function leave() {
@@ -219,7 +242,7 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
       pointerId = undefined; releaseTimer = setTimeout(leave, Math.max(0, 220 - (performance.now() - touchStarted)));
     };
     const cancel = (event: PointerEvent) => { if (event.pointerId === pointerId) leave(); };
-    const preference = () => { disposeEngine(); dirty = true; phase("fallback"); setAvailable(false); if (allowed()) void initialize(); };
+    const preference = () => { qualityBlocked = false; disposeEngine(); dirty = true; phase("fallback"); setAvailable(false); if (allowed()) void initialize(); };
     const visibility = () => { if (document.hidden) { if (!ready) { disposeEngine(); dirty = true; } else pause(); } else if (allowed()) void initialize(); };
     const load = () => { dirty = true; if (allowed()) void initialize(); };
     const observer = new IntersectionObserver(([entry]) => {
@@ -230,17 +253,21 @@ export function ImageAtomizer({ frame }: { frame: CharacterFrame }) {
     const resize = new ResizeObserver(([entry]) => {
       const { width: nextWidth, height: nextHeight } = entry.contentRect;
       if (Math.abs(nextWidth - priorWidth) < 2 && Math.abs(nextHeight - priorHeight) < 2) return;
-      priorWidth = nextWidth; priorHeight = nextHeight; dirty = true;
+      priorWidth = nextWidth; priorHeight = nextHeight; dirty = true; qualityBlocked = false;
       if (allowed()) void initialize();
     }); resize.observe(stage);
+    let resolution: MediaQueryList;
+    const resolutionChanged = () => { resolution.removeEventListener("change", resolutionChanged); resolution = matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`); resolution.addEventListener("change", resolutionChanged); preference(); };
+    resolution = matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`); resolution.addEventListener("change", resolutionChanged);
     stage.addEventListener("pointerenter", enter); stage.addEventListener("pointermove", pointer, { passive: true }); stage.addEventListener("pointerleave", exit);
     stage.addEventListener("pointerdown", down, { passive: true }); window.addEventListener("pointerup", up); window.addEventListener("pointercancel", cancel);
-    image.addEventListener("load", load); eligible.addEventListener("change", preference); document.addEventListener("visibilitychange", visibility);
+    image.addEventListener("load", load); eligible.addEventListener("change", preference); reduced.addEventListener("change", preference); forced.addEventListener("change", preference); document.addEventListener("visibilitychange", visibility);
     return () => {
       disposed = true; disposeEngine(); observer.disconnect(); resize.disconnect();
+      resolution.removeEventListener("change", resolutionChanged);
       stage.removeEventListener("pointerenter", enter); stage.removeEventListener("pointermove", pointer); stage.removeEventListener("pointerleave", exit);
       stage.removeEventListener("pointerdown", down); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", cancel);
-      image.removeEventListener("load", load); eligible.removeEventListener("change", preference); document.removeEventListener("visibilitychange", visibility); replay.current = () => {};
+      image.removeEventListener("load", load); eligible.removeEventListener("change", preference); reduced.removeEventListener("change", preference); forced.removeEventListener("change", preference); document.removeEventListener("visibilitychange", visibility); replay.current = () => {};
     };
   }, [failed]);
 

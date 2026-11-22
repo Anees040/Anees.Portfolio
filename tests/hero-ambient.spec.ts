@@ -84,9 +84,9 @@ for (const cores of [8, 6, 4]) {
     const box = (await portrait.locator(".character-frame").boundingBox())!; await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.27);
     await expect(portrait).toHaveAttribute("data-particle-phase", "holding");
     const metrics = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
-    expect(metrics.width).toBeLessThanOrEqual(cores === 8 ? 480 : cores === 6 ? 420 : 300);
-    expect(metrics.particles).toBeLessThanOrEqual(cores === 4 ? 7000 : 32000); expect(metrics.bufferBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
-    expect(metrics.interactionRadius / metrics.portraitWidth).toBeCloseTo(0.26); expect(metrics.affectedParticles).toBeGreaterThan(metrics.particles * 0.12);
+    expect(metrics.width).toBeLessThanOrEqual(700); expect(metrics.width * metrics.height).toBeLessThanOrEqual(480 * 700);
+    expect(metrics.particles).toBeLessThanOrEqual(cores === 4 ? 18000 : 32000); expect(metrics.bufferBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
+    expect(metrics.interactionRadius / metrics.portraitWidth).toBeCloseTo(0.44); expect(metrics.affectedParticles).toBeGreaterThan(metrics.particles * 0.35);
     console.log("Hero capability measurement", JSON.stringify({ cores, particles: metrics.particles, bytes: metrics.bufferBytes, maxFrameMs: metrics.maxFrameMs, intervalP95Ms: metrics.intervalP95Ms, updateMs: metrics.updateMs / metrics.frames, drawMs: metrics.drawMs / metrics.frames }));
     await page.mouse.move(10, 10); await expect(portrait).toHaveAttribute("data-particle-reassembled", "true");
   });

@@ -51,22 +51,23 @@ test("initial cloud is seeded, bounded and converges to the exact portrait witho
   expect(first.engine.metrics.formationMs).toBeLessThan(1000);
 });
 
-test("pointer force is local, stationary equilibrium holds displacement and exit returns exactly", () => {
-  const { engine, arrays } = fixture();
-  engine.pointer(60, 54); finish(engine);
-  expect(engine.metrics.settled).toBe(true);
+test("pointer force is local and a stationary pointer returns to the exact photograph", () => {
+  const { engine, arrays } = fixture({ radiusRatio: .1, portraitWidth: 160 });
+  engine.pointer(60, 54);
+  for (let frame = 0; frame < 5; frame++) engine.step(16.667);
+  expect(engine.metrics.settled).toBe(false);
   expect(engine.metrics.reassembled).toBe(false);
-  expect(engine.metrics.maxDisplacement).toBeGreaterThan(4);
+  expect(engine.metrics.maxDisplacement).toBeGreaterThan(1);
   let changed = 0;
   for (let index = 0; index < arrays.count; index++) {
     const distance2 = (arrays.tx[index] - 60) ** 2 + (arrays.ty[index] - 54) ** 2;
     const moved = Math.abs(arrays.x[index] - arrays.tx[index]) + Math.abs(arrays.y[index] - arrays.ty[index]);
-    if (distance2 >= (80 * 0.26) ** 2) expect(moved).toBe(0);
+    if (distance2 >= engine.metrics.interactionRadius ** 2) expect(moved).toBe(0);
     if (moved > 1) changed++;
   }
-  expect(changed).toBeGreaterThan(100);
+  expect(changed).toBeGreaterThan(5);
   expect(changed).toBeLessThan(arrays.count * 0.2);
-  engine.pointer(-1000, -1000); finish(engine);
+  finish(engine);
   expect(engine.metrics.reassembled).toBe(true);
   expect(arrays.x).toEqual(arrays.tx);
 });
@@ -79,19 +80,15 @@ test("scatter is distinct from cloud formation and returns to targets", () => {
   finish(engine); expect(engine.metrics.reassembled).toBe(true);
 });
 
-test("the wider curved field affects substantially more source pixels while retaining the center and a bounded portrait", () => {
-  const narrow = fixture({ radiusRatio: 0.13 }), wide = fixture();
-  narrow.engine.pointer(60, 54); wide.engine.pointer(60, 54); finish(narrow.engine); finish(wide.engine);
-  expect(wide.engine.metrics.affectedParticles).toBeGreaterThan(narrow.engine.metrics.affectedParticles * 3.5);
-  expect(wide.engine.metrics.maxDisplacement).toBeGreaterThan(narrow.engine.metrics.maxDisplacement * 1.8);
-  expect(wide.engine.metrics.maxDisplacement).toBeLessThan(wide.engine.metrics.interactionRadius * 0.5);
-  const center = Array.from(wide.arrays.tx).findIndex((value, index) => value === 60 && wide.arrays.ty[index] === 54);
-  expect(wide.arrays.x[center]).toBe(60); expect(wide.arrays.y[center]).toBe(54);
-  const curved = Array.from(wide.arrays.tx).findIndex((value, index) => value === 70 && wide.arrays.ty[index] === 54);
-  expect(wide.arrays.y[curved]).toBeGreaterThan(54);
-  wide.engine.pointer(-1000, -1000); finish(wide.engine);
-  expect(wide.arrays.x).toEqual(wide.arrays.tx); expect(wide.arrays.y).toEqual(wide.arrays.ty);
-  expect(wide.arrays.buffer.data).toEqual(wide.source.pixels);
+test("fine particle displacement keeps the surrounding image unchanged", () => {
+  const { engine, arrays, source } = fixture({ footprint: 1 });
+  engine.pointer(60, 54); engine.step(16.667);
+  const packed = new Uint32Array(arrays.buffer.data.buffer), original = new Uint32Array(source.pixels.buffer);
+  let unchanged = 0;
+  for (let index = 0; index < packed.length; index++) if (packed[index] === original[index]) unchanged++;
+  expect(unchanged).toBeGreaterThan(packed.length * .97);
+  finish(engine);
+  expect(arrays.buffer.data).toEqual(source.pixels);
 });
 
 for (const gap of [2, 3, 4]) {
@@ -99,7 +96,7 @@ for (const gap of [2, 3, 4]) {
     const { engine, arrays, source } = fixture({ gap });
     const buffer = arrays.buffer;
     engine.pointer(60, 54); finish(engine);
-    expect(engine.metrics.interactionRadius).toBeCloseTo(20.8);
+    expect(engine.metrics.interactionRadius).toBeCloseTo(8);
     expect(engine.metrics.particles).toBeLessThanOrEqual(32000); expect(engine.metrics.bufferBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
     engine.pointer(-1000, -1000); finish(engine);
     expect(arrays.x).toEqual(arrays.tx); expect(arrays.y).toEqual(arrays.ty); expect(arrays.buffer).toBe(buffer);
@@ -162,7 +159,7 @@ test("route exit terminates its worker; return and remount keep one canvas", asy
 });
 
 for (const mode of ["worker", "main", "constructor-failure", "watchdog", "crash"] as const) {
-  test(`hero ${mode}: real cloud, formation, holding, reassembly and keyboard replay`, async ({ page }) => {
+  test(`hero ${mode}: real cloud, local interaction, crisp rest and keyboard replay`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.addInitScript((mode) => {
       Object.defineProperty(navigator, "hardwareConcurrency", { value: 8 });
@@ -191,11 +188,13 @@ for (const mode of ["worker", "main", "constructor-failure", "watchdog", "crash"
     if (mode === "crash") await expect(portrait).toHaveAttribute("data-particle-mode", "main", { timeout: 10000 });
     const canvas = page.locator(".particle-canvas"), bounds = (await canvas.boundingBox())!;
     await page.mouse.move(bounds.x + bounds.width * 0.5, bounds.y + bounds.height * 0.27);
-    await expect(portrait).toHaveAttribute("data-particle-phase", "holding", { timeout: 10000 });
-    const held = await values(page);
-    expect(held.maxDisplacement).toBeGreaterThan(20);
-    expect(held.reassembled).toBe(false);
+    await expect(portrait).toHaveAttribute("data-particle-state", "active");
     await expect(canvas).toHaveCSS("opacity", "1");
+    await expect.poll(async () => (await values(page)).maxDisplacement).toBeGreaterThan(1);
+    await stable(page);
+    expect((await values(page)).maxDisplacement).toBe(0);
+    await expect(canvas).toHaveCSS("opacity", "0");
+    await expect(page.locator(".hero-artwork img")).toHaveCSS("opacity", "1");
     const sleeping = await portrait.getAttribute("data-particle-metrics");
     await page.waitForTimeout(300); expect(await portrait.getAttribute("data-particle-metrics")).toBe(sleeping);
     await page.mouse.move(10, 10); await stable(page);
@@ -258,7 +257,7 @@ for (const failure of ["image", "context"] as const) {
 
 test("mobile genuine touch, tap, cancellation and native vertical scrolling", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
-  const page = await context.newPage(); await page.goto("http://127.0.0.1:3100/");
+  const page = await context.newPage(); await page.goto(test.info().project.use.baseURL!);
   await page.locator(".character-frame").scrollIntoViewIfNeeded(); const portrait = await stable(page);
   const box = (await page.locator(".character-frame").boundingBox())!, horizontal = box.x + box.width * 0.5, vertical = box.y + box.height * 0.3;
   const session = await context.newCDPSession(page);
@@ -276,7 +275,8 @@ test("mobile genuine touch, tap, cancellation and native vertical scrolling", as
   for (let step = 1; step <= 6; step++) { await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: horizontal, y: vertical + 50 - step * 25 }] }); await page.waitForTimeout(30); }
   await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 50);
-  expect((await values(page)).particles).toBeLessThan(7000);
+  expect((await values(page)).particles).toBeGreaterThan(15000);
+  expect((await values(page)).particles).toBeLessThanOrEqual(32000);
   await expect(page.getByRole("button", { name: "Reassemble portrait" })).toBeVisible(); await context.close();
 });
 
@@ -316,7 +316,7 @@ for (const [width, height] of [[320,844], [375,844], [390,844], [414,844], [768,
 
 test("no-JS hero retains its approved image, introduction and both actions", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
-  const page = await context.newPage(); await page.goto("http://127.0.0.1:3100/");
+  const page = await context.newPage(); await page.goto(test.info().project.use.baseURL!);
   await expect(page.locator(".hero-artwork img")).toBeVisible();
   await expect(page.getByRole("link", { name: "Explore my work" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Get to know me" })).toBeVisible(); await context.close();

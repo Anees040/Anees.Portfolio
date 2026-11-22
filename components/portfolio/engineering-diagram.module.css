@@ -1,0 +1,23 @@
+.diagram { margin: 1.5rem 0; }
+.canvas { position: relative; block-size: 13rem; }
+.canvas svg { display: block; inline-size: 100%; block-size: 100%; }
+.canvas path { stroke: var(--color-art-line); stroke-width: 1.5; stroke-dasharray: 1; vector-effect: non-scaling-stroke; }
+.node { position: absolute; inset-inline-start: var(--diagram-x); inset-block-start: var(--diagram-y); translate: -50% -50%; inline-size: 30%; padding: .75rem .35rem; text-align: center; background: var(--color-bg-inverse); border-block: 1px solid var(--color-border-inverse); }
+.node strong { display: block; font: 400 clamp(1.2rem, 2vw, 1.65rem)/1.15 var(--font-instrument-serif), serif; }
+.node span { display: block; color: var(--color-text-inverse-muted); font-size: var(--type-caption); line-height: 1.5; margin-block-start: .5rem; }
+.diagram figcaption { color: var(--color-text-inverse-muted); font-size: var(--type-caption); line-height: 1.6; margin-block-start: 1rem; }
+.branching .canvas { block-size: 20rem; }
+.branching .node { inline-size: 36%; }
+.branching .node:nth-of-type(3) { border-color: var(--color-detail); }
+@container (max-width: 24rem) {
+  .canvas { display: grid; gap: 1.25rem; block-size: auto; }
+  .canvas svg { display: none; }
+  .node { position: relative; inset: auto; translate: none; inline-size: 100%; padding: .75rem; }
+  .node + .node::before { content: ""; position: absolute; inset-inline-start: 50%; inset-block-start: -1.25rem; block-size: 1.25rem; border-inline-start: 1px solid var(--color-art-line); }
+  .branching .canvas { grid-template-columns: repeat(2, minmax(0, 1fr)); block-size: auto; }
+  .branching .node { inline-size: 100%; }
+  .branching .node:nth-of-type(3) { grid-column: 1 / -1; }
+  .branching .node:nth-of-type(2)::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .node { transform: none !important; opacity: 1 !important; } .canvas path { stroke-dashoffset: 0 !important; } }
+@media (forced-colors: active) { .node { background: Canvas; color: CanvasText; } .node span, .diagram figcaption { color: CanvasText; } .canvas path { stroke: CanvasText; } }

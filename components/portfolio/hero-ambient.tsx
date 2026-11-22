@@ -10,13 +10,14 @@ export function HeroAmbient() {
 
   useEffect(() => {
     const element = root.current!, hero = element.closest<HTMLElement>("#home")!;
+    const motionControl = hero.querySelector<HTMLInputElement>("[data-ambient-control]");
     const surface = document.createElement("canvas");
     surface.className = "cosmos-ambient-canvas"; surface.setAttribute("aria-hidden", "true");
     element.appendChild(surface);
     const preference = matchMedia("(prefers-reduced-motion: no-preference) and (forced-colors: none)");
     const low = navigator.hardwareConcurrency <= 4 || navigator.maxTouchPoints > 0;
     let visible = false, disposed = false, frame = 0, last = 0, renderer: HeroAmbientRenderer | undefined;
-    const allowed = () => visible && !document.hidden && preference.matches && !disposed && navigator.hardwareConcurrency > 2;
+    const allowed = () => visible && !document.hidden && preference.matches && !disposed && navigator.hardwareConcurrency > 2 && motionControl?.checked !== false;
     const report = () => { if (renderer) element.dataset.ambientMetrics = JSON.stringify({ ...renderer.metrics, bufferBytes: surface.width * surface.height * 4, fps: low ? 24 : AMBIENT_BUDGET.fps }); };
     const stop = () => {
       cancelAnimationFrame(frame); frame = 0; last = 0;
@@ -62,13 +63,15 @@ export function HeroAmbient() {
       } catch { renderer = undefined; delete element.dataset.ambientReady; }
     };
     const change = resize;
-    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting && entry.intersectionRatio >= .08; sync(); }, { threshold: [0, .08] });
     const size = new ResizeObserver(resize);
     observer.observe(hero); size.observe(hero);
     preference.addEventListener("change", change); document.addEventListener("visibilitychange", sync);
+    motionControl?.addEventListener("change", sync);
     return () => {
       disposed = true; stop(); observer.disconnect(); size.disconnect();
       preference.removeEventListener("change", change); document.removeEventListener("visibilitychange", sync);
+      motionControl?.removeEventListener("change", sync);
       delete element.dataset.ambientReady; renderer = undefined;
       surface.width = 0; surface.height = 0;
       surface.remove();

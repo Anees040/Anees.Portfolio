@@ -1,4 +1,4 @@
-export type SceneMode = "pending" | "static" | "pinned" | "failed";
+export type SceneMode = "pending" | "static" | "pinned" | "scrolling" | "failed";
 
 export interface SceneMeasurements {
   viewportWidth: number;
@@ -26,7 +26,7 @@ export interface SceneFitRequirements {
   minimumStageWidthRem?: number;
 }
 
-export type SceneProperties = Partial<Record<"x" | "y" | "xPercent" | "yPercent" | "scale" | "rotation" | "opacity", number>>;
+export type SceneProperties = Partial<Record<"x" | "y" | "xPercent" | "yPercent" | "scale" | "rotation" | "opacity", number>> & { clipPath?: string };
 
 export interface SceneTimeline {
   fromTo(target: HTMLElement, from: SceneProperties, to: SceneProperties, start: number, duration: number): void;
@@ -43,6 +43,7 @@ export interface ScrollScene {
   id: string;
   root: HTMLElement;
   stage: HTMLElement;
+  scroll?: "flow" | "adaptive";
   content?: readonly HTMLElement[];
   navigation?: HTMLElement;
   cta?: HTMLElement;
@@ -50,7 +51,7 @@ export interface ScrollScene {
   fits?(measurements: Readonly<SceneMeasurements>): boolean;
   distance(measurements: Readonly<SceneMeasurements>): number;
   anchors: readonly { id: string; progress: number }[];
-  setup(context: { scope: HTMLElement; measurements: Readonly<SceneMeasurements>; timeline: SceneTimeline }): ScenePlayback | void;
+  setup(context: { scope: HTMLElement; measurements: Readonly<SceneMeasurements>; timeline: SceneTimeline; pinned: boolean }): ScenePlayback | void;
   staticFallback(): void;
 }
 

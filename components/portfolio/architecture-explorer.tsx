@@ -13,6 +13,6 @@ export function ArchitectureExplorer({ architecture, id }: { architecture: CaseS
         {index < architecture.nodes.length - 1 && <ArrowDown className="architecture-connector" size={24} strokeWidth={1} aria-hidden="true" />}
       </div>)}
     </div>
-    <p className="diagram-caption">{architecture.conceptual ? "Conceptual illustration · Product relationships" : "Source-based technical illustration · Select a layer to inspect"}</p>
+    <p className="diagram-caption">{architecture.conceptual ? "Conceptual illustration · Product relationships" : "Technical flow · Select a layer to inspect"}</p>
   </div>;
 }

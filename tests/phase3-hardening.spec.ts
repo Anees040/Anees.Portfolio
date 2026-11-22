@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { journeyChapters, profileContent } from "../lib/profile-content";
 import { chooseWork, expectStackedWork, loadWork } from "./work-helpers";
+import { loadThread, seekThread, threadProgress } from "./thread-helpers";
 
 test("profile and journey support owner content without invented dates or assets", () => {
   expect(new Set(journeyChapters.map(chapter => chapter.id)).size).toBe(journeyChapters.length);
@@ -32,11 +33,10 @@ for (const width of [390, 1440]) {
 }
 
 test("trail highlights the measured chapter, reverses, and clears for reduced motion", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/", { waitUntil: "networkidle" });
+  await loadThread(page, 1440, 1000);
   for (const index of [0, 3, 1]) {
     const chapter = page.locator(".trail-chapters > li").nth(index);
-    await chapter.evaluate(element => scrollTo({ top: element.getBoundingClientRect().top + scrollY - innerHeight / 2 + 24, behavior: "instant" }));
+    await seekThread(page, threadProgress[index]);
     await expect(chapter).toHaveAttribute("data-trail-current", "true");
     await expect(page.locator("[data-trail-current='true']")).toHaveCount(1);
   }

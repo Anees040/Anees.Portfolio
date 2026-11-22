@@ -30,7 +30,7 @@ worker.onmessage = (event) => {
     const message = event.data;
     if (message.type === "init") {
       stop(); generation = message.generation; sequence = 0;
-      const context = message.canvas.getContext("2d");
+      const context = message.canvas.getContext("2d", { willReadFrequently: true });
       if (!context || typeof worker.requestAnimationFrame !== "function") throw new Error("Worker canvas unavailable");
       engine = new ParticleEngine(context, message.source);
       if (message.forming) engine.form();

@@ -1,0 +1,96 @@
+.case-study .case-title-row h1 { font-size: clamp(4.4rem, 14vw, 13rem); }
+.case-study .case-hero-visual { padding: 0; block-size: auto; overflow: clip; min-inline-size: 0; }
+.case-opening-art { position: relative; block-size: clamp(34rem, 53vw, 48rem); }
+.case-study .case-visual-type { position: absolute; inset: 5% auto auto 5%; font-size: clamp(3rem, 6vw, 6rem); z-index: 0; inline-size: 5ch; opacity: .55; }
+.case-hero-screen { position: absolute; }
+.case-hero-screen img { display: block; inline-size: 100%; block-size: auto; border-radius: .75rem; }
+.case-screen-primary { inline-size: 52%; inset: 18% 7% auto auto; z-index: 2; }
+.case-screen-secondary { inline-size: 37%; inset: 43% auto auto 8%; z-index: 3; }
+.case-sukoon .case-opening-art { block-size: clamp(38rem, 56vw, 50rem); }
+.case-sukoon .case-screen-primary { inset: 12% auto auto 9%; }
+.case-sukoon .case-screen-secondary { inset: 37% 6% auto auto; }
+.case-sukoon .case-visual-type { inset: 5% 5% auto auto; text-align: end; }
+.case-eduverse .case-hero-composition { grid-template-columns: 1fr 1.35fr; }
+.case-eduverse .case-screen-primary { inset: 27% auto auto 8%; inline-size: 44%; }
+.case-eduverse .case-screen-secondary { inset: 14% 4% auto auto; inline-size: 40%; }
+.case-eduverse .case-visual-type { inline-size: 100%; font-size: clamp(3rem, 4.7vw, 5rem); }
+.case-sportlynk .case-hero-composition { display: block; }
+.case-sportlynk .case-opening-copy { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4rem; align-items: start; margin-block-end: 2rem; }
+.case-sportlynk .case-opening-copy .case-statement { grid-row: 1 / 4; font-size: clamp(3rem, 7vw, 7rem); max-inline-size: 10ch; }
+.case-sportlynk .case-opening-art { block-size: auto; }
+.case-sportlynk .sportlynk-preview { min-block-size: 34rem; }
+.case-sportlynk .court-drawing { max-inline-size: 62rem; inline-size: 100%; align-self: center; }
+.case-prose > p + p { margin-block-start: 1.75rem; max-inline-size: 65ch; line-height: 1.8; }
+.case-role { margin-block-start: 2.5rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--color-border-strong); }
+.case-role h3 { font-size: var(--type-body); margin-block-end: .75rem; }
+.case-role p { font-size: var(--type-small); max-inline-size: 60ch; }
+.case-study .feature-stories { display: block; margin-block-start: 3rem; }
+.case-study .feature-stories article { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: clamp(2rem, 6vw, 6rem); padding-block: 2.25rem; border-block-start: 1px solid var(--color-border-strong); }
+.case-study .feature-stories h3 { font: 400 clamp(2rem, 3vw, 3rem)/1.15 var(--font-instrument-serif), serif; max-inline-size: 18ch; }
+.case-study .feature-stories p { max-inline-size: 65ch; line-height: 1.8; margin: 0; }
+.case-study .feature-stories .text-link { grid-column: 2; justify-self: start; margin-block-start: .75rem; }
+.case-experience { padding-block: var(--section-space) 2rem; }
+.case-experience > h2 { max-inline-size: 20ch; }
+.case-journey { list-style: none; padding: 0; margin: 3rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 4rem; }
+.case-journey li { display: flex; align-items: start; gap: 1.5rem; position: relative; }
+.case-journey li > span { color: var(--color-accent-text); font: 400 3rem/1 var(--font-instrument-serif), serif; }
+.case-journey h3 { font-size: 1.2rem; font-weight: 500; margin-block-end: .75rem; }
+.case-journey p { font-size: var(--type-small); max-inline-size: 55ch; line-height: 1.8; }
+.case-study .project-gallery { align-items: start; gap: clamp(1rem, 4vw, 4rem); padding-inline: 0; }
+.case-study .project-gallery > figure:nth-child(2) { margin-block-start: 6rem; }
+.case-study .project-gallery > figure:nth-child(3) { margin-block-start: 2.5rem; }
+.case-study .gallery-image-trigger { inline-size: 100%; overflow: visible; max-inline-size: 350px; }
+.case-study .gallery-screen-plane { display: block; padding: 0; background: none; }
+.case-study .gallery-image-trigger img { inline-size: 100%; max-block-size: none; object-fit: contain; }
+.case-study .gallery-image-trigger > span:last-child { position: static; display: flex; justify-content: center; padding-block: .75rem; color: var(--color-text-primary); background: none; }
+.case-sukoon .case-gallery-section { padding-block-end: calc(var(--section-space) * 1.5); }
+.case-eduverse .project-gallery > figure:nth-child(2) { margin-block-start: 3rem; }
+.case-eduverse .project-gallery > figure:nth-child(3) { margin-block-start: 6rem; }
+.case-system-map { margin: 3rem 0 4rem; }
+.case-map-canvas { position: relative; block-size: clamp(21rem, 31vw, 28rem); }
+.case-map-canvas svg { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+.case-map-canvas path { stroke: var(--color-art-line); stroke-width: 1.5; stroke-dasharray: 1; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.case-map-node { position: absolute; inset-inline-start: var(--node-x); inset-block-start: var(--node-y); translate: -50% -50%; inline-size: 24%; max-inline-size: 15rem; padding: 1.25rem .75rem; text-align: center; background: var(--color-bg-deep); border: 1px solid var(--color-border-inverse); }
+.case-map-node strong { font: 400 clamp(1.3rem, 2.3vw, 2.25rem)/1.1 var(--font-instrument-serif), serif; display: block; }
+.case-map-node span { display: block; margin-block-start: .75rem; font-size: var(--type-caption); color: var(--color-text-inverse-muted); }
+.map-sukoon .case-map-node:nth-of-type(2), .map-eduverse .case-map-node:nth-of-type(2) { border-color: var(--color-detail); }
+.case-system-map figcaption { color: var(--color-text-inverse-muted); font-size: var(--type-small); margin-block: 1.5rem .75rem; }
+.case-system-map > p { max-inline-size: 74ch; color: var(--color-text-inverse); font-size: var(--type-small); line-height: 1.8; }
+.case-challenges { padding-block: var(--section-space); background: var(--color-bg-surface); }
+.case-challenges h2 { margin-block-end: 3rem; }
+.case-challenges .story-points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; }
+.case-challenges .story-points article { border-block-start: 1px solid var(--color-border-strong); padding-block-start: 1.5rem; }
+.case-challenges h3 { font: 400 clamp(1.8rem, 2.8vw, 2.8rem)/1.15 var(--font-instrument-serif), serif; }
+.case-challenges p { line-height: 1.8; }
+.case-study .case-outcome { padding-block-start: var(--section-space); }
+.case-study .case-outcome .story-points article { padding-block-start: 1.25rem; border-block-start: 1px solid var(--color-border-strong); }
+.case-study .case-outcome .next-steps { margin-block-start: 3rem; }
+@media (max-width: 767px) {
+  .case-study .case-title-row h1 { font-size: clamp(3.6rem, 15vw, 7rem); }
+  .case-study .case-hero-composition, .case-sportlynk .case-opening-copy { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .case-sportlynk .case-opening-copy .case-statement { grid-row: auto; max-inline-size: 14ch; }
+  .case-study .case-opening-art { block-size: clamp(31rem, 130vw, 42rem); }
+  .case-sportlynk .case-opening-art { block-size: auto; }
+  .case-sportlynk .sportlynk-preview { min-block-size: 24rem; }
+  .case-study .feature-stories article { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .case-study .feature-stories .text-link { grid-column: 1; }
+  .case-journey, .case-challenges .story-points { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .case-study .project-gallery { grid-template-columns: minmax(0, 1fr); gap: 3rem; justify-items: center; }
+  .case-study .project-gallery { display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x proximity; padding: .4rem; scrollbar-width: thin; }
+  .case-study .project-gallery > figure { flex: 0 0 82%; scroll-snap-align: start; }
+  .case-study .gallery-screen-plane img { inline-size: auto; max-inline-size: 100%; max-block-size: min(34rem, 78svh); margin-inline: auto; }
+  .case-study .project-gallery > figure { inline-size: min(100%, 350px); }
+  .case-study .project-gallery > figure:nth-child(n) { margin-block-start: 0; }
+  .case-map-canvas { block-size: auto; display: grid; gap: 1.5rem; }
+  .case-map-canvas svg { display: none; }
+  .case-map-node { position: relative; inset: auto; translate: none; inline-size: 100%; max-inline-size: none; padding: 1.25rem; }
+  .case-map-node + .case-map-node::before { content: ""; position: absolute; inset-block-start: -1.5rem; inset-inline-start: 50%; block-size: 1.5rem; border-inline-start: 1px solid var(--color-art-line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-study [data-case-layer], .case-study [data-case-node] { transform: none !important; clip-path: none !important; }
+  .case-study [data-case-draw] { stroke-dashoffset: 0 !important; }
+}
+@media (forced-colors: active) {
+  .case-map-node { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .case-map-node span, .case-system-map figcaption, .case-system-map > p { color: CanvasText; }
+}

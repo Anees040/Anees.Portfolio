@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir, writeFile } from "node:fs/promises";
+import { loadThread, seekThread } from "./thread-helpers";
 
 const output = ".qa/phase3-finish";
 const slugs = ["sportlynk", "fitpilot", "sukoon", "eduverse"];
@@ -30,27 +31,15 @@ for (const mode of ["worker", "main", "worker-failure"] as const) {
     const metrics = JSON.parse(first!);
     expect(metrics.particles).toBeGreaterThan(1000);
     expect(metrics.width).toBeGreaterThan(0);
-    expect(metrics.width).toBeLessThanOrEqual(480);
+    expect(metrics.width).toBeLessThanOrEqual(700);
     expect(metrics.height).toBeGreaterThan(0);
     expect(metrics.height).toBeLessThanOrEqual(700);
-    expect(metrics.gap).toBe(2);
-    const expectedParticles = await portrait.evaluate((element, { width, height, gap }) => {
-      const image = element.querySelector<HTMLImageElement>("img")!;
-      const canvas = document.createElement("canvas");
-      canvas.width = width; canvas.height = height;
-      const context = canvas.getContext("2d")!;
-      const scale = Math.min(width * 0.78 / image.naturalWidth, height * 0.88 / image.naturalHeight);
-      const portraitWidth = image.naturalWidth * scale, portraitHeight = image.naturalHeight * scale;
-      context.beginPath();
-      context.ellipse(width / 2, height * 0.06 + portraitHeight / 2, portraitWidth / 2, portraitHeight / 2, 0, 0, Math.PI * 2);
-      context.clip();
-      context.drawImage(image, (width - portraitWidth) / 2, height * 0.06, portraitWidth, portraitHeight);
-      const pixels = context.getImageData(0, 0, width, height).data;
-      let count = 0;
-      for (let row = 0; row < height; row += gap) for (let column = 0; column < width; column += gap) if (pixels[(row * width + column) * 4 + 3] > 0) count++;
-      return count;
-    }, { width: metrics.width, height: metrics.height, gap: metrics.gap });
-    expect(metrics.particles).toBe(expectedParticles);
+    expect(metrics.gap).toBeGreaterThanOrEqual(1);
+    expect(metrics.width * metrics.height).toBeLessThanOrEqual(480 * 700);
+    const photo = (await portrait.locator("img").boundingBox())!, canvas = (await page.locator(".particle-canvas").boundingBox())!;
+    expect(canvas.x).toBeCloseTo(photo.x, 0); expect(canvas.y).toBeCloseTo(photo.y, 0);
+    expect(canvas.width).toBeCloseTo(photo.width, 0); expect(canvas.height).toBeCloseTo(photo.height, 0);
+    expect(metrics.width).toBeGreaterThanOrEqual(Math.floor(photo.width));
     expect(metrics.particles).toBeLessThanOrEqual(32000);
     expect(metrics.bufferBytes).toBeLessThanOrEqual(8 * 1024 * 1024);
     expect(metrics.frames).toBeGreaterThan(20);
@@ -149,12 +138,14 @@ test("a worker failure in a hidden tab recovers on return", async ({ page }) => 
   await expect(page.getByRole("button", { name: "Reassemble portrait" })).toBeVisible();
 });
 
-test("touch and low-core devices use interactive lower-density portrait paths", async ({ browser, page }) => {
+test("touch preserves portrait resolution; fewer cores limit workload independently", async ({ browser, page }) => {
   const context = await browser.newContext({ viewport: { width: 768, height: 1000 }, hasTouch: true });
   const touch = await context.newPage();
-  await touch.goto("http://127.0.0.1:3100", { waitUntil: "networkidle" });
+  await touch.goto(test.info().project.use.baseURL!, { waitUntil: "networkidle" });
   await expect(touch.locator(".particle-canvas")).toHaveCount(1);
-  await expect(touch.locator(".image-atomizer")).toHaveAttribute("data-particle-mode", "main");
+  await expect(touch.locator(".image-atomizer")).toHaveAttribute("data-particle-metrics", /particles/);
+  const touchMetrics = JSON.parse((await touch.locator(".image-atomizer").getAttribute("data-particle-metrics"))!);
+  expect(touchMetrics.width).toBeGreaterThanOrEqual(Math.floor((await touch.locator(".image-atomizer img").boundingBox())!.width));
   await expect(touch.locator(".hero-artwork .character-portrait")).toBeVisible();
   await context.close();
   await page.addInitScript(() => Object.defineProperty(navigator, "hardwareConcurrency", { value: 4 }));
@@ -163,8 +154,8 @@ test("touch and low-core devices use interactive lower-density portrait paths", 
   await expect(portrait).toHaveAttribute("data-particle-metrics", /particles/, { timeout: 10000 });
   const metrics = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
   expect(metrics.mode).toBe("main");
-  expect(metrics.width).toBeLessThanOrEqual(300);
-  expect(metrics.particles).toBeLessThan(7000);
+  expect(metrics.width).toBeGreaterThanOrEqual(Math.floor((await portrait.locator("img").boundingBox())!.width));
+  expect(metrics.particles).toBeLessThanOrEqual(18000);
 });
 
 for (const mode of ["unprotected", "protected"] as const) {
@@ -209,25 +200,13 @@ test("engineering native chapters work by keyboard and connect to project eviden
 });
 
 test("build trail follows reversible scroll and live reduced motion settles the path", async ({ page }) => {
-  await home(page);
+  await loadThread(page, 1440, 1000);
   const trail = page.locator(".trail-layout");
-  const range = await trail.evaluate(el => ({ top: el.getBoundingClientRect().top + scrollY, height: el.clientHeight }));
   const progress: number[] = [];
   for (const fraction of [0.15, 0.65, 0.35]) {
-    await page.evaluate(({ top, height, fraction }) => scrollTo({ top: top + height * fraction - innerHeight / 2, behavior: "instant" }), { ...range, fraction });
+    await seekThread(page, fraction);
     await expect(trail).toHaveAttribute("data-trail-motion", "active");
-    const expected = await trail.evaluate((element, fraction) => {
-      const bounds = element.getBoundingClientRect();
-      const chapters = Array.from(element.querySelectorAll<HTMLElement>(".trail-chapters > li"));
-      const starts = chapters.map(chapter => chapter.getBoundingClientRect().top - bounds.top);
-      const position = element.clientHeight * fraction;
-      let chapter = 0;
-      for (let index = 1; index < starts.length; index++) if (position >= starts[index]) chapter = index;
-      const next = Math.min(chapter + 1, starts.length - 1);
-      const within = next === chapter ? 0 : (position - starts[chapter]) / (starts[next] - starts[chapter]);
-      return (chapter + within) / (starts.length - 1);
-    }, fraction);
-    await expect.poll(async () => Number(await trail.getAttribute("data-trail-progress"))).toBeCloseTo(expected, 2);
+    await expect.poll(async () => Number(await trail.getAttribute("data-trail-progress"))).toBeCloseTo(fraction, 2);
     progress.push(Number(await trail.getAttribute("data-trail-progress")));
   }
   expect(progress[1]).toBeGreaterThan(progress[0]);

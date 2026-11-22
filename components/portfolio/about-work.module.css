@@ -159,7 +159,9 @@
   .workNavigation nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .viewControls { gap: 0.5rem 1rem; }
   .viewControls label { min-block-size: 2.75rem; }
-  .screenSequence, .projectChapter[data-project="sukoon"] .screenSequence { grid-template-columns: minmax(0, 1fr); max-inline-size: 16rem; gap: 1.5rem; }
+  .screenSequence, .projectChapter[data-project="sukoon"] .screenSequence { display: flex; max-inline-size: none; gap: 1rem; overflow-x: auto; scroll-snap-type: x proximity; padding: .4rem; scrollbar-width: thin; }
+  .screenSequence figure { flex: 0 0 82%; scroll-snap-align: start; }
+  .screenSequence img { inline-size: auto; max-inline-size: 100%; max-block-size: min(34rem, 78svh); margin-inline: auto; }
   .projectChapter[data-project="fitpilot"] .screenSequence figure, .projectChapter[data-project="sukoon"] .screenSequence figure { padding-block-start: 0; }
   .screenSequence figcaption { font-size: 1rem; }
   .screenContext { margin-block-start: 1.5rem; }

@@ -15,7 +15,8 @@ const nextConfig: NextConfig = {
   turbopack: {
     rules: {
       "*.css": {
-        condition: { not: { path: /about-work\.module\.css$/ } },
+        // Hero uses global class names; scoped modules retain native CSS exports.
+        condition: { any: [{ not: { path: /\.module\.css$/ } }, { path: /hero-cosmos\.module\.css$/ }] },
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",
       },

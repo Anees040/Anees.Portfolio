@@ -1,5 +1,11 @@
 # Verified content and asset sources
 
+## Phase 5 identity and credibility — 22 November 2026
+
+Profile additions draw from the existing approved student identity, interests and case-study narratives. Education stays “Studying Software Engineering” at COMSATS University Islamabad, without dates, grades or completion claims. Skill groups describe actual project use (Flutter/Riverpod, Dart/Kotlin, Supabase/Firebase Auth/MethodChannel, SQLite/Realtime Database and public GitHub sources); AI capture/study integrations remain exploration. Evidence reuses `caseStudies.role` and status fields: SportLynk is team/in development/not launched, FitPilot is a solo personal project, Sukoon is completed personal work with hardening, and EduVerse is an academic semester project. No additional individual team task or employment claim is inferred.
+
+GitHub profile and exact public repository destinations Anees040/FitPilot, Anees040/sukoon and Anees040/EduVerse returned HTTP 200 in this session. Historical source-review dates remain unchanged. No repository activity or adoption metrics are published. Public/local original photo hashes still match. There is no approved CV or certificate asset; `credentials` is empty. The user explicitly deferred internship/contribution details.
+
 ## Hero/About correction provenance — 20 November 2026
 
 The owner confirms local `photo.png` is the original and only supplied photograph. It measures 1268×1240; the public copy remains byte-identical. Only Hero renders it, inside an ellipse with its original background. No face retouch, AI call, removal model or fabricated transparency. One unchanged 1402×1122 RGBA desk illustration supports About; its anatomy/objects are flattened, not animation layers. Earlier portraits and private references stay preserved and unused for the main identity.

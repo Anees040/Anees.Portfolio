@@ -1,5 +1,7 @@
 # Personal content still needed
 
+Phase 5 update, 22 November 2026: the user will provide internship and individual team-task details later. Existing approved case-study roles are reused without expanding responsibilities. No final approved CV, LinkedIn URL, education dates/results or credentials are registered. `#certificates` now has the expressly requested compact empty state. Add an approved record to `credentials` in `lib/profile-content.ts` and its real image/document under `public`; the renderer already supports issuer, issue/optional expiry date, optional ID/description and verification URL. No sample cards ship.
+
 Current visual correction: Hero alone renders the confirmed original public photograph. About renders one static working illustration plus unchanged biography/facts; its repeated identity image and redundant labels are removed. Independently authored workspace/hand/head/lamp layers and approved game atlas remain separate art tasks. Exact shared-canvas requirements are in `phase3r/ASSET_INVENTORY.md`. The earlier two-portrait note below is historical.
 
 Updated on 20 November 2026. The owner supplied and explicitly approved a public identity photograph and a separate static working illustration. Hero and About use the unchanged photograph registered in `profileContent.photograph`; About's labeled supporting illustration is not a second identity photograph. The older private reference remains unpublished. Resume, LinkedIn, dates, personal contribution details and private SportLynk implementation evidence still require owner input.
@@ -17,7 +19,7 @@ Phase 3 continues without these items. Nothing below is represented by public lo
 | Current learning | Specific topics, courses or experiments, with evidence if you want completion claims | About → Currently exploring, Engineering workbook and evidence notes; `learning` and `engineeringAreas`. AI is currently represented as exploration, not expertise. |
 | Career goals | Types of work or opportunities sought; any availability statement you approve | About → Where I'm heading and Contact invitation; `direction`. No employment history is inferred. |
 | Internships/work | Organization, actual role, dates, responsibilities and any evidence you may publish | A verified About/Journey expansion. Until supplied, the Build Trail remains academic/personal chapters, not work experience. |
-| Certifications, competitions and achievements | Exact title, issuer/event, date, result and verification URL | Verified About evidence or journey milestones. These are not currently rendered as an empty section. |
+| Certifications, competitions and achievements | Exact title, issuer/event, date, result and verification URL | `#certificates` supports approved credentials; its current empty state is intentional. Awards and other achievements stay omitted until verified. |
 
 ## Journey
 

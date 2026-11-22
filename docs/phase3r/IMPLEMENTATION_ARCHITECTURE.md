@@ -8,7 +8,7 @@ One session, no agents/worktrees, preserving incoming local changes at `a105cbc`
 
 `components/portfolio/hero-ambient.tsx` owns one canvas renderer/rAF plus scoped size, Hero visibility, preference/hidden cleanup. `lib/hero-ambient.ts` contains deterministic stars and original finite comet rendering. It does not own portrait input, sampling, scroll, a shared runtime or React frame state. Static SVG is server-rendered. <=2 cores, context failure, no-JS, reduced motion and forced colours retain static presentation. The two renderers coordinate around Hero visibility/preferences while keeping their responsibilities distinct.
 
-The next Thread migration is planned, not started: consume the existing boundary/absolute-progress contract, remove its old Motion subscription only in approved 3R-4, and preserve five real chapter IDs. The roadmap records distance/holds/static alternatives; modular workspace/game art is a separate gate.
+The authorized Thread migration and closeout are complete: `TrailMotion` consumes the existing SceneBoundary/absolute-progress timeline port, removes its old Motion scroll subscription and preserves all five real chapter IDs. One local measurement observer and idempotent cleanup belong to the scene; stable reading-anchor array identity preserves the current chapter across fallback. The narrow Thread CSS-module loader exclusion leaves Hero's existing handling intact. No runtime/contract/provider/boundary source change was required. Distance/holds/static alternatives and 263 complete / 60 shipping passing checks are recorded in the roadmap/delivery. Modular workspace/game art remains a separate gate.
 
 ## Phase 3R-2 implemented foundation — 19 November 2026
 

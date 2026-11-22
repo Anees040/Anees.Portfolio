@@ -9,6 +9,8 @@ npm install
 npm run dev
 ```
 
+Development runs at `http://localhost:3200`, leaving port 3000 available for SportLynk's backend. Production preview and browser tests use port 3100.
+
 For a production preview:
 
 ```sh

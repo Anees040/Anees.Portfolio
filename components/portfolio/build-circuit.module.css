@@ -1,0 +1,53 @@
+.experiment { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 3rem clamp(2rem, 6vw, 6rem); padding: clamp(.75rem, 4vw, 4rem); background: var(--color-bg-deep); color: var(--color-text-inverse); --color-focus: var(--color-detail); }
+.introduction { align-self: center; min-inline-size: 0; }
+.introduction h3 { font: 400 clamp(2.8rem, 5vw, 5rem)/1 var(--font-instrument-serif), serif; margin: 0 0 1.5rem; }
+.introduction h3 em { color: var(--color-text-inverse-muted); }
+.introduction > p { max-inline-size: 46ch; color: var(--color-text-inverse); line-height: 1.75; }
+.introduction .controlsHint { color: var(--color-text-inverse-muted); font-size: var(--type-small); margin-block-start: 1rem; }
+.status { min-block-size: 7rem; margin-block-start: 2rem; border-block-start: 1px solid var(--color-border-inverse); padding-block-start: 1.25rem; }
+.status strong { display: block; font: 400 clamp(1.65rem, 2.8vw, 2.5rem)/1.15 var(--font-instrument-serif), serif; }
+.status span { display: block; margin-block-start: .75rem; color: var(--color-text-inverse-muted); font-size: var(--type-small); max-inline-size: 46ch; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; margin-block-start: 1rem; }
+.actions button { background: transparent; color: var(--color-text-inverse); display: inline-flex; align-items: center; gap: .65rem; border: 0; border-block-end: 1px solid var(--color-border-inverse); min-block-size: 44px; padding: .5rem 0; font-size: var(--type-small); cursor: pointer; }
+.actions button:disabled { opacity: .5; cursor: default; }
+.boardFolio { min-inline-size: 0; align-self: center; inline-size: 100%; max-inline-size: 32rem; justify-self: center; container-type: inline-size; }
+.boardLabels { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; align-items: center; font-size: var(--type-caption); padding-block: .85rem; color: var(--color-text-inverse-muted); }
+.boardLabels > span { display: inline-flex; gap: .75rem; align-items: center; }
+.startPoint, .endPoint { display: inline-block; inline-size: .5rem; block-size: .5rem; background: var(--color-detail); border-radius: 50%; }
+.endPoint { background: transparent; outline: 1px solid var(--color-detail); }
+.experiment[data-circuit-complete="true"] .endPoint { background: var(--color-detail); }
+.boardFrame { position: relative; isolation: isolate; }
+.board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--color-border-inverse); }
+.tile { position: relative; aspect-ratio: 1; padding: 0; min-inline-size: 0; border: 1px solid color-mix(in srgb, var(--color-border-inverse) 45%, transparent); background: var(--color-bg-inverse); color: var(--color-art-solid); cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.tile svg { display: block; inline-size: 100%; block-size: 100%; }
+.tile g { transform-origin: 50px 50px; transition: transform var(--duration-feedback) var(--ease-out); }
+.board[data-instant="true"] .tile g { transition: none; }
+.tile path { stroke: var(--color-art-line); stroke-width: 5; stroke-linecap: butt; opacity: .7; }
+.tile circle { fill: var(--color-art-line); opacity: .7; }
+.tile[data-powered="true"] path { stroke: var(--color-circuit-path); opacity: 1; }
+.tile[data-powered="true"] circle { fill: var(--color-circuit-path); opacity: 1; }
+.tile[data-powered="true"] { background: color-mix(in srgb, var(--color-bg-inverse) 90%, var(--color-art-solid)); }
+.tile:focus-visible { z-index: 3; outline: 2px solid var(--color-detail); outline-offset: -5px; }
+.tile:disabled { cursor: default; }
+.tileCoordinate { position: absolute; inset-block-start: .5rem; inset-inline-start: .5rem; color: var(--color-text-inverse-muted); opacity: .65; font-size: var(--type-caption); pointer-events: none; }
+.checkpoint { position: absolute; inset-inline: .15rem; inset-block-end: .25rem; font-size: var(--type-caption); color: var(--color-text-inverse-muted); pointer-events: none; }
+.checkpointCompact { display: none; }
+@container (max-width: 22rem) { .checkpointFull { display: none; } .checkpointCompact { display: inline; } }
+.route { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; z-index: 2; }
+.completeRoute { stroke: var(--color-circuit-path); stroke-width: 3; }
+.signal { stroke: var(--color-detail); stroke-width: 5; stroke-linecap: round; stroke-dasharray: .065 1; stroke-dashoffset: .065; animation: circuit-send calc(var(--duration-entrance) * 3) linear 1 both; }
+@keyframes circuit-send { from { stroke-dashoffset: .065; opacity: 1; } 95% { opacity: 1; } to { stroke-dashoffset: -1; opacity: 0; } }
+.lessons { grid-column: 1 / -1; padding-block-start: 2rem; border-block-start: 1px solid var(--color-border-inverse); }
+.lessons h4 { font-size: var(--type-body); font-weight: 500; margin: 0 0 .75rem; }
+.lessons > p { font-size: var(--type-small); color: var(--color-text-inverse-muted); max-inline-size: 68ch; margin-block-end: 1.75rem; }
+.lessons > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.lessons a { display: block; text-decoration: none; }
+.lessons a > span { display: flex; align-items: center; gap: .65rem; font-size: var(--type-small); margin-block-end: .6rem; }
+.lessons strong { font: 400 2rem/1.1 var(--font-instrument-serif), serif; }
+.lessons a[data-connected="true"] strong { color: var(--color-text-inverse-muted); }
+.lessons a p { font-size: var(--type-small); line-height: 1.65; color: var(--color-text-inverse-muted); margin-block-start: .75rem; max-inline-size: 42ch; }
+.staticNote { font-size: var(--type-small); margin-block-start: 1.5rem; }
+@media (hover: hover) and (pointer: fine) { .tile:not(:disabled):hover { background: var(--color-bg-deep); } .actions button:not(:disabled):hover, .lessons a:hover > span { color: var(--color-text-inverse-muted); } }
+@media (max-width: 767px) { .experiment { grid-template-columns: minmax(0, 1fr); gap: 2rem; } .boardFolio { grid-row: 2; max-inline-size: 28rem; } .lessons > div { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; } .status { min-block-size: 0; } }
+@media (prefers-reduced-motion: reduce) { .tile g { transition: none; } .signal { animation: none; stroke-dasharray: none; opacity: 1; } }
+@media (forced-colors: active) { .experiment, .tile { background: Canvas; color: CanvasText; } .tile path, .completeRoute, .signal { stroke: CanvasText; } .tile circle { fill: CanvasText; } .tile:focus-visible { outline-color: Highlight; } }

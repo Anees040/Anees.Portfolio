@@ -337,7 +337,7 @@ test("scene registration and its scoped measurement observer clean up on route e
     };
   });
   await loadWork(page);
-  const scenes = process.env.PORTFOLIO_SCENE_FIXTURE === "1" ? "2" : "1";
+  const scenes = process.env.PORTFOLIO_SCENE_FIXTURE === "1" ? "3" : "2";
   const homeRuntime = page.locator(".scroll-scene-provider").filter({ has: workScene(page) });
   await expect(homeRuntime).toHaveAttribute("data-scroll-scenes", scenes);
   expect(await page.evaluate(() => (window as Window & { workObservers?: { active: number } }).workObservers!.active)).toBe(1);

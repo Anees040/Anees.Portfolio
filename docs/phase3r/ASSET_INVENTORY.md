@@ -1,5 +1,36 @@
 # Actual asset inventory
 
+## Phase 3R-5 readiness audit — 20 November 2026
+
+**Gate not satisfied: no owner-approved, technically valid game atlas exists locally.** Audit performed after Phase 3R-4 passed its required verification and documentation closeout. Read current registration/guide/provenance, enumerated public and preserved snapshot assets, decoded current/archive metadata using installed `sharp`, compared archive SHA-256 hashes, and opened the original sheet/portrait/desk plus standing/seated derivatives directly. No screenshots, generated frames or new reports were created.
+
+| Current asset | Measured dimensions; format | Readiness finding |
+| --- | --- | --- |
+| `public/assets/character/anees-character-primary.png` | 1024×1536 PNG, no alpha, single image | Static hoodie portrait with baked checkerboard; no complete character floor baseline or animation |
+| `public/assets/character/anees-character-sheet.png` | 1536×1024 PNG, alpha, single image | Unrelated expressions, crops, head scales and poses; not aligned anticipation/airborne/landing frames |
+| `public/images/character/desktop/anees-idle.webp` | 800×1200 WebP, alpha, single image | Static primary derivative; only idle registered |
+| `public/images/character/desktop/anees-workspace-idle.webp` | 480×480 WebP, alpha, single image | Cropped standing illustration; no airborne/landing states |
+| `public/images/character/desktop/anees-workspace-working.webp` | 480×480 WebP, alpha, single image | Whole seated desk pose; head/hands/body/equipment are flattened, with different scale/pose from standing |
+| `anees-working-illustration.png` and `public/assets/character/anees-working-illustration.png` | 1402×1122 PNG, alpha, single image | Intact supplied desk scene; zero independent anatomical/workspace layers |
+
+Preserved Phase 2 completion/resume copies of the primary and contact sheet match current originals by SHA-256, so they do not supply additional frames. Other snapshot registrations contain the same static states. `lib/character-assets.ts` supports optional sequences as a type, but none are registered. No Anees game manifest supplies frame rectangles, pivot/baseline, per-frame duration, sequence order or state transitions. The existing guide and derivative sidecars document owner-approved static artwork provenance/use, not approval/export rights for a nonexistent game sequence. Reference atlas JSON under `.qa/phase3r/references/` belongs to Elliott's research material and is study-only; QA recording frames are page captures, not character art.
+
+The exact character route remains: approved original transparent frames on the common 512×512 master, consistent scale and floor/pivot, idle/anticipation/airborne/landing sequence, explicit frame rectangles/trim/source size/durations, a modest desktop/mobile atlas and documented creator/export rights plus owner approval. Requested sizes below are specifications, not delivered assets. No single-picture jump/typing/blink animation or fake cutout rig is produced.
+
+### Proposed alternative for owner approval: Build Circuit
+
+One warm editorial routing plate: Linen surface, Graphite labels, copper connections and small geometric signals/gates. Visitors repair three finite routes, then send a signal to verify the result and reveal a genuine project evidence card. No character, arcade scenery, proficiency score, unrelated quiz or external art dependency. These are simplified engineering lessons, not simulations of production backends.
+
+| Task | Meaningful route/feedback | Existing evidence destination |
+| --- | --- | --- |
+| Keep a local change | Route a disconnected write through local storage and a pending sync queue; a direct network route explains why the change cannot depend on connectivity | `/work/fitpilot` — local SQLite/Supabase sync responsibilities |
+| Respect the boundary | Select the matching payload-version gate before delivery to native schedule storage; mismatched versions explain the need for an explicit transport contract | `/work/sukoon` — versioned Flutter/Android schedule boundary |
+| Keep records connected | Connect the quiz to its course before completing the record route; an orphan branch explains the missing relationship | `/work/eduverse` — CourseService/QuizService relationships |
+
+Proposed controls: Start, Pause/Resume, Restart and Next Task; native gate/path buttons, scoped keyboard input and touch buttons that preserve page scrolling. Isolated finite state would validate routing, collect each evidence token exactly once and finish each task deliberately. Delta-time signal travel would run only during explicit active play, pause hidden/offscreen and reset resume time. DOM status/results/evidence would carry all meaning; reduced motion would resolve the same routes without spatial travel, and no-JS would show complete lessons/evidence. The current Concurrency Lab/reducer and `#playground` destination would remain separate and unchanged; a later approved game would have its own normal-flow destination, with minimal Thread continue-link integration.
+
+**Proposed only. Owner approval is required before production gameplay.** Phase 3R-5 and its game tests have not started; Phase 3R-6 remains unauthorized.
+
 ## Current Hero/About correction — 20 November 2026
 
 The owner confirms local `photo.png` is the only supplied original photograph. `sharp` and PNG-header measurements: **1268×1240 RGB**, 1,936,933 bytes; `public/assets/profile/photo.png` is byte-identical. The earlier 402×421 brief size is not the actual asset. Hero uses this original unchanged, with a CSS ellipse matched by the canvas sampler; maximum image display is 468px. No separate treated photograph or reliable local segmentation tool is registered. No removal model/service was installed or used; the background remains intentionally visible within the ellipse.

@@ -10,6 +10,7 @@ import { Playground } from "@/components/portfolio/playground";
 import { Evidence } from "@/components/portfolio/evidence";
 import { ScrollSceneProvider } from "@/components/portfolio/scroll-scene-provider";
 import { ScrollSceneFixture } from "@/components/portfolio/scene-boundary";
+import { SectionTravel } from "@/components/portfolio/section-travel";
 
 export default function Home() {
   return (
@@ -18,15 +19,15 @@ export default function Home() {
       <SiteHeader />
       <main id="main-content" tabIndex={-1}>
         <Hero />
-        <About />
-        <SelectedWork />
-        <Engineering />
-        <BuildTrail />
-        <Playground />
-        <Evidence />
+        <SectionTravel id="about" title="ABOUT" variant="about"><About /></SectionTravel>
+        <SectionTravel id="work" title="SELECTED WORK" variant="work" embedded><SelectedWork /></SectionTravel>
+        <SectionTravel id="engineering" title="ENGINEERING" variant="engineering"><Engineering /></SectionTravel>
+        <SectionTravel id="journey" title="MY JOURNEY" variant="journey"><BuildTrail /></SectionTravel>
+        <SectionTravel id="building" title="ALWAYS BUILDING" variant="building"><Playground /></SectionTravel>
+        <SectionTravel id="evidence" title="EVIDENCE" variant="evidence"><Evidence /></SectionTravel>
         {process.env.PORTFOLIO_SCENE_FIXTURE === "1" ? <ScrollSceneFixture /> : null}
       </main>
-      <Contact />
+      <SectionTravel id="contact" title="CONTACT" variant="contact"><Contact /></SectionTravel>
     </ScrollExperience></ScrollSceneProvider>
   );
 }

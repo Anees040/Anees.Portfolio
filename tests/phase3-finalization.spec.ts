@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
 import { chooseWork, loadWork, workScene } from "./work-helpers";
+import { chooseThread, expectStackedThread, loadThread, threadScene } from "./thread-helpers";
 
 type ParticleTransition = { state?: string; phase?: string; maxDisplacement?: number; frames?: number };
 
@@ -18,7 +19,7 @@ async function observeParticleTransitions(page: Page) {
 }
 
 for (const mode of ["main", "worker"] as const) {
-  test(`atomizer ${mode}: equilibrium holds real displaced pixels without drawing, then reassembles`, async ({ page }) => {
+  test(`atomizer ${mode}: local displacement returns to the crisp image and stops drawing`, async ({ page }) => {
     await page.addInitScript(mode => {
       Object.defineProperty(navigator, "hardwareConcurrency", { value: 8 });
       if (mode === "main") Object.defineProperty(window, "Worker", { value: undefined });
@@ -30,15 +31,20 @@ for (const mode of ["main", "worker"] as const) {
     const portrait = page.locator(".image-atomizer");
     await expect(portrait).toHaveAttribute("data-particle-state", "resting");
     await expect(portrait).toHaveAttribute("data-particle-mode", mode);
+    await expect(portrait).toHaveAttribute("data-particle-formation-complete", "true");
     await observeParticleTransitions(page);
     const stage = page.locator(".image-atomizer .character-frame");
     const box = (await stage.boundingBox())!;
     await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.3);
-    await expect(portrait).toHaveAttribute("data-particle-phase", "holding", { timeout: 15000 });
     await expect(portrait).toHaveAttribute("data-particle-state", "active");
     await expect(page.locator(".particle-canvas")).toHaveCSS("opacity", "1");
+    await expect.poll(() => page.evaluate(() => (window as Window & { particleTransitions?: ParticleTransition[] }).particleTransitions!.some(state => state.maxDisplacement! > 1))).toBe(true);
+    await expect(portrait).toHaveAttribute("data-particle-phase", "holding");
+    await page.mouse.move(4, 4);
+    await expect(portrait).toHaveAttribute("data-particle-state", "resting");
     const metrics = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
-    expect(metrics.maxDisplacement).toBeGreaterThan(4); expect(metrics.meanDisplacement).toBeGreaterThan(0.1); expect(metrics.reassembled).toBe(false);
+    expect(metrics.maxDisplacement).toBe(0); expect(metrics.meanDisplacement).toBe(0); expect(metrics.reassembled).toBe(true);
+    await expect(portrait.locator("img")).toHaveCSS("opacity", "1");
     const readDraws = () => page.evaluate(() => (window as Window & { particleDrawCount?: number }).particleDrawCount ?? 0);
     const draws = await readDraws(); await page.waitForTimeout(500);
     expect(await portrait.getAttribute("data-particle-metrics")).toBe(JSON.stringify(metrics));
@@ -56,9 +62,10 @@ for (const mode of ["main", "worker"] as const) {
 
 test("touch portrait supports tap, horizontal drag, release, cancellation and native vertical scroll", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
-  const page = await context.newPage(); await page.goto("http://127.0.0.1:3100", { waitUntil: "networkidle" });
+  const page = await context.newPage(); await page.goto(test.info().project.use.baseURL!, { waitUntil: "networkidle" });
   const portrait = page.locator(".image-atomizer"); const stage = page.locator(".image-atomizer .character-frame");
-  await expect(portrait).toHaveAttribute("data-particle-mode", "main");
+  await expect(portrait).toHaveAttribute("data-particle-mode", /^(main|worker)$/);
+  await expect(portrait).toHaveAttribute("data-particle-formation-complete", "true");
   await expect(stage).toHaveCSS("touch-action", "pan-y");
   await observeParticleTransitions(page);
   await stage.scrollIntoViewIfNeeded(); const box = (await stage.boundingBox())!;
@@ -87,7 +94,7 @@ test("touch portrait supports tap, horizontal drag, release, cancellation and na
 
 test("a fresh mobile tap moves actual particles before smooth reassembly", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
-  const page = await context.newPage(); await page.goto("http://127.0.0.1:3100", { waitUntil: "networkidle" });
+  const page = await context.newPage(); await page.goto(test.info().project.use.baseURL!, { waitUntil: "networkidle" });
   const stage = page.locator(".image-atomizer .character-frame"); await stage.scrollIntoViewIfNeeded();
   const portrait = page.locator(".image-atomizer");
   await expect(portrait).toHaveAttribute("data-particle-metrics", /particles/);
@@ -135,14 +142,10 @@ test("a runtime worker error restores the main renderer and the active hover fie
   await expect(portrait).toHaveAttribute("data-particle-state", "resting");
   const bounds = (await page.locator(".image-atomizer .character-frame").boundingBox())!;
   await page.mouse.move(bounds.x + bounds.width * .5, bounds.y + bounds.height * .3);
-  await expect(portrait).toHaveAttribute("data-particle-phase", "holding", { timeout: 15000 });
-  const held = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
-  expect(held.maxDisplacement).toBeGreaterThan(4);
-  expect(held.reassembled).toBe(false);
+  await expect(portrait).toHaveAttribute("data-particle-state", "active");
   await page.evaluate(() => (window as Window & { portfolioWorker?: Worker }).portfolioWorker!.dispatchEvent(new Event("error")));
   await expect(portrait).toHaveAttribute("data-particle-mode", "main");
   await expect(portrait).toHaveAttribute("data-particle-phase", "holding", { timeout: 15000 });
-  await expect(portrait).toHaveAttribute("data-particle-state", "active");
   await expect(page.locator(".particle-canvas")).toHaveCount(1);
   await page.mouse.move(3, 3); await expect(portrait).toHaveAttribute("data-particle-state", "resting", { timeout: 15000 });
 });
@@ -155,31 +158,30 @@ test("canvas capability failure preserves the original image and useful hero", a
   await expect(page.getByRole("link", { name: "Explore my work", exact: true })).toBeVisible();
 });
 
-test("DPR two and resize keep one lower-density, proportionate canvas", async ({ browser }) => {
+test("DPR two uses adequate sampling or the crisp photograph after a larger resize", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, deviceScaleFactor: 2 });
-  const page = await context.newPage(); await page.goto("http://127.0.0.1:3100", { waitUntil: "networkidle" });
+  const page = await context.newPage(); await page.goto(test.info().project.use.baseURL!, { waitUntil: "networkidle" });
   const portrait = page.locator(".image-atomizer");
   await expect(portrait).toHaveAttribute("data-particle-metrics", /particles/);
   const before = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
-  expect(before.dpr).toBe(2); expect(before.width).toBeLessThanOrEqual(300);
+  expect(before.dpr).toBe(2);
+  expect(before.width).toBeGreaterThanOrEqual(Math.floor((await portrait.locator("img").boundingBox())!.width * 1.5));
+  expect(before.width * before.height).toBeLessThanOrEqual(480 * 700);
   await page.setViewportSize({ width: 768, height: 1000 });
   await page.locator(".image-atomizer .character-frame").scrollIntoViewIfNeeded();
-  await expect(page.locator(".particle-canvas")).toHaveCount(1);
-  await expect.poll(async () => {
-    const metrics = JSON.parse((await portrait.getAttribute("data-particle-metrics"))!);
-    const bounds = (await page.locator(".image-atomizer .character-frame").boundingBox())!;
-    return Math.abs(metrics.width / metrics.height - bounds.width / bounds.height);
-  }).toBeLessThan(0.02);
+  await expect(portrait).toHaveAttribute("data-particle-quality-fallback", "resolution");
+  await expect(page.locator(".particle-canvas")).toHaveCount(0);
+  await expect(portrait.locator("img")).toHaveCSS("opacity", "1");
   await expect(portrait).toHaveAttribute("data-particle-state", "resting"); await context.close();
 });
 
 test("thread chapters seek, synchronize, reverse, expose correct links and release the sticky archive", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto("/", { waitUntil: "networkidle" });
+  await loadThread(page, 1440, 1000);
   const trail = page.locator(".trail-layout");
   let previous = "";
   for (const index of [0, 2, 4, 1]) {
     const link = page.getByRole("navigation", { name: "Journey chapters" }).locator("a").nth(index);
-    await link.focus(); await page.keyboard.press("Enter");
+    await chooseThread(page, index);
     await expect(link).toHaveAttribute("aria-current", "step");
     await expect(trail).toHaveAttribute("data-trail-chapter", String(index + 1));
     await expect(page.locator(".trail-chapters > li").nth(index)).toBeFocused();
@@ -188,8 +190,10 @@ test("thread chapters seek, synchronize, reverse, expose correct links and relea
     await expect(trail.locator(`.thread-scene-sheet[data-sheet="${index}"]`)).toHaveCSS("visibility", "visible");
   }
   await page.locator("#playground").scrollIntoViewIfNeeded();
-  expect((await page.locator(".thread-scene").boundingBox())!.y).toBeLessThan(0);
+  await expect.poll(async () => (await threadScene(page).locator("[data-thread-stage]").boundingBox())!.y).toBeLessThan(0);
+  expect((await threadScene(page).locator("[data-thread-stage]").boundingBox())!.y).toBeLessThan(0);
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await expectStackedThread(page);
   await expect(trail).toHaveAttribute("data-trail-motion", "static");
   await expect(page.locator(".trail-reading-artifact").first()).toBeVisible();
 });

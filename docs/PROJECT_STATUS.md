@@ -1,5 +1,25 @@
 # Project status
 
+## Current state — Phase 5 review gate, 22 November 2026
+
+Development follow-up: `npm run dev` now opens `http://localhost:3200`. Native case-study loading boundaries resolve the repeated Next.js URL-data navigation diagnostic without disabling Cache Components or instant validation. Development/production client navigation through all four studies and the unknown-slug 404 pass; lint/typecheck/build pass. Broader route accessibility checks expose an existing challenge-copy contrast issue, recorded in BUILD_LOG.md and left outside this focused fix.
+
+The owner authorized final visual corrections followed by Professional Identity & Credibility. Both are implemented and await the owner's browser review. The incoming refinements, photograph, ambient motion, case studies, Build Circuit and Concurrency Lab are preserved. Phase 6/7, publication and the AI service are not started.
+
+Wordmarks now measure loaded typography against their content gutters, arrive early and hold, with the same reverse path and compact static fallbacks. Contact clears the sticky header. The portrait's actual incoming 10% field is now 44%, with softened inverse-square repulsion, stable central directions, a 24% displacement bound, fine source-colour particles and exact spring return. Held fields sleep; main/worker, live preferences and failure paths remain covered.
+
+About retains verified education and adds first-person practice/learning. Engineering includes project-linked skills; Evidence reuses approved roles; `#certificates` has a compact empty state and approved-record schema. No final CV, credentials, internship details or additional individual team responsibilities were supplied. These remain owner inputs, with no invented public claims.
+
+Lint, typecheck and the final production build pass. The focused production run passed **37/38**; its one accessible-label mismatch was fixed, and **3/3** relevant profile/accessibility/keyboard checks pass on the final build. The other 37 checks include all 15 tested sizes, doubled text, font swap, main/worker/idle/replay, worker failures, touch, hidden/offscreen, no-JS and live reduced motion. No full-suite rerun is claimed. Screenshots at 1440×900 and 390×844 and real pointer passes were inspected; no visual approval, WebKit or physical-device check is claimed. Details and limitations are recorded in the existing delivery log below.
+
+## Current state — Phase 3R-4 closeout, 20 November 2026
+
+**Follow the Thread is implemented and verified; manual visual approval remains pending.** All five truthful chapters share one continuous filament and absolute GSAP scene progress, stable reading holds, reversible layers, real hashes/history/focus and finite release. Complete mobile/touch/short-height/enlarged-text/reduced-motion/no-JS stories remain. Closeout repaired local CSS-module/layout and fallback reading/focus defects without changing the shared motion contract or protected section source.
+
+Lint, typecheck, both fresh production builds, **263/263 fixture-enabled E2E cases**, **60/60 fixture-disabled shipping checks** (all 28 Thread cases included) and whitespace checks pass. Exact commands, results and file ledger: [PHASE3_DELIVERY.md](PHASE3_DELIVERY.md). The final build has no reference fixture. Assertions do not certify visual polish or physical devices, Safari/Firefox or real screen readers. Earlier current-state statements below are historical.
+
+**Phase 3R-5 stops at owner approval.** Asset inspection found no technically valid, approved game atlas: the preserved files are static portraits/contact sheets/flattened desk scenes, with no aligned transitions or game manifest. The original geometric **Build Circuit** alternative is proposed in [ASSET_INVENTORY.md](phase3r/ASSET_INVENTORY.md) and the roadmap; production gameplay has not started. Existing Concurrency Lab remains unchanged. Approve that route or provide the aligned atlas. Phase 3R-6 is not authorized.
+
 ## Hero/About correction verified — 20 November 2026
 
 **The owner-rejected Hero/About result has been corrected and awaits manual visual review. Phase 3R-4 has not started.** Hero alone uses the unchanged confirmed original 1268×1240 photograph, integrated with a matched ellipse/orbit, expressive 26% particle field, bounded warm ambient canvas and reversible unpinned depth. About uses the unchanged story/five facts and one static supplied desk illustration, with no repeated portrait or redundant caption. No independent character/hand/head/lamp layers exist; separate art requirements and the 3R-4 plan are documented in the existing handoff.

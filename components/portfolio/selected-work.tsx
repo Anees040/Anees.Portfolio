@@ -8,6 +8,7 @@ import { ProjectJourney } from "./project-journey";
 import { WorkspaceInteraction } from "./workspace-interaction";
 import { WorkspaceScene } from "./workspace-scene";
 import { TextLink } from "./text-link";
+import { SectionLettering } from "./section-lettering";
 import styles from "./about-work.module.css";
 
 export function SportLynkPreview() {
@@ -28,14 +29,14 @@ function ProjectScreens({ study }: { study: CaseStudy }) {
   const labels = study.slug === "fitpilot" ? ["Today", "Log", "Plan"] : study.slug === "sukoon" ? ["Home", "Permissions", "Tracker"] : ["Student · Course", "Teacher", "Admin"];
 
   return <div className={styles.screenStory} data-work-screens>
-    <div className={styles.screenSequence}>{screens.map((screen, index) => <figure key={screen.src}>
+    <div className={styles.screenSequence} tabIndex={0} role="region" aria-label={`${study.name} application screens`}>{screens.map((screen, index) => <figure key={screen.src}>
       <Image src={screen.src} width={screen.width} height={screen.height} alt={screen.alt} sizes="(max-width: 599px) 70vw, (max-width: 1023px) 28vw, 192px" loading="eager" />
       <figcaption>{labels[index]}</figcaption>
     </figure>)}</div>
     <div className={styles.screenContext}>
       <h4>{study.architecture.title}</h4>
       <p>{study.slug === "fitpilot" ? "Food logging → activity options. SQLite records and a queue connect local use to Supabase sync." : study.slug === "sukoon" ? "Daily configuration → a versioned schedule → native Android alarms and restoration." : "Student, teacher and admin views connect around course identities in Firebase Realtime Database."}</p>
-      <span>{study.name} · Repository screenshots</span>
+      <span>{study.name} · Application screens</span>
     </div>
   </div>;
 }
@@ -51,7 +52,7 @@ export function SelectedWork() {
             <fieldset className={styles.viewControls}><legend className="visually-hidden">Choose a work perspective</legend>{[{ id: "projects", name: "Projects" }, { id: "notes", name: "Engineering Notes" }, { id: "log", name: "Build Log" }].map((view, index) => <label key={view.id}><input type="radio" name="work-perspective" value={view.id} defaultChecked={index === 0} /><span>{view.name}</span></label>)}</fieldset>
           </div>
           <div className={styles.workDeck} data-work-deck>{caseStudies.map((study, index) => <article id={study.slug} className={styles.projectChapter} data-work-panel data-project={study.slug} aria-labelledby={`${study.slug}-heading`} tabIndex={-1} key={study.slug}>
-            <div className={styles.projectPlane} data-work-plane aria-hidden="true" />
+            <div className={styles.projectPlane} data-work-plane aria-hidden="true"><SectionLettering title="SELECTED WORK" embedded /></div>
             <div className={styles.chapterContent} data-work-content>
               <div className={styles.projectCopy} data-work-copy>
                 <div className={styles.projectTitleLine}><span className={styles.projectNumber} aria-label={`Project ${index + 1} of 4`}>0{index + 1}</span><div className={styles.titleClip}><h3 id={`${study.slug}-heading`} data-work-title translate="no">{study.name}</h3></div></div>

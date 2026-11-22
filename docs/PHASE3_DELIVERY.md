@@ -1,5 +1,64 @@
 # Muhammad Anees — Phase 3 / 3R delivery
 
+## Final corrections / Phase 5 verification — 22 November 2026
+
+The owner's latest request supersedes historical phase gates below. Phase 5 is implemented and stops for owner review. The focused production run verified 37/38 cases; after correcting repository accessible labels to include the visible action, the final profile/accessibility/keyboard rerun passed 3/3. Lint, strict typecheck, production build and whitespace checks pass. This is targeted preservation coverage, not a new full-suite certification.
+
+**Actual browser:** local Chrome 157.0.8103.79 (Chromium). **Viewports:** 320×568, 360×640, 375×812, 390×844, 414×896, 430×932, 768×1024, 820×1180, 1024×768, 1280×720, 1440×900, 1920×1080, 2560×1440; additionally 844×390 landscape and 1440×600 short desktop. Each size checks the wordmarks, Contact and new skills/education/evidence/credentials at default and doubled root text. Additional cases cover font swapping, reversed/held scroll, keyboard/clipboard, no-JS, accessibility, touch/vertical scroll, exact central force and return at 30/60 Hz, main/worker/worker failure, hidden/offscreen sleep and live preferences. Earlier 42 Phase 2 cases are preserved; no claim that they were all rerun here.
+
+Inspected temporary screenshots of the changed content at 1440×900 and 390×844 and the portrait at rest and over hair/forehead/face/cheeks/beard/suit/boundary, with exact return. Elliott's actual live portfolio and supplied code informed comparison; CodePen was blocked by Cloudflare. No WebKit attempt, browser download, Safari or physical iPhone/iPad/Android testing occurred. No visual approval or real screen-reader certification is claimed. No new screenshot gallery ships.
+
+The final CV, actual certificates and internship/additional team-contribution details remain owner inputs. The source portrait and ambient atmosphere are unchanged. No commit, push, reset, clean, deployment or Phase 6/7 work is included.
+
+## Phase 3R-4 closeout — 20 November 2026
+
+**Implemented and verified; manual visual approval pending.** Continued the existing local Thread implementation on `master` at owner-created commit `71ea48b`, following `82142f6`. Preserved every incoming source change, untracked upload/public asset and historical QA file. No agent, worktree, dependency installation, commit, push, deployment, reset or clean operation was performed. Earlier phase boundaries below are historical.
+
+### Reviewed result and repairs
+
+All five unchanged, date-free chapters render with their original destinations: **Build the foundation**, **Make the everyday useful**, **Go beneath the interface**, **Connect the whole product**, **Keep going deeper**. `#journey` and all five `#trail-*` anchors remain. FitPilot/Sukoon and EduVerse use authentic registered repository screenshots; SportLynk uses the existing explicitly conceptual product diagram. Foundation/direction use original typography, not manufactured product screens. Case-study/evidence links and caveats remain.
+
+`TrailMotion` owns one `follow-the-thread` SceneBoundary factory through the existing GSAP timeline port. Its old Motion scroll subscription is removed. One SVG path supplies both base and copper progress paint; normalized absolute progress sets dash offset, cursor, markers, navigation and bounded plane/artifact/copy tracks. Distance is 2.8 available viewport heights. Holds are `0–.12`, `.22–.34`, `.44–.56`, `.66–.78`, `.88–1`; chapter destinations are `.06`, `.28`, `.50`, `.72`, `.94`. Active selection changes at transition midpoints, without autoplay timers. Equal native scroll positions restore equal visual states in either direction.
+
+Actual stage/deck/navigation/CTA, header clearance, decoded images and root text determine fit. The measured 1440×900 stage is approximately 665px high, with a 490px deck. Touch, short-height, enlarged-text, reduced-motion, forced-colour, low-core and no-JS modes retain the complete vertical story and continuous static filament. Hidden staged content is inert/aria-hidden. The shared coordinator handles native hashes, history, semantic focus and final release; no wheel/touch interception or adjacent extra pin is introduced.
+
+Closeout exposed and repaired missing CSS-module exports caused by the broad stylesheet loader, the obsolete root grid overriding the new composition, reading-position loss on live fallback, and failure-path focus/navigation cleanup. The loader exclusion is narrow to About/Thread modules, preserving Hero's existing handling. Reading anchors now retain one array identity while prioritizing the current chapter. Reduced-motion CSS settles appearance without changing geometry before the coordinator captures reading position. Expected image failure leaves the native focus listener active. Shared runtime/contract/provider/boundary source remains unchanged.
+
+### Verification
+
+All runs use local Chrome, one worker, assertions only, screenshots/video disabled, list reporting and tracing off. Build, server and tests use matching fixture flags; `$env:CAPTURE_VISUALS='0'` throughout. Server command: `npm.cmd run start -- --hostname 127.0.0.1 --port 3100`.
+
+| Exact command | Actual result |
+| --- | --- |
+| `npm.cmd run lint` | Passed, exit 0 |
+| `npm.cmd run typecheck` | Passed, exit 0 |
+| `$env:PORTFOLIO_SCENE_FIXTURE='1'; $env:CAPTURE_VISUALS='0'; npm.cmd run build` | Passed, exit 0, no build warnings |
+| `$env:PORTFOLIO_SCENE_FIXTURE='1'; $env:CAPTURE_VISUALS='0'; npm.cmd run test:e2e -- --reporter=list --trace=off` | **263/263 passed in 12.2 minutes**, including all 28 new Thread cases |
+| `$env:PORTFOLIO_SCENE_FIXTURE='0'; $env:CAPTURE_VISUALS='0'; npm.cmd run build` | Passed, exit 0, no build warnings |
+| `$env:PORTFOLIO_SCENE_FIXTURE='0'; $env:CAPTURE_VISUALS='0'; npm.cmd run test:e2e -- tests/phase3r-thread.spec.ts tests/hero-ambient.spec.ts tests/portrait-refinement.spec.ts --reporter=list --trace=off` | **60/60 passed in 2.8 minutes**, including all 28 Thread cases |
+| `git diff --check` | Passed, exit 0; final documentation diff rechecked |
+
+The preliminary development/Strict Mode regression run passed 53/54 cases, exposing a retained release assertion that sampled before GSAP's queued update. Its original negative-position requirement is preserved with polling; the corrected case passed in 7.4 seconds, then passed in the full production run. Earlier Thread checks were migrated to normalized scene progress and current semantic/artifact wrappers, not removed. Exact scene counts now include Thread: three with the reference fixture, two in shipping, zero on case routes. Duplicate/cleanup and zero-count assertions remain strict.
+
+Coverage includes chapter truth/anchors, path/cursor/marker/navigation synchronization, stable holds, forward/reverse snapshots, every direct hash, history/focus, finite release, native touch/wheel navigation, live preferences, enlarged text, responsive/no-JS reading, image failure, hidden tab, repeated route mounting/observer disposal, Work isolation and scoped Axe checks.
+
+### File ledger and limits
+
+- Existing Thread implementation reviewed/retained: `components/portfolio/build-trail.tsx`, `trail-artifact.tsx`, `trail-motion.tsx`, incoming `thread-scene.module.css`.
+- Closeout integration: `next.config.ts` and local Thread lifecycle/CSS repairs; no shared motion-contract changes.
+- Permanent regression coverage: new `tests/phase3r-thread.spec.ts`, `thread-helpers.ts`; migrated `phase3-finalization.spec.ts`, `phase3-hardening.spec.ts`, `phase3.spec.ts`, `phase3r-studio-work.spec.ts`, `scroll-scenes.spec.ts`.
+- Existing documentation: this delivery, `BUILD_LOG.md`, `PROJECT_STATUS.md`, `phase3r/PHASE_ROADMAP.md`, `MOTION_MAP.md`, `IMPLEMENTATION_ARCHITECTURE.md`, `ASSET_INVENTORY.md`.
+
+No new visual captures or QA directories were created. Hero/About, Selected Work, Engineering, Always Building, Concurrency Lab, Evidence and Contact source remains protected. The final compiled build has the fixture disabled. No disposable scripts, intermediates or debug components were created. Reading comfort, transition composition and portfolio-wide polish still require the owner's recording review. Physical devices, Safari, Firefox and real screen-reader sessions were not tested. Shipping Hero tier checks passed their existing bounds, but observed local-load peaks of 23.1/21.8/6.5ms at emulated 8/6/4 cores are not a no-dropped-frame guarantee; no Hero performance change is included.
+
+## Phase 3R-5 readiness — 20 November 2026
+
+**No valid approved animation atlas; Stage C/D gameplay implementation and game testing are not started.** Inspected actual public/source uploads, preserved snapshot copies, current standing/seated images, original contact sheet, registration and provenance. Installed `sharp` confirms the 1024×1536 primary portrait, 1536×1024 contact sheet, 800×1200 idle, two 480×480 workspace derivatives and 1402×1122 flattened desk image are static images. Visual inspection confirms different crops/scales/poses rather than a consistent baseline sequence. Snapshot originals hash-match the current originals. No game frame rectangles, character pivot/baseline, durations, sequence order, anticipation/airborne/landing transitions or approved game export rights are present. Optional sequence types and study-only reference atlas JSON do not satisfy readiness.
+
+Prepared **Build Circuit** for owner approval in the existing `phase3r/ASSET_INVENTORY.md` and roadmap: a professional warm geometric routing puzzle with three finite tasks grounded in FitPilot local persistence/sync, Sukoon versioned native boundaries and EduVerse course/quiz relationships. Proposed native path controls, explicit play/pause/restart/next, finite exactly-once evidence collection, DOM feedback, accessible motion-free/no-JS paths and original SVG signals would provide a complete game without animated human art. This is a specification, not shipped gameplay. Existing Concurrency Lab/reducer and `#playground` remain unchanged; the current Thread continue destination still leads to that lab until a separate Always Building scene is approved and integrated.
+
+The owner's Stage B/C prompt explicitly requires approval before geometric substitution. **Stop here for that approval or delivery of a valid atlas.** No frames were invented, no flattened body part was animated, no new dependency/service/QA gallery was created, and Phase 3R-6 did not begin. The character route's exact missing exports and the alternative's task/interaction details are in the existing asset inventory.
+
 ## Hero/About visual correction — 20 November 2026
 
 **Implemented, verified, awaiting Anees's manual recording review. Phase 3R-4 is planned only.** The local/remote commit was `a105cbc`; the incoming working tree already contained portrait/desk refinements and two root uploads. All incoming files and assets remain preserved. No agent/worktree, dependency install/fix, AI service, generated face, commit/push or deployment was performed.

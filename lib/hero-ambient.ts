@@ -26,10 +26,10 @@ export class HeroAmbientRenderer {
     ctx.clearRect(0, 0, width, height);
     for (let index = 0; index < this.stars.length; index++) {
       const star = this.stars[index];
-      const x = (star.x * width + time * (1.8 + star.speed * 2)) % width;
-      const y = (star.y * height + time * (0.7 + star.speed)) % height;
+      const x = (star.x * width + time * (1.8 + star.speed * 2) * 1.18) % width;
+      const y = (star.y * height + time * (0.7 + star.speed) * 1.18) % height;
       ctx.fillStyle = this.colors[star.color < 3 ? 0 : star.color === 3 ? 1 : 2];
-      ctx.globalAlpha = 0.38 + 0.34 * (0.5 + 0.5 * Math.sin(star.phase + time * star.speed));
+      ctx.globalAlpha = 0.34 + 0.43 * (0.5 + 0.5 * Math.sin(star.phase + time * star.speed));
       ctx.beginPath(); ctx.arc(x, y, star.radius, 0, Math.PI * 2); ctx.fill();
     }
     if (time >= this.nextComet) {
@@ -46,8 +46,8 @@ export class HeroAmbientRenderer {
       ctx.fillStyle = this.colors[1];
       for (let index = AMBIENT_BUDGET.tail; index > 0; index--) {
         const lag = index * 0.008;
-        ctx.globalAlpha = fade * (1 - index / (AMBIENT_BUDGET.tail + 1)) * 0.65;
-        ctx.beginPath(); ctx.arc(x - velocityX * lag, y - velocityY * lag, 0.45 + (1 - index / AMBIENT_BUDGET.tail) * 0.65, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = fade * (1 - index / (AMBIENT_BUDGET.tail + 1)) * 0.76;
+        ctx.beginPath(); ctx.arc(x - velocityX * lag, y - velocityY * lag, 0.5 + (1 - index / AMBIENT_BUDGET.tail) * 0.7, 0, Math.PI * 2); ctx.fill();
       }
       for (let radius = 6; radius >= 2; radius -= 2) {
         ctx.globalAlpha = fade * (radius === 2 ? 0.95 : radius === 4 ? 0.16 : 0.055);
